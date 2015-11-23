@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Zubax Documentation Portal</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Zubax GNSS 2</strong></div>
+            <div class="panel-body">
+                <p>Lorem ipsum dolor, <a href="https://zubax.com">sit amet</a>.</p>
+                <p>URL: {{ request.url }}</p>
+                <p>Endpoint: {{ request.endpoint }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
