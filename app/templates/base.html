@@ -145,8 +145,11 @@
                 {%- endfor -%}
                 </div>
             {%- endif %}
-            {% block content %}
-            {% endblock %}
+
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
         <!-- /#page-wrapper -->
     </div>
