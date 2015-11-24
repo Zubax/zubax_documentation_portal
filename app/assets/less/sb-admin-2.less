@@ -40,6 +40,12 @@ body {
     }
 }
 
+@media print {
+    a[href]:after {
+        display: none;
+    }
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
@@ -330,6 +336,12 @@ nav {
     a:hover {
         color: black;
         i { color: inherit; }
+    }
+}
+
+@media print {
+    .breadcrumbs {
+        display: none;
     }
 }
 
