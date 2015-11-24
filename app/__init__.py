@@ -56,7 +56,7 @@ def render_markdown(source, relative_url):
 
     # Styling tables
     for tag in hygiene.find_all('table'):
-        tag.attrs['class'] = 'table table-striped table-condensed'
+        tag.attrs['class'] = 'table table-striped table-condensed table-bordered'
 
     # Fixing local path entries
     def fix_path(path):
