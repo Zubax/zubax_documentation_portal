@@ -61,7 +61,7 @@ def render_markdown(source, relative_url):
     # Fixing local path entries
     def fix_path(path):
         path = path.strip()
-        if path.startswith('/') or ':/' in path:
+        if path.startswith('/') or path.startswith('#') or ':/' in path:
             return path
         return '/'.join([relative_url, path])
 
@@ -70,6 +70,13 @@ def render_markdown(source, relative_url):
             for attr_name in ['src', 'href']:
                 if attr_name in x.attrs:
                     x.attrs[attr_name] = fix_path(x.attrs[attr_name])
+
+    # Every image must be wrapped into a link tag
+    for img in hygiene.find_all('img'):
+        if img.parent.name != 'a':
+            a = hygiene.new_tag('a', href=img.attrs['src'])
+            img.parent.append(a)
+            a.append(img)
 
     # Enabling Lightbox on images
     image_id = 0
