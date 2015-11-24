@@ -5,14 +5,13 @@
 
 import os, re
 from functools import reduce
-from . import app, cached, render_markdown
+from . import app, cached, render_markdown_from_file
 from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
 
 
 def get_excerpt(markdown_source_path, url_root):
-    with open(markdown_source_path) as f:
-        main_page = render_markdown(f.read(), url_root)
+    main_page = render_markdown_from_file(markdown_source_path, url_root)
     paragraphs = re.findall(r'<p[^>]*>.+?</p>', main_page, re.DOTALL)
     return Markup(paragraphs[0]) if paragraphs else None
 
@@ -70,14 +69,12 @@ def make_content_page_endpoint(item):
         @cached()
         def endpoint():
             try:
-                with open(item.fs_path) as f:
-                    markdown_source = f.read()
-                    content = render_markdown(markdown_source, item.parent_url)
-                    try:
-                        page_title = re.findall(r'<h(\d)>([^<]+)</h\1>', content)[0][1]
-                    except IndexError:
-                        page_title = item.title
-                    return render_template('content_page.html', content=content, title=page_title)
+                content = render_markdown_from_file(item.fs_path, item.parent_url)
+                try:
+                    page_title = re.findall(r'<h(\d)>([^<]+)</h\1>', content)[0][1]
+                except IndexError:
+                    page_title = item.title
+                return render_template('content_page.html', content=content, title=page_title)
             except IsADirectoryError:
                 if item.url_path.endswith('/tutorials') and item.category == 'Products':
                     docs = []

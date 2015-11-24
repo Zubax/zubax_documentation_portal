@@ -36,6 +36,12 @@ class MarkdownRenderer(misaka.HtmlRenderer, misaka.SmartyPants):
         return pygments.highlight(text, lexer, formatter)
 
 
+def resolve_relative_path(p):
+    if not os.path.isabs(p):
+        p = os.path.join(app.config['BASE_DIR'], p)
+    return p
+
+
 def render_markdown(source, relative_url):
     # Rendering the hard way because we need pygments
     renderer = MarkdownRenderer()
@@ -74,6 +80,11 @@ def render_markdown(source, relative_url):
 
     # Oi moroz moroz ne moroz mena
     return Markup(str(hygiene))  # Ne moroz mena moigo kona
+
+
+def render_markdown_from_file(path, relative_url):
+    with open(resolve_relative_path(path)) as f:
+        return render_markdown(f.read(), relative_url)
 
 
 def cached(timeout=None, key=None):
