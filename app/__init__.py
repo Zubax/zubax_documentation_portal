@@ -5,7 +5,7 @@
 
 import os, time, logging
 from functools import wraps
-from flask import Flask, render_template, send_from_directory, request, Markup, g
+from flask import Flask, render_template, send_from_directory, request, Markup, g, redirect
 from flask_menu import Menu
 from flask.ext.assets import Environment
 from flask.ext.misaka import Misaka
@@ -128,8 +128,29 @@ def after_request(response_class):
     return response_class
 
 
+def try_desperate_redirect(path):
+    # Compatibility with the old website
+    redirects = {
+        '/Zubax_GNSS': '/zubax_gnss',
+        '/DroneCode_Probe': '/dronecode_probe',
+        '/UAVCAN_Interface': '/uavcan'
+    }
+
+    if path in redirects:
+        target = redirects[path]
+        logger.info('Compat redirect %r --> %r', path, target)
+        return redirect(target)
+
+    if path.lower().startswith('/zubax_gnss_tutorial'):
+        return redirect('/zubax_gnss/tutorials')
+
+
 @app.errorhandler(404)
 def not_found(_error):
+    red = try_desperate_redirect(request.path)
+    if red:
+        return red
+
     return render_template('404.html'), 404
 
 
