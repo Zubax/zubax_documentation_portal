@@ -10,6 +10,13 @@ from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
 
 
+def get_excerpt(markdown_source_path, url_root):
+    with open(markdown_source_path) as f:
+        main_page = render_markdown(f.read(), url_root)
+    paragraphs = re.findall(r'<p[^>]*>.+?</p>', main_page, re.DOTALL)
+    return Markup(paragraphs[0]) if paragraphs else None
+
+
 class ProductInfo:
     def __init__(self, title, fs_root, url_root, weight, main_page_path):
         self.title = title
@@ -17,14 +24,9 @@ class ProductInfo:
         self.url_root = url_root
         self.weight = weight
         self.forum_url = 'https://productforums.zubax.com/'  # TODO: link the right sub-forum somehow
-
-        with open(main_page_path) as f:
-            main_page = render_markdown(f.read(), url_root)
-        paragraphs = re.findall(r'<p[^>]*>.+?</p>', main_page, re.DOTALL)
-        if paragraphs:
-            self.short_description_html = Markup(paragraphs[0])
-        else:
-            self.short_description_html = Markup(self.title)
+        self.tutorials_url = None
+        self.tutorial_items = []
+        self.short_description_html = get_excerpt(main_page_path, url_root) or Markup(self.title)
 
     @property
     def image_url(self):
@@ -32,6 +34,12 @@ class ProductInfo:
 
 
 PRODUCTS = []
+
+
+def find_product(item):
+    for p in PRODUCTS:
+        if item.url_path.startswith(p.url_root):
+            return p
 
 
 @app.route('/')
@@ -72,6 +80,17 @@ def make_content_page_endpoint(item):
                         page_title = item.title
                     return render_template('content_page.html', content=content, title=page_title)
             except IsADirectoryError:
+                if item.url_path.endswith('/tutorials') and item.category == 'Products':
+                    docs = []
+                    product = find_product(item)
+                    for tut in product.tutorial_items:
+                        docs.append({
+                            'title': tut.title,
+                            'url': tut.url_path,
+                            'excerpt': get_excerpt(tut.fs_path, tut.url_path),
+                        })
+                    page_title = product.title + ' &#8212; Tutorials'
+                    return render_template('document_list.html', items=docs, title=page_title)
                 return redirect(item.parent_url)
 
         endpoint.__name__ = 'content_page' + item.url_path.replace('/', '_')
@@ -136,6 +155,12 @@ class ContentStructureItem:
             prod_weight, prod_title = ContentStructureItem.parse_weight_title(os.path.split(fs_root)[-1])
             if self.category == 'Products':
                 PRODUCTS.append(ProductInfo(prod_title, fs_root, url_root, prod_weight, self.fs_path))
+
+        if self.type == 'node' and self.category == 'Products' and self.url_path.endswith('/tutorials'):
+            find_product(self).tutorials_url = self.url_path
+
+        if self.type == 'leaf' and self.category == 'Products' and '/tutorials/' in self.url_path:
+            find_product(self).tutorial_items.append(self)
 
     @property
     def void(self):
