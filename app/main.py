@@ -6,15 +6,41 @@
 import os, re
 from functools import reduce
 from . import app, cached, render_markdown
-from flask import request, render_template, redirect, send_file
+from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
+
+
+class ProductInfo:
+    def __init__(self, title, fs_root, url_root, weight, main_page_path, has_tutorials=False):
+        self.title = title
+        self.fs_root = fs_root
+        self.url_root = url_root
+        self.weight = weight
+        self.forum_url = 'https://productforums.zubax.com/'  # TODO: link the right sub-forum somehow
+        self.has_tutorials = has_tutorials
+
+        with open(main_page_path) as f:
+            main_page = render_markdown(f.read(), url_root)
+        paragraphs = re.findall(r'<p[^>]*>.+?</p>', main_page, re.DOTALL)
+        if paragraphs:
+            self.short_description_html = Markup(paragraphs[0])
+        else:
+            self.short_description_html = Markup(self.title)
+
+    @property
+    def image_url(self):
+        return self.url_root + '/image.jpg'
+
+
+PRODUCTS = []
 
 
 @app.route('/')
 @register_menu(app, '.', 'Home', order=0)
 @cached()
 def index():
-    return render_template('index.html')
+    products = sorted(PRODUCTS.copy(), key=lambda x: x.weight)
+    return render_template('index.html', **locals())
 
 
 @app.route('/search')
@@ -101,8 +127,16 @@ class ContentStructureItem:
         else:
             self.menu_path = raw_url_path.replace('/', '.')
             self.weight, self.title = ContentStructureItem.parse_weight_title(os.path.basename(fs_path))
+            self.category = ContentStructureItem.parse_weight_title(fs_path.split(os.path.sep)[0])[1]
 
         self.url_path = re.sub(r'^/[^/]+', '', raw_url_path)
+
+        if self.main_page and '/' not in self.parent_url.strip('/'):
+            fs_root = os.path.dirname(fs_path)
+            url_root = self.parent_url
+            prod_weight, prod_title = ContentStructureItem.parse_weight_title(os.path.split(fs_root)[-1])
+            if self.category == 'Products':
+                PRODUCTS.append(ProductInfo(prod_title, fs_root, url_root, prod_weight, self.fs_path))
 
     @property
     def void(self):
@@ -110,7 +144,7 @@ class ContentStructureItem:
 
     @property
     def main_page(self):
-        return self.weight == 0 and not self.void
+        return self.type == 'leaf' and self.weight == 0 and not self.void
 
     @property
     def parent_url(self):

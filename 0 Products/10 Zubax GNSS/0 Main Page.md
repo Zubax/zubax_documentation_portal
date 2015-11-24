@@ -1,6 +1,7 @@
 # Zubax GNSS
 
-This page is about <a href="zubax.com/product/zubax-gnss">Zubax GNSS</a>.
+Zubax GNSS is a high-performance positioning module for outdoor environments with doubly redundant UAVCAN bus interface.
+It includes a state-of-the-art GPS/GLONASS receiver, a high-precision barometer and a 3-axis compass.
 
 ## Header 2
 

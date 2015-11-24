@@ -3,23 +3,47 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1>Zubax Documentation Portal</h1>
+        <h1>Zubax Docs</h1>
     </div>
 </div>
 
+{% for p in products %}
+    {% if loop.index0 % 2 == 0 %}
 <div class="row">
+    {% endif %}
+
     <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-heading"><strong>Zubax GNSS 2</strong></div>
+        <div class="panel panel-default product-panel">
+            <div class="panel-heading"><a href="{{ p.url_root }}">{{ p.title }}</a></div>
             <div class="panel-body">
-                <p>Lorem ipsum dolor, <a href="https://zubax.com">sit amet</a>.</p>
-                <p>URL: {{ request.url }}</p>
-                <p>Endpoint: {{ request.endpoint }}</p>
-                <a href="https://zubax.com/logo.png" data-lightbox="image-1" data-title="Logo">
-                    <img src="https://zubax.com/logo.png" width="100px" />
-                </a>
+                <div class="product-description">
+                    {{ p.short_description_html }}
+                </div>
+                <div class="product-image">
+                    <a href="{{ p.image_url }}" data-lightbox="product-image-{{ loop.index }}"
+                       data-title="{{ p.title }}">
+                        <img src="{{ p.image_url }}" />
+                    </a>
+                </div>
+                <div class="product-links btn-group btn-group-justified">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-default" onclick="location.href='{{ p.url_root }}';">
+                            <i class="fa fa-book"></i> Read the Docs
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-default" onclick="window.open('{{ p.forum_url }}');">
+                            <i class="fa fa-comments"></i> Get Support
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    {% if loop.index % 2 == 0 %}
 </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}
