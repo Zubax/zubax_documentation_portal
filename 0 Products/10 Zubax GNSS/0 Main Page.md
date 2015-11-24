@@ -2,7 +2,7 @@
 
 <info>
 This page is valid for firmware version 2.0 and newer.
-Documentation for older versions is [available here](http://docs.zubax.com/index.php?title=Zubax_GNSS&action=history).
+Documentation for older versions is [available here](http://old-docs.zubax.com/index.php?title=Zubax_GNSS&action=history).
 Update instructions are [available here](http://zubax.com/news/zubax-gnss-firmware-update-v20).
 </info>
 
