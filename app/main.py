@@ -11,13 +11,12 @@ from flask_menu import register_menu, current_menu
 
 
 class ProductInfo:
-    def __init__(self, title, fs_root, url_root, weight, main_page_path, has_tutorials=False):
+    def __init__(self, title, fs_root, url_root, weight, main_page_path):
         self.title = title
         self.fs_root = fs_root
         self.url_root = url_root
         self.weight = weight
         self.forum_url = 'https://productforums.zubax.com/'  # TODO: link the right sub-forum somehow
-        self.has_tutorials = has_tutorials
 
         with open(main_page_path) as f:
             main_page = render_markdown(f.read(), url_root)
