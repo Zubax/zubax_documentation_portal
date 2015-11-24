@@ -15,9 +15,8 @@ Some more data.
  Blah   | Whoa
   42    | 1123581321
 
-[![Alt text](https://zubax.com/logo.png)](https://zubax.com/logo.png)
-<a href="https://zubax.com/logo.png" style="float: right;">
-<img src="https://zubax.com/logo.png" alt="This is a logo" width="100" />
+<a href="image.jpg" style="float: right;">
+<img src="image.jpg" alt="Zubax GNSS" width="100" />
 </a>
 
 #### Source code

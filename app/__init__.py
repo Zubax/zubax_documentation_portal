@@ -36,7 +36,7 @@ class MarkdownRenderer(misaka.HtmlRenderer, misaka.SmartyPants):
         return pygments.highlight(text, lexer, formatter)
 
 
-def render_markdown(source):
+def render_markdown(source, relative_url):
     # Rendering the hard way because we need pygments
     renderer = MarkdownRenderer()
     md = misaka.Markdown(renderer, extensions=misaka.EXT_TABLES | misaka.EXT_FENCED_CODE | misaka.EXT_AUTOLINK |
@@ -49,6 +49,19 @@ def render_markdown(source):
     # Styling tables
     for tag in hygiene.find_all('table'):
         tag.attrs['class'] = 'table table-striped table-condensed'
+
+    # Fixing local path entries
+    def fix_path(path):
+        path = path.strip()
+        if path.startswith('/') or ':/' in path:
+            return path
+        return '/'.join([relative_url, path])
+
+    for tag_name in ['a', 'img']:
+        for x in hygiene.find_all(tag_name):
+            for attr_name in ['src', 'href']:
+                if attr_name in x.attrs:
+                    x.attrs[attr_name] = fix_path(x.attrs[attr_name])
 
     # Enabling Lightbox on images
     image_id = 0

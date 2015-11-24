@@ -3,15 +3,16 @@
 # Author: Pavel Kirienko <pavel.kirienko@zubax.com>
 #
 
-import os, re, fnmatch
+import os, re
 from functools import reduce
 from . import app, cached, render_markdown
-from flask import request, render_template, redirect
+from flask import request, render_template, redirect, send_file
 from flask_menu import register_menu, current_menu
 
 
 @app.route('/')
 @register_menu(app, '.', 'Home', order=0)
+@cached()
 def index():
     return render_template('index.html')
 
@@ -38,7 +39,8 @@ def make_content_page_endpoint(item):
             try:
                 with open(item.fs_path) as f:
                     markdown_source = f.read()
-                    content = render_markdown(markdown_source)
+                    url_path = item.parent_url if item.main_page else item.url_path
+                    content = render_markdown(markdown_source, url_path)
                     try:
                         page_title = re.findall(r'<h(\d)>([^<]+)</h\1>', content)[0][1]
                     except IndexError:
@@ -63,6 +65,14 @@ def make_content_page_endpoint(item):
             register_menu(app, item.menu_path, item.title, item.weight, active_when=active_when, item=item)(endpoint)
 
 
+def make_static_endpoint(item):
+    path = os.path.join(app.config['BASE_DIR'], item.fs_path)
+
+    @app.route(item.url_path, endpoint='static' + item.url_path.replace('/', '_'))
+    def endpoint():
+        return send_file(path, cache_timeout=600)
+
+
 class ContentStructureItem:
     @staticmethod
     def parse_weight_title(p):
@@ -83,11 +93,14 @@ class ContentStructureItem:
     def __init__(self, item_type, fs_path):
         self.fs_path = fs_path
         self.type = item_type
-        assert self.type in ('node', 'leaf')
+        assert self.type in ('node', 'leaf', 'static')
 
         raw_url_path = ContentStructureItem.fs_path_to_url(fs_path)
-        self.menu_path = raw_url_path.replace('/', '.')
-        self.weight, self.title = ContentStructureItem.parse_weight_title(os.path.basename(fs_path))
+        if self.type == 'static':
+            raw_url_path = raw_url_path.rsplit('/', 1)[0] + '/' + os.path.split(fs_path)[-1]
+        else:
+            self.menu_path = raw_url_path.replace('/', '.')
+            self.weight, self.title = ContentStructureItem.parse_weight_title(os.path.basename(fs_path))
 
         self.url_path = re.sub(r'^/[^/]+', '', raw_url_path)
 
@@ -103,9 +116,6 @@ class ContentStructureItem:
     def parent_url(self):
         return self.url_path.rsplit('/', 1)[0]
 
-    def glob(self, pattern):
-        return fnmatch.fnmatch(self.url_path, pattern)
-
 
 def index_content():
     base_dir = os.path.abspath(app.config['BASE_DIR'])
@@ -119,7 +129,11 @@ def index_content():
             continue
         root = root[len(base_dir):].strip(os.path.sep)
         for f in files:
-            make_content_page_endpoint(ContentStructureItem('leaf', os.path.join(root, f)))
+            if os.path.splitext(f)[1] == '.md':
+                make_content_page_endpoint(ContentStructureItem('leaf', os.path.join(root, f)))
+            else:
+                make_static_endpoint(ContentStructureItem('static', os.path.join(root, f)))
+
         make_content_page_endpoint(ContentStructureItem('node', root))
 
 index_content()
