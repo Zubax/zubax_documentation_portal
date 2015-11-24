@@ -45,8 +45,19 @@ def render_markdown(source):
 
     # Yay slowest markdown renderer ever
     hygiene = BeautifulSoup(rendered, 'html5lib')
+
+    # Styling tables
     for tag in hygiene.find_all('table'):
         tag.attrs['class'] = 'table table-striped table-condensed'
+
+    # Enabling Lightbox on images
+    image_id = 0
+    for a in hygiene.find_all('a'):
+        if a.img:
+            a.attrs['data-lightbox'] = 'image-%d' % image_id
+            image_id += 1
+            if a.img.attrs.get('title') or a.img.attrs.get('alt'):
+                a.attrs['data-title'] = a.img.attrs.get('title') or a.img.attrs.get('alt')
 
     # Oi moroz moroz ne moroz mena
     return Markup(str(hygiene))  # Ne moroz mena moigo kona

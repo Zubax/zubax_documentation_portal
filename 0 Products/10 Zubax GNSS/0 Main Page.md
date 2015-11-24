@@ -1,6 +1,6 @@
 # Zubax GNSS
 
-This page is about Zubax GNSS.
+This page is about <a href="zubax.com/product/zubax-gnss">Zubax GNSS</a>.
 
 ## Header 2
 
@@ -14,6 +14,11 @@ Some more data.
 --------|--------------
  Blah   | Whoa
   42    | 1123581321
+
+[![Alt text](https://zubax.com/logo.png)](https://zubax.com/logo.png)
+<a href="https://zubax.com/logo.png" style="float: right;">
+<img src="https://zubax.com/logo.png" alt="This is a logo" width="100" />
+</a>
 
 #### Source code
 
