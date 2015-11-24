@@ -80,6 +80,13 @@ def render_markdown(source, relative_url):
             if a.img.attrs.get('title') or a.img.attrs.get('alt'):
                 a.attrs['data-title'] = a.img.attrs.get('title') or a.img.attrs.get('alt')
 
+    # Rendering alert boxes
+    for alert_name in ['info', 'warning', 'danger']:
+        for x in hygiene.find_all(alert_name):
+            alert_name = x.name
+            x.name = 'div'
+            x.attrs['class'] = 'alert alert-' + alert_name
+
     # Oi moroz moroz ne moroz mena
     return Markup(str(hygiene))  # Ne moroz mena moigo kona
 
