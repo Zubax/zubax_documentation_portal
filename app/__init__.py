@@ -3,9 +3,9 @@
 # Author: Pavel Kirienko <pavel.kirienko@zubax.com>
 #
 
-import os
+import os, time, logging
 from functools import wraps
-from flask import Flask, render_template, send_from_directory, request, Markup
+from flask import Flask, render_template, send_from_directory, request, Markup, g
 from flask_menu import Menu
 from flask.ext.assets import Environment
 from flask.ext.misaka import Misaka
@@ -25,6 +25,8 @@ menu = Menu(app)
 misaka_instance = Misaka(app)
 
 cache = SimpleCache()
+
+logger = logging.getLogger('app')
 
 
 class MarkdownRenderer(misaka.HtmlRenderer, misaka.SmartyPants):
@@ -110,6 +112,18 @@ def cached(timeout=None, key=None):
 
 
 from app import main
+
+
+@app.before_request
+def before_request():
+    g.request_timestamp = time.time()
+    g.get_request_rel_time_ms = lambda: int((time.time() - g.request_timestamp) * 1000 + 1)
+
+
+@app.after_request
+def after_request(response_class):
+    logging.debug('Request %r processed in %d ms', request.path, g.get_request_rel_time_ms())
+    return response_class
 
 
 @app.errorhandler(404)
