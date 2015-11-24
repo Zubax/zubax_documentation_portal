@@ -175,9 +175,20 @@ def index_content():
     base_dir = os.path.abspath(app.config['BASE_DIR'])
     ignore_prefix = os.path.join(base_dir, 'app')
 
+    def is_valid_path(p):
+        if root.startswith(ignore_prefix):
+            return False
+        if root == base_dir:
+            return False
+        if (os.path.sep + '.') in root:
+            return False
+        if (os.path.sep + '_') in root:
+            return False
+        return True
+
     for root, dirs, files in os.walk(base_dir):
         root = os.path.abspath(root)
-        if root.startswith(ignore_prefix) or root == base_dir or (os.path.sep + '.') in root:
+        if not is_valid_path(root):
             continue
         if not files and not dirs:
             continue
