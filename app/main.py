@@ -3,11 +3,14 @@
 # Author: Pavel Kirienko <pavel.kirienko@zubax.com>
 #
 
-import os, re
+import os, re, logging
 from functools import reduce
 from . import app, cached, render_markdown_from_file
 from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_excerpt(markdown_source_path, url_root):
@@ -46,11 +49,13 @@ def find_product(item):
 @cached()
 def index():
     products = sorted(PRODUCTS.copy(), key=lambda x: x.weight)
+    logger.info('Rendering index page with %s products', len(products))
     return render_template('index.html', **locals())
 
 
 @app.route('/search')
 def search():
+    logger.info('Search request %r', request.args['q'])
     return redirect('https://duckduckgo.com/?q=site:docs.zubax.com ' + request.args['q'])
 
 
@@ -69,6 +74,7 @@ def make_content_page_endpoint(item):
         @cached()
         def endpoint():
             try:
+                logger.info('Rendering %r, %r with relative URL %r', item.url_path, item.fs_path, item.parent_url)
                 content = render_markdown_from_file(item.fs_path, item.parent_url)
                 try:
                     page_title = re.findall(r'<h(\d)>([^<]+)</h\1>', content)[0][1]
@@ -77,6 +83,7 @@ def make_content_page_endpoint(item):
                 return render_template('content_page.html', content=content, title=page_title)
             except IsADirectoryError:
                 if item.url_path.endswith('/tutorials') and item.category == 'Products':
+                    logger.info('Rendering tutorial listing at %r', item.url_path)
                     docs = []
                     product = find_product(item)
                     for tut in product.tutorial_items:
@@ -87,7 +94,9 @@ def make_content_page_endpoint(item):
                         })
                     page_title = product.title + ' &#8212; Tutorials'
                     return render_template('document_list.html', items=docs, title=page_title)
-                return redirect(item.parent_url)
+                else:
+                    logger.info('Rendering one level up from %r', item.url_path)
+                    return redirect(item.parent_url)
 
         endpoint.__name__ = 'content_page' + item.url_path.replace('/', '_')
 
