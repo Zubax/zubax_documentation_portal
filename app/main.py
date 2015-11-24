@@ -72,8 +72,7 @@ def make_content_page_endpoint(item):
             try:
                 with open(item.fs_path) as f:
                     markdown_source = f.read()
-                    url_path = item.parent_url if item.main_page else item.url_path
-                    content = render_markdown(markdown_source, url_path)
+                    content = render_markdown(markdown_source, item.parent_url)
                     try:
                         page_title = re.findall(r'<h(\d)>([^<]+)</h\1>', content)[0][1]
                     except IndexError:
