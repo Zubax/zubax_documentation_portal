@@ -122,7 +122,9 @@ def before_request():
 
 @app.after_request
 def after_request(response_class):
-    logging.debug('Request %r processed in %d ms', request.path, g.get_request_rel_time_ms())
+    processing_time_ms = g.get_request_rel_time_ms()
+    log_method = logger.debug if processing_time_ms < 100 else logger.error
+    log_method('Request %r processed in %d ms', request.path, processing_time_ms)
     return response_class
 
 
