@@ -5,15 +5,30 @@
 body {
     background-color: @gray-lightest;
 
-    #page-wrapper img {
-        max-width: 100%;
-
-        &.thumbnail {
-            float: right;
-            margin: 20px;
-            max-width: 250px;
-            display: block;
-            clear: both;
+    #page-wrapper {
+        img {
+            max-width: 100%;
+            &.thumbnail {
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 4px;
+                float: right;
+                margin: 20px;
+                max-width: 250px;
+                display: block;
+                clear: both;
+            }
+        }
+        .container-fluid {
+            .row {
+                p {
+                    img {
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        padding: 4px;
+                    }
+                }
+            }
         }
     }
 }
