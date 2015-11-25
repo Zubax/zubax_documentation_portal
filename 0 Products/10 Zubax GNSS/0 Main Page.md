@@ -14,10 +14,11 @@ Update instructions are [available here](http://zubax.com/news/zubax-gnss-firmwa
 Zubax GNSS is a high-performance positioning module for outdoor environments with doubly redundant [UAVCAN](/uavcan)
 bus interface.
 It includes a state-of-the-art GPS/GLONASS receiver, a high-precision barometer and a 3-axis compass.
-Links to the firmware sources, schematics and 3D printable models are available at the bottom of this page.
 
 If you're just looking for a quick-start guide, check out the [tutorials](tutorials),
 but please return to this page afterwards.
+
+Links to the firmware sources, schematics and 3D printable models are available at the bottom of this page.
 
 ### Mechanics
 

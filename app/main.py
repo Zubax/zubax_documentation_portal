@@ -8,6 +8,7 @@ from functools import reduce
 from . import app, cached, render_markdown_from_file
 from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
+from bs4 import BeautifulSoup
 
 
 logger = logging.getLogger(__name__)
@@ -15,8 +16,11 @@ logger = logging.getLogger(__name__)
 
 def get_excerpt(markdown_source_path, url_root):
     main_page = render_markdown_from_file(markdown_source_path, url_root)
-    paragraphs = re.findall(r'<p[^>]*>.+?</p>', main_page, re.DOTALL)
-    return Markup(paragraphs[0]) if paragraphs else None
+    borscht = BeautifulSoup(main_page, 'html5lib')
+    disallowed_tags = ['div', 'img', 'table']
+    for p in borscht.find_all('p'):
+        if all(ch not in disallowed_tags for ch in p.children) and re.match(r'\S', p.text):
+            return Markup(str(p))
 
 
 class ProductInfo:
