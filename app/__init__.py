@@ -99,7 +99,7 @@ def render_markdown(source, relative_url):
 
 
 def render_markdown_from_file(path, relative_url):
-    with open(resolve_relative_path(path)) as f:
+    with open(resolve_relative_path(path), encoding='utf8') as f:
         return render_markdown(f.read(), relative_url)
 
 
