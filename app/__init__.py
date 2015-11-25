@@ -75,7 +75,8 @@ def render_markdown(source, relative_url):
     for img in hygiene.find_all('img'):
         if img.parent.name != 'a':
             a = hygiene.new_tag('a', href=img.attrs['src'])
-            img.parent.append(a)
+            img.insert_after(a)
+            img.extract()
             a.append(img)
 
     # Enabling Lightbox on images
