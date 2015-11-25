@@ -12,3 +12,4 @@ Markdown==2.6.4
 misaka<2.0
 BeautifulSoup4
 pygments==1.6
+pyyaml

@@ -3,9 +3,9 @@
 # Author: Pavel Kirienko <pavel.kirienko@zubax.com>
 #
 
-import os, re, logging
+import os, re, logging, yaml
 from functools import reduce
-from . import app, cached, render_markdown_from_file
+from . import app, cached, render_markdown_from_file, resolve_relative_path
 from flask import request, render_template, redirect, send_file, Markup
 from flask_menu import register_menu, current_menu
 from bs4 import BeautifulSoup
@@ -29,10 +29,21 @@ class ProductInfo:
         self.fs_root = fs_root
         self.url_root = url_root
         self.weight = weight
-        self.forum_url = 'https://productforums.zubax.com/'  # TODO: link the right sub-forum somehow
         self.tutorials_url = None
         self.tutorial_items = []
         self.short_description_html = get_excerpt(main_page_path, url_root) or Markup(self.title)
+
+        try:
+            with open(resolve_relative_path(os.path.join(self.fs_root, 'options.yaml'))) as f:
+                self.config = yaml.load(f)
+                logger.info('Product config for %r: %r', self.title, self.config)
+        except OSError:
+            logger.info('Could not read config file for product %r', self.title)
+            self.config = {}
+
+    @property
+    def support_url(self):
+        return self.config.get('support_url', app.config['SUPPORT_URL'])
 
     @property
     def image_url(self):
@@ -207,9 +218,10 @@ def index_content():
             continue
         root = root[len(base_dir):].strip(os.path.sep)
         for f in files:
-            if os.path.splitext(f)[1] == '.md':
+            ext = os.path.splitext(f)[1]
+            if ext == '.md':
                 make_content_page_endpoint(ContentStructureItem('leaf', os.path.join(root, f)))
-            else:
+            elif ext != '.yaml':
                 make_static_endpoint(ContentStructureItem('static', os.path.join(root, f)))
 
         make_content_page_endpoint(ContentStructureItem('node', root))
