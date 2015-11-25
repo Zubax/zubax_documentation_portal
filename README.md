@@ -28,8 +28,19 @@ Still have questions? Check out the existing pages for details.
 
 ## Running on a local machine
 
-Make sure to have Python 3.4+ installed.
-Clone this repo and then execute the following:
+Install the following dependencies:
+
+* Python 3.4+
+* pip
+* LESS compiler (lessc)
+
+On a Debian-based system the dependencies can be installed as follows:
+
+```bash
+sudo apt-get install python3 python3-pip node-less
+```
+
+Once the dependencies are satisfied, clone this repo and then execute the following:
 
 ```bash
 pip3 install -r requirements.txt
