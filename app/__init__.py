@@ -166,7 +166,12 @@ def not_found(_error):
     if red:
         return red
 
-    return render_template('404.html'), 404
+    return render_template('http_error.html', error_description='File not found (404)'), 404
+
+
+@app.errorhandler(500)
+def not_found(_error):
+    return render_template('http_error.html', error_description='Internal server error (500)'), 500
 
 
 @app.route('/favicon.ico')

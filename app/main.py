@@ -74,11 +74,6 @@ def search():
     return redirect('https://duckduckgo.com/?q=site:docs.zubax.com ' + request.args['q'])
 
 
-@app.errorhandler(404)
-def not_found(_error):
-    return render_template('404.html'), 404
-
-
 def make_content_page_endpoint(item):
     if item.void:
         @app.before_first_request

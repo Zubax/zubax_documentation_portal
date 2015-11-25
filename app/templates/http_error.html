@@ -19,10 +19,11 @@ a {
     text-decoration: none;
 }
 </style>
-<title>File not found</title>
+<title>{{ error_description }}</title>
+</head>
 <body>
 <h1 style="font-size: 3em">
-    File not found (404)
+    {{ error_description }}
 </h1>
 <p style="font-size: 2em">
     <a href="/">Proceed to the home page</a>
@@ -31,4 +32,12 @@ a {
     <a href="https://github.com/Zubax/zubax_documentation_portal/issues/new">Report this error</a>
 </p>
 </body>
-</head>
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-37484982-4', 'auto');
+ga('send', 'pageview');
+</script>
