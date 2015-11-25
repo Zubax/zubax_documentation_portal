@@ -1,10 +1,16 @@
 @import "variables.less";
 
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,700,300italic&subset=latin,greek);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono);
+
 // Global Styles
 
 body {
     background-color: @gray-lightest;
     font-size: 16px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    color: black;
 
     #page-wrapper {
         img {
@@ -72,6 +78,10 @@ code {
     color: black;
     background-color: @gray-lightest;
     border: @gray-lighter solid 1px;
+}
+
+code, kbd, pre, samp {
+    font-family: "Roboto Mono", monospace;
 }
 
 nav {
