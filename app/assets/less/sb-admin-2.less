@@ -1,6 +1,6 @@
 @import "variables.less";
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,700,300italic&subset=latin,greek);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,300italic&subset=latin,greek);
 @import url(https://fonts.googleapis.com/css?family=Roboto+Mono);
 
 // Global Styles
@@ -13,6 +13,9 @@ body {
     color: black;
 
     #page-wrapper {
+        strong {
+            font-weight: 500;
+        }
         img {
             max-width: 100%;
             &.thumbnail {
@@ -39,6 +42,9 @@ body {
         }
         table.table {
             width: unset;
+            th {
+                font-weight: 500;
+            }
             td {
                 padding-left: 10px;
                 padding-right: 10px;
@@ -54,7 +60,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 h1 {
@@ -99,7 +105,7 @@ nav {
     .panel-heading {
         a {
             color: black;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 16px;
         }
     }
@@ -109,7 +115,7 @@ nav {
     .panel-heading {
         a {
             color: black;
-            font-weight: 600;
+            font-weight: 500;
         }
     }
     .product-description {
