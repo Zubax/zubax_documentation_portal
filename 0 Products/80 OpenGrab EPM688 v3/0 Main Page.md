@@ -123,12 +123,8 @@ Note that CAN frames filtered out by the hardware acceptance filters will not ca
 ## Links
 
 
-GitHub repo, source and mechanical drawings
-UAVCAN documentation 
-NicaDrone.com, purchase
-PCB layout and schematics 
-
-* [Product description](http://zubax.com/product/zubax-gnss)
 * [Source repository (firmware sources, drawings, etc)](https://github.com/Zubax/opengrab_epm_v3)
+* [PC layout and schematic] (https://upverter.com/ctech4285/1dada3422c772add/OpenGrab-EPM-V3R3/)
+* [Purchase (NicaDrone.com)] (http://nicadrone.com/index.php?id_product=66&controller=product)
 
-* [Tutorials](tutorials)
+* [Pixhawk documentation] (TODO)
