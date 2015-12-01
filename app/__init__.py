@@ -146,6 +146,7 @@ def after_request(response_class):
 def try_desperate_redirect(path):
     # Compatibility with the old website
     redirects = {
+        '/Main_Page': '/',
         '/Zubax_GNSS': '/zubax_gnss',
         '/DroneCode_Probe': '/dronecode_probe',
         '/UAVCAN_Interface': '/uavcan'
