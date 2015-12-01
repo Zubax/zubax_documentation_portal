@@ -22,7 +22,7 @@ configuration to charge the main PET capacitors up to 475 V.
 
 A thyristor bridge is used to discharge the capacitor in either direction through the winding inside the AlNiCo
 material.
-This results in a short, 20us 300A pulse creating a 100kAm field in the AlNiCo material.
+This results in a short, 20 us 300 A pulse creating a 100 kAm field in the AlNiCo material.
 This causes the magnetic domains in the AlNiCo magnets to align in a particular orientation to form a magnetic
 circuit with a ferrous target.
 
