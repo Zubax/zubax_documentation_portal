@@ -5,51 +5,51 @@
 <img src="image.jpg" class="thumbnail" title="Top view">
 <img src="bottom.jpg" class="thumbnail" title="Bottom view">
 
-The OpenGrab EPM v3 Developed by NicaDrone in cooperation with Zubax is an Electro Permanent Magnet, combining the advantages of electro and permanent magnets. 
-The device creates a very strong magnetic contact with a ferrous target. 
+The OpenGrab EPM v3 Developed by NicaDrone in cooperation with Zubax is an Electro Permanent Magnet, combining the advantages of electro and permanent magnets.
+The device creates a very strong magnetic contact with a ferrous target.
 
 
 The device supports UAVCAN, RC PWM and Push Button operation.
 
 ### Theory of operation
 
-The LPC11C24 drives a Mosfet connected to a transformer in a flyback configuration to charge the main PET capacitors up to 475V. 
+The LPC11C24 drives a Mosfet connected to a transformer in a flyback configuration to charge the main PET capacitors up to 475V.
 
-A Thyristor bridge is used to discharge the capacitor in either direction through the winding inside the AlNiCo material. This results in a short, 20us 300A pulse creating a 100kAm field in the AlNiCo material. 
-This causes the magnetic domains in the AlNiCo magnets to align in a particular orientation to form a magnetic circuit with a ferrous target plate. 
+A Thyristor bridge is used to discharge the capacitor in either direction through the winding inside the AlNiCo material. This results in a short, 20us 300A pulse creating a 100kAm field in the AlNiCo material.
+This causes the magnetic domains in the AlNiCo magnets to align in a particular orientation to form a magnetic circuit with a ferrous target plate.
 
 An ON command results in the charging and discharging the capacitors 3 times to achieve full magnetization.
 
-An OFF command results in charging and discharging the capacitors several times with changing direction and decreasing amplitude, effectively degaussing the AlNiCo material. 
+An OFF command results in charging and discharging the capacitors several times with changing direction and decreasing amplitude, effectively degaussing the AlNiCo material.
 
 ### Applications
-* Cargo lifting in UAVs 
+* Cargo lifting in UAVs
 
 * Robot work holding
 
 * Education demonstration of magnetic properties
 
-### Features 
-* 4.5-5.5V Vcc 
+### Features
+* 4.5-5.5V Vcc
 
-* PWM signal 
+* PWM signal
 
-* UAVCAN 
+* UAVCAN
 
-* Minimal steady state power <10mW 
+* Minimal steady state power <10mW
 
 * Short cycle time
 
-* Onboard NXP LPC11C24 with Can transceiver and UART bootloader 
+* Onboard NXP LPC11C24 with Can transceiver and UART bootloader
 
-* Open source firmware available on GitHub 
+* Open source firmware available on GitHub
 
 
 ### Mechanics
 
 The diagram below documents the Pin out, LED indicator (click to enlarge):
 
-<img src="PinOut.jpg" width=350 title="Drawing, bottom view">
+<img src="pinout.jpg" width=350 title="Drawing, bottom view">
 
 Mechanical Dimensions (click to enlarge):
 
@@ -70,28 +70,28 @@ Mechanical Dimensions (click to enlarge):
 | PWM error | PWM outside this range will be ignored    | <0.75 and >2.25 | ms   |
 | Mass      |                                           |              65 | g    |
 | Trange    | Temperature range for optimal performance |      -40 to +70 | degC |
-| PWM Frq   | Supported PWM frequency					|              50 | Hz   | 
+| PWM Frq   | Supported PWM frequency                   |              50 | Hz   |
 
 ### Interfaces
 
 #### Push Button
 
-Pressing this button will toggle the EPM. 
+Pressing this button will toggle the EPM.
 
 #### PWM
 
-Connect an RC receiver or Pixhawk with 50Hz PWM output to the PWM connector. Use a 3 position switch for OFF, NEUTRAL and ON. 
+Connect an RC receiver or Pixhawk with 50Hz PWM output to the PWM connector. Use a 3 position switch for OFF, NEUTRAL and ON.
 
-#### [UAVCAN interface](#UAVCAN_interface) 
+#### [UAVCAN interface](#UAVCAN_interface)
 
 With two connectors for each interface.
 
 #### Auxiliary Serial Port interface
 
-The EPM reports error and status messages over this interface. It can also be used to update the firmware. 
+The EPM reports error and status messages over this interface. It can also be used to update the firmware.
 Please see the "readme" in the firmware section of the Git repository.
 
-Power can be provided via: 
+Power can be provided via:
 
 * Any single UAVCAN port
 * PWM port
@@ -127,9 +127,9 @@ Note that CAN frames filtered out by the hardware acceptance filters will not ca
 
 ### Warnings
 
-* The winding inside the AlNiCo magnet are 0.2mm underneath a black epoxy. Dirt or metal shavings can be crushed into the epoxy causing an insulation break down. This normally destroys one of the Thyristors.  
+* The winding inside the AlNiCo magnet are 0.2mm underneath a black epoxy. Dirt or metal shavings can be crushed into the epoxy causing an insulation break down. This normally destroys one of the Thyristors.
 
-* There are several high voltage traces on the PCB covered by conformal coating. Pressing a finger on for example T1 firmly while switching is in progress will probably feel quite good. 
+* There are several high voltage traces on the PCB covered by conformal coating. Pressing a finger on for example T1 firmly while switching is in progress will probably feel quite good.
 
 ## Links
 
