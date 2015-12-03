@@ -141,9 +141,11 @@ and make sure that the option for GDB (DSF) is disabled.
         * Enter the following in the field `Initialization Commands`:
 
 ```
-target extended /dev/ttyACM0    # Or another port
+# Make sure to select the correct port here
+target extended /dev/ttyACM0
 
-monitor swdp_scan   # Use jtag_scan instead if necessary
+# Use jtag_scan instead of swdp_scan if necessary
+monitor swdp_scan
 attach 1
 monitor vector_catch disable hard
 
