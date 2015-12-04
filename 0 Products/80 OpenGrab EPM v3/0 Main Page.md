@@ -25,6 +25,8 @@ material.
 This results in a short, 20 us 300 A pulse creating a 100 kAm field in the AlNiCo material.
 This causes the magnetic domains in the AlNiCo magnets to align in a particular orientation to form a magnetic
 circuit with a ferrous target.
+More detailed explanation of the operating principle is available on
+[Wikipedia](https://en.wikipedia.org/wiki/Electropermanent_magnet#Electropermanent_magnet_principle).
 
 An ON command results in the charging and discharging the capacitors 3 times to achieve full magnetization.
 
