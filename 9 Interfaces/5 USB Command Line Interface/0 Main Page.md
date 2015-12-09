@@ -32,13 +32,12 @@ please follow instructions below to configure your system manually.
 Please skip this section if you're not using Windows, or if your OS is not older than Windows 10.
 
 1. Save the following file to your computer: <https://files.zubax.com/drivers/zubax.inf>.
-2. Connect a Zubax product that supports USB CLI to your computer.
-3. Open Control Panel &rarr; System &rarr; Device Manager.
-4. Find the Zubax product in the list and right-click on it.
-5. Click `Update driver`.
-6. Select `Search driver on computer`.
-7. Locate the file downloaded at step #1 in the appeared window.
-8. Click OK.
+2. Make sure the downloaded file has name `zubax.inf`. If it is named differently, rename it.
+3. Right-click the file and select `Install`.
+4. Follow the dialogs.
+
+If installation fails due to missing digital signature, please follow instructions on this page:
+<http://answers.microsoft.com/en-us/windows/forum/windows_8-hardware/how-to-install-a-driver-that-does-not-contain/7c3f299b-3483-4c96-8c44-87c7451af222>.
 
 ## How to connect
 
