@@ -1,7 +1,5 @@
 # Zubax GNSS 2
 
-## Overview
-
 <img src="image.jpg" class="thumbnail" title="Top view">
 <img src="bottom.jpg" class="thumbnail" title="Bottom view">
 
@@ -15,7 +13,9 @@ but please return to this page afterwards.
 
 Links to the firmware sources and 3D printable models are available at the bottom of this page.
 
-### Mechanics
+## Characteristics
+
+### Mechanical
 
 The drawing below documents the basic mechanical characteristics of Zubax GNSS 2,
 such as the placement of connectors, LED indicators and mounting holes (click to enlarge):
@@ -25,125 +25,6 @@ such as the placement of connectors, LED indicators and mounting holes (click to
 <info>
 If your Zubax GNSS 2 was supplied with a protective tape on the barometer, make sure to remove it before first use.
 </info>
-
-### Interfaces
-
-Zubax GNSS 2 features three communication interfaces, each of which is described in detail in the subsequent parts
-of this document. The interfaces are as follows:
-
-* Doubly redundant [UAVCAN interface](#UAVCAN_interface) with two connectors for each interface.
-Connector type is UAVCAN Micro connector (Molex CLIK-Mate).
-* USB (CDC ACM profile, also known as virtual serial port).
-Connector type is USB micro B (which is the most common USB connector).
-* DroneCode debug and diagnostics port.
-Connector type is DCD-M (JST SH).
-
-The device can be powered via the following:
-
-* Any single UAVCAN port
-* Both UAVCAN ports simultaneously (the power supply circuit prevents direct current flow between these power inputs)
-* USB
-
-It is allowed to power the device simultaneously via USB and UAVCAN, since the power supply circuit prevents
-back-powering via these interfaces.
-
-Power supply characteristics are identical regardless of the power input used - refer to the tables below for details.
-
-### LED indication
-
-#### PPS LED
-
-This LED indicator blinks with the rate of 1 Hz if the GNSS receiver has a navigation fix.
-
-#### Status LED
-
-<style>
-div.led {
-    animation-iteration-count: 1;
-}
-div.led:hover {
-    animation-iteration-count: infinite;
-    color: transparent;
-}
-div.led-ok {
-    animation-name: led-ok;
-    animation-duration: 1s;
-}
-div.led-warning {
-    animation-name: led-warning;
-    animation-duration: 0.3s;
-}
-div.led-error {
-    animation-name: led-error;
-    animation-duration: 0.1s;
-}
-@keyframes led-ok {
-    0%   {background-color:red;}
-    5%   {background-color:white;}
-    100% {background-color:white;}
-}
-@keyframes led-warning {
-    0%   {background-color:red;}
-    16%  {background-color:white;}
-    100% {background-color:white;}
-}
-@keyframes led-error {
-    0%   {background-color:red;}
-    50%  {background-color:white;}
-    100% {background-color:white;}
-}
-</style>
-
-This LED indicator shows the health of the device derived from the continuous self-diagnostics:
-
-Health  | Blinking ON/OFF duration
---------|------------------------------------------------
-OK      | <div class="led led-ok">0.05/0.95 seconds</div>
-WARNING | <div class="led led-warning">0.05/0.25 seconds</div>
-ERROR   | <div class="led led-error">0.05/0.05 seconds</div>
-
-Possible reasons for each status code are listed in the table below:
-
-Health  | Conditions
---------|----------------------------------------------------------------------------------------------
-OK      | Everything is OK; sensors are functioning properly.
-WARNING | See below.
-ERROR   | Sensor malfunction. The device may stop publishing corresponding sensor measurements to the bus.
-
-Possible reasons for the health being `WARNING`:
-
-* GNSS fix quality is below the configurable threshold (see [configuration parameters](#Configuration_parameters))
-(disabled by default)
-* Operating temperature range violation (see [characteristics](#Characteristics))
-* Magnetic field strength is too high (see [characteristics](#Characteristics)) (likely a sensor malfunction)
-* Magnetic field strength vector remained zero for several seconds (likely a sensor malfunction)
-
-#### CAN1 and CAN2 LEDs
-
-These LED indicators show the CAN bus traffic.
-
-Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
-received during the last few milliseconds.
-Under high bus load, these LED indicators are expected to glow steadily.
-If the interface is not connected to the bus, its LED indicator will be inactive,
-even if the device is actually attempting to transmit.
-
-Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicators to blink.
-
-#### Behavior during firmware update and bootup
-
-During first few seconds after power-on or after restart, and also in the process of firmware update,
-Zubax GNSS 2 uses its LED indicators in a different way, as described in the table below.
-
-Status                          | INFO  | CAN1  | CAN2
---------------------------------|-------|-------|-------
-CAN bit rate detection          | Off   | Solid | Off
-Dynamic node ID allocation      | Solid | Off   | Off
-Update in progress              | Solid | Solid | Off
-
-States that are not listed in the table indicate errors.
-
-## Characteristics
 
 ### General
 
@@ -155,8 +36,6 @@ Temperature             | -30           | 60            | &deg;C|GNSS hot start 
 Magnetic field strength |               | 1.3           | Gauss |
 
 #### Power supply
-
-Characteristics apply regardless of the used power input.
 
 Parameter       | Minimum       | Typical       | Maximum       | Units | Note
 ----------------|---------------|---------------|---------------|-------|----------------------------------------------
@@ -207,22 +86,142 @@ Please refer to the specifications provided by the sensor manufacturer.
 Sensor model:
 [Honeywell HMC5983](https://aerospace.honeywell.com/~/media/Images/Plymouth%20Website%20PDFs/Magnetic%20Sensors/Data%20Sheets/HMC5983_3_Axis_Compass_IC.ashx)
 
+## Interfaces
+
+Zubax GNSS 2 features three communication interfaces, each of which is described in detail in the subsequent parts
+of this document. The interfaces are as follows:
+
+* Doubly redundant [UAVCAN interface](#UAVCAN_interface) with two connectors for each interface.
+Connector type is UAVCAN Micro connector (Molex CLIK-Mate).
+* USB (CDC ACM profile, also known as virtual serial port).
+Connector type is USB micro B (which is the most common USB connector).
+* [DroneCode debug and diagnostics port. Connector type is DCD-M (JST SH)](/dronecode_probe).
+
+The device can be powered via the following:
+
+* Any single UAVCAN port
+* Both UAVCAN ports simultaneously (the power supply circuit prevents direct current flow between these power inputs)
+* USB
+
+It is allowed to power the device simultaneously via USB and UAVCAN, since the power supply circuit prevents
+back-powering via these interfaces.
+
+Power supply characteristics are identical regardless of the power input used - refer to the tables below for details.
+
+## Continuous self-diagnostics
+
+Zubax GNSS 2 continuously monitors its own status and sensor outputs for anomalies and malfunctions.
+Results of the continuous self-testing are mapped to three health codes: OK, WARNING, and ERROR.
+The table below documents how the device uses health codes to report its status.
+
+Health  | Conditions
+--------|----------------------------------------------------------------------------------------------
+OK      | Everything is OK; all enabled sensors are functioning properly.
+WARNING | See below.
+ERROR   | Sensor malfunction. The device may stop sending corresponding sensor measurements.
+
+Possible reasons for the health being `WARNING`:
+
+* GNSS fix quality is below the configured threshold (see [configuration parameters](#Configuration_parameters))
+(disabled by default).
+* Operating temperature range violation (see [characteristics](#Characteristics)).
+* Magnetic field strength is too high (see [characteristics](#Characteristics)) (likely a sensor malfunction).
+* Magnetic field strength vector remained zero for several seconds (likely a sensor malfunction).
+
+## LED indication
+
+### PPS LED
+
+This LED indicator blinks with the rate of 1 Hz if the GNSS receiver has a navigation fix.
+
+### Status LED
+
+<style>
+div.led {
+    padding: 0 2px;
+    animation-iteration-count: 1;
+}
+div.led:hover {
+    animation-iteration-count: infinite;
+}
+div.led-ok {
+    animation-name: led-ok;
+    animation-duration: 1s;
+}
+div.led-warning {
+    animation-name: led-warning;
+    animation-duration: 0.3s;
+}
+div.led-error {
+    animation-name: led-error;
+    animation-duration: 0.1s;
+}
+@keyframes led-ok {
+    0%   {background-color:red;}
+    5%   {background-color:white;}
+    100% {background-color:white;}
+}
+@keyframes led-warning {
+    0%   {background-color:red;}
+    16%  {background-color:white;}
+    100% {background-color:white;}
+}
+@keyframes led-error {
+    0%   {background-color:red;}
+    50%  {background-color:white;}
+    100% {background-color:white;}
+}
+</style>
+
+This LED indicator shows the health of the device derived from the continuous self-diagnostics as described above:
+
+Health  | Blinking ON/OFF duration
+--------|------------------------------------------------
+OK      | <div class="led led-ok">0.05/0.95 seconds</div>
+WARNING | <div class="led led-warning">0.05/0.25 seconds</div>
+ERROR   | <div class="led led-error">0.05/0.05 seconds</div>
+
+### CAN1 and CAN2 LEDs
+
+These LED indicators show the CAN bus traffic.
+
+Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
+received during the last few milliseconds.
+Under high bus load, these LED indicators are expected to glow steadily.
+If the interface is not connected to the bus, its LED indicator will be inactive,
+even if the device is actually attempting to transmit.
+
+Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicators to blink.
+
+### LED indication during firmware update and bootup
+
+During first few seconds after power-on or after restart, and also in the process of firmware update,
+Zubax GNSS 2 uses its LED indicators in a different way, as described in the table below.
+
+Status                          | INFO  | CAN1  | CAN2
+--------------------------------|-------|-------|-------
+CAN bit rate detection          |       | Solid |
+Dynamic node ID allocation      | Solid |       |
+Update in progress              | Solid | Solid |
+
+States that are not listed in the table indicate errors.
+
 ## UAVCAN interface
 
 This section describes the properties specific for this product only.
 For general info about the UAVCAN interface, please refer to the [UAVCAN interface documentation page](/uavcan).
 
-<info>If Zubax GNSS is used in a setup with non-redundant CAN bus, only CAN1 must be used.</info>
+<info>If Zubax GNSS 2 is used in a setup with non-redundant CAN bus, only CAN1 must be used.</info>
 
 ### Mode and status codes
 
-Zubax GNSS employs the following UAVCAN-defined operating modes:
+Zubax GNSS 2 employs the following UAVCAN-defined operating modes:
 
 UAVCAN operating mode   | Conditions
 ------------------------|----------------------------------------------------------------------------------------------
 INITIALIZING            | The device has just started and is not ready to begin normal operation yet.
 OPERATIONAL             | This is the main operating mode.
-SOFTWARE_UPDATE         | The device is undergoing firmware update. It will automatically transition to OPERATIONAL upon completion.
+SOFTWARE_UPDATE         | The device is undergoing firmware update via UAVCAN. It will automatically transition to OPERATIONAL mode upon completion.
 
 While the device resides in OPERATIONAL mode, its internal health codes are mapped directly to UAVCAN health codes.
 The description of internal health codes is provided above.
@@ -258,7 +257,7 @@ The following service servers are implemented:
 
 Data type                                       | Note
 ------------------------------------------------|----------------------------------------------------------------------
-`uavcan.protocol.GetNodeInfo`                   | Reported name: `com.zubax.gnss`, reported hardware version: 2.x.
+`uavcan.protocol.GetNodeInfo`                   | Please refer to the [identification information section](#Identification_information).
 `uavcan.protocol.GetDataTypeInfo`               |
 `uavcan.protocol.GetTransportStats`             |
 `uavcan.protocol.RestartNode`                   |
@@ -273,6 +272,7 @@ Input:
 Data type                                       | Note
 ------------------------------------------------|----------------------------------------------------------------------
 `uavcan.protocol.GlobalTimeSync`                | Always synchronizes with network time, if present.
+`uavcan.protocol.dynamic_node_id.Allocation`    | Used to allocate node ID if dynamic node ID allocation is enabled (it is enabled by defualt).
 
 Output (publishing frequency is configurable per message type):
 
@@ -285,63 +285,25 @@ Data type                                       | Note
 `uavcan.equipment.ahrs.Magnetometer`            |
 `uavcan.equipment.air_data.StaticPressure`      | Disabled by default
 `uavcan.equipment.air_data.StaticTemperature`   | Publication rate and priority are the same as for `uavcan.equipment.air_data.StaticPressure`. Disabled by default.
+`uavcan.protocol.dynamic_node_id.Allocation`    | Used to allocate node ID if dynamic node ID allocation is enabled (it is enabled by defualt).
 
-## Auxiliary Serial Port interface
+## USB interface
 
-<img src="usb_aux_serial.jpg" class="thumbnail">
+USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver,
+and also provides access to configuration parameters.
 
-Auxiliary Serial Port Interface is a command-line interface accessible via TTL UART.
-Its use is mainly optional, and, in most cases, it's not required at all.
-Compatible interface cables can be purchased from our distributors.
-
-### Connector
-
-The connector type used for this interface is
-[Molex CLIK-Mate 1.25mm 6 circuits](http://www.molex.com/molex/products/family?key=clikmate_wiretoboard_connectors).
-The device can be powered via this connector, as documented in the [power supply specification section](#Power_supply).
-
-Pin     | Type  | Function
---------|-------|--------------------------------
-1       | Power | Power input
-2       | UART  | TX
-3       | UART  | RX
-4       |       | Not connected
-5       |       | Not connected
-6       | Power | GND
-
-### Communication
-
-<img src="putty_config.png" class="thumbnail"
-     title="PuTTY configuration example (assuming that the serial port name is /dev/ttyUSB0)">
-
-#### UART configuration
-
-* Baud rate: 115200
-* Word length: 8
-* Parity: None
-* Stop bits: 1
-
-#### Terminal configuration
-
-CLI parameters:
-
-* Line ending: CR+LF (0x0D+0x0A, `\r\n`)
-* Local echo: Off
-* Local line editing: Off
-
-For example,
-<abbr title="Full-screen window manager that multiplexes a physical terminal between several processes, typically interactive shells">GNU Screen</abbr>
-can be used to connect to the the Auxiliary Serial Port as follows (assuming that the serial port name is /dev/ttyUSB0):
-
-```bash
-screen /dev/ttyUSB0 115200 8N1
-```
-
-To exit GNU Screen, press <kbd>Ctrl+A</kbd>, then <kbd>K</kbd>, then confirm by pressing <kbd>Y</kbd>.
+Please refer to the [USB command line interface documentation page](/usb_command_line_interface)
+for more information specific to this interface.
 
 ### Command-line interface
 
 This section documents supported CLI commands.
+
+#### `zubax_id`
+
+This is the standard Zubax identification command.
+It is supported by all devices that implement a command line interface.
+Please refer to the [USB command line interface documentation page](/usb_command_line_interface) for more info.
 
 #### `cfg`
 
@@ -360,20 +322,28 @@ Restarts the device. Note that sensors will not be restarted.
 
 #### `gnssbridge`
 
-Activates the direct bridge connection between the CLI port and the GNSS receiver.
-Both serial ports settings will remain unchanged (115200-8-N-1).
+Activates the direct bridge connection between USB CLI and the GNSS receiver.
 
 Once the bridge is activated, the state of the device changes as follows until reboot:
 
-* CLI becomes unavailable because its serial port is being used to communicate with the GNSS receiver.
-* The device stops publishing GNSS messages to UAVCAN.
+* CLI becomes unavailable because it is being used to communicate with the GNSS receiver.
+* The device stops publishing GNSS messages via UAVCAN.
 * Status code changes to CRITICAL because GNSS sensor data are not available anymore.
 
-Aside from the above, the device continues to work virtually as usual, e.g., its UAVCAN stack operates normally, other sensors are working (if enabled), etc.
+Aside from the above, the device continues to work virtually as usual, e.g., its UAVCAN stack operates normally,
+other sensors are working (if enabled), etc.
 
 #### `help`
 
 Print the list of available commands
+
+## Debug port
+
+DroneCode debug port provides access to debug interfaces: SWD and UART.
+It allows to update firmware and provides access to the debug UART that is used to log events and report problems.
+Debug port can be accessed using [Zubax DroneCode Probe](/dronecode_probe).
+
+This port is not needed for normal usage of the device.
 
 ## Configuration parameters
 
@@ -451,7 +421,7 @@ Default value: 16
 
 Publication interval of `uavcan.equipment.ahrs.MagneticFieldStrength`.
 
-Default value: 50000
+Default value: 20000
 
 Units: Microsecond
 
@@ -526,13 +496,21 @@ Set the node status to WARNING if the number of satellites used in the GNSS solu
 
 Default value: 0
 
+## Identification information
+
+This section documents device properties that are reported in response to identification requests:
+CLI command `zubax_id` and UAVCAN service `uavcan.protocol.GetNodeInfo`.
+
+* Product ID and UAVCAN node name: `com.zubax.gnss`.
+* Hardware version: 2.x.
+
 ## Firmware update
 
 Note that firmware update may cause the configuration stored in the non-volatile memory to reset to defaults.
 
 ### Via UAVCAN
 
-Zubax GNSS uses PX4 UAVCAN bootloader that implements UAVCAN-compliant firmware update protocol.
+Zubax GNSS 2 uses PX4 UAVCAN bootloader that implements UAVCAN-compliant firmware update protocol.
 
 Update procedure works as follows:
 
