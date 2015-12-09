@@ -2,6 +2,7 @@
 
 <img src="image.jpg" class="thumbnail" title="Zubax DroneCode Probe (generic)">
 <img src="Zubax_DroneCode_Probe_Auvidea.jpg" class="thumbnail" title="Zubax DroneCode Probe (by Auvidea GmbH)">
+<img src="schematic.png" class="thumbnail" title="Zubax DroneCode Probe schematic">
 
 Zubax DroneCode Probe is a generic JTAG / SWD + UART console adapter compatible with most ARM Cortex based designs and
 in particular with hardware maintained by the [DroneCode project](http://dronecode.org).
