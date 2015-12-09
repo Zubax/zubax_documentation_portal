@@ -504,6 +504,22 @@ CLI command `zubax_id` and UAVCAN service `uavcan.protocol.GetNodeInfo`.
 * Product ID and UAVCAN node name: `com.zubax.gnss`.
 * Hardware version: 2.x.
 
+## Accessories
+
+Zubax GNSS 2 can be used with the following accesories:
+
+* [UAVCAN Micro Patch Cable](/uavcan#UAVCAN_Micro_Patch_Cable)
+* [UAVCAN Micro to DF13 Adapter Cable](/uavcan#UAVCAN_Micro_to_DF13_Adapter_Cable)
+* [UAVCAN Micro Termination Plug](/uavcan#UAVCAN_Micro_Termination_Plug)
+* USB micro B cable (the most common type of USB cable)
+
+<img src="UAVCAN_Micro_to_DF13_adapter_cable.jpg" height=200 title="UAVCAN Micro to DF13 adapter cable (non-twisted)">
+<img src="CAN_termination_plug.jpg" height=200 title="UAVCAN Micro Termination Plug">
+<img src="MicroB_USB_Plug.jpg" height=200
+     title="USB micro B cable (source: wikipedia.org; owner: https://commons.wikimedia.org/wiki/User:Masamic; license: CC SA-3.0)">
+
+**The acessories can be purchased from [our distributors](https://zubax.com/sales-network).**
+
 ## Firmware update
 
 Note that firmware update may cause the configuration stored in the non-volatile memory to reset to defaults.
@@ -534,6 +550,7 @@ Please refer to the [DroneCode probe documentation page](/dronecode_probe) for i
 
 ## Links
 
+* [Purchase](https://zubax.com/sales-network)
 * [Product description](http://zubax.com/product/zubax-gnss-2)
 * [Source repository (firmware sources, 3D printable models, etc)](https://github.com/Zubax/zubax_gnss)
 * [Tutorials](tutorials)
