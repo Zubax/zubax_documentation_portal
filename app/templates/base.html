@@ -196,7 +196,8 @@
                 'highlightOnScroll': true, //add class to heading that is currently in focus
                 'highlightOffset': 100, //offset to trigger the next headline
                 'anchorName': function(i, heading, prefix) { //custom function for anchor name
-                    return encodeURI(heading.textContent.replace(' ', '_'));
+                    // This conversion matches the Python markdown postprocessor conversion.
+                    return encodeURI(heading.textContent.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, ''));
                 },
                 'headerText': function(i, heading, $heading) { //custom function building the header-item text
                     return $heading.text();

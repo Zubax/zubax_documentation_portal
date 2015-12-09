@@ -3,7 +3,7 @@
 # Author: Pavel Kirienko <pavel.kirienko@zubax.com>
 #
 
-import os, time, logging
+import os, time, logging, re
 from functools import wraps
 from flask import Flask, render_template, send_from_directory, request, Markup, g, redirect
 from flask_menu import Menu
@@ -94,6 +94,15 @@ def render_markdown(source, relative_url):
             alert_name = x.name
             x.name = 'div'
             x.attrs['class'] = 'alert alert-' + alert_name
+
+    # Generating table of contents anchors.
+    # JS-based solution doesn't quite work because if anchors are not set at page load time the browser won't scroll.
+    for header in ['h2', 'h3', 'h4', 'h5']:
+        for h in hygiene.find_all(header):
+            anchor = ''.join(h.strings).strip()
+            anchor = re.sub(r'\s', '_', anchor)
+            anchor = re.sub(r'[^A-Za-z0-9\-_:\.]', '', anchor)
+            h.attrs['id'] = anchor
 
     # Oi moroz moroz ne moroz mena
     return Markup(str(hygiene))  # Ne moroz mena moigo kona
