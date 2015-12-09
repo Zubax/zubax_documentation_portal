@@ -66,13 +66,12 @@ DCD-S   | JST          | **SM06B-SURS-TF**                                      
 
 ### ARM Cortex M debug connector
 
-<img src="ARM_Cortex_M_debug_cable.jpg" title="ARM Cortex M debug cable" class="thumbnail">
+<img src="Cortex_debug_connector.png" title="ARM Cortex M debug connector - 2x5 pins, pitch 1.27 mm" class="thumbnail">
+<img src="ARM_Cortex_M_debug_cable.jpg" title="ARM Cortex M debug cable - 2x5 pins, pitch 1.27 mm" class="thumbnail">
 
 This is the standard
 [ARM Cortex M Debug Connector](http://infocenter.arm.com/help/topic/com.arm.doc.faqs/attached/13634/cortex_debug_connectors.pdf)
 that can be seen on many other ARM debuggers.
-
-<img src="Cortex_debug_connector.png" title="ARM Cortex M debug connector">
 
 Pin     | Name
 --------|------------------------------
