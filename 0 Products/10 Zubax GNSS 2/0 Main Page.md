@@ -22,6 +22,8 @@ such as the placement of connectors, LED indicators and mounting holes (click to
 
 <img src="drawing.png" width=500 title="Drawing, bottom view">
 
+Two extra holes around the barometer can be used to install a protective cover.
+
 <info>
 If your Zubax GNSS 2 was supplied with a protective tape on the barometer, make sure to remove it before first use.
 </info>
