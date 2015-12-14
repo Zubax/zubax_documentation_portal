@@ -23,6 +23,18 @@ def get_excerpt(markdown_source_path, url_root):
             return Markup(str(p))
 
 
+def get_image(markdown_source_path, url_root):
+    main_page = render_markdown_from_file(markdown_source_path, url_root)
+    borscht = BeautifulSoup(main_page, 'html5lib')
+    for tag in borscht.recursiveChildGenerator():
+        if tag.name is None:
+            continue
+        if tag.name.startswith('h2'):
+            return
+        if tag.name == 'img':
+            return tag.attrs['src']
+
+
 class ProductInfo:
     def __init__(self, title, fs_root, url_root, weight, main_page_path):
         self.title = title
@@ -101,6 +113,7 @@ def make_content_page_endpoint(item):
                             'title': tut.title,
                             'url': tut.url_path,
                             'excerpt': get_excerpt(tut.fs_path, tut.url_path),
+                            'image_url': get_image(tut.fs_path, tut.url_path),          # Not used now
                         })
                     page_title = product.title + ' &#8212; Tutorials'
                     return render_template('document_list.html', items=docs, title=page_title)
