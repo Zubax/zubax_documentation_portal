@@ -3,10 +3,12 @@
 <img src="image.jpg" class="thumbnail" title="Top view">
 <img src="bottom.jpg" class="thumbnail" title="Bottom view">
 
-Zubax GNSS 2 is a high-performance positioning module for outdoor environments with doubly redundant [UAVCAN](/uavcan)
-bus interface and USB.
-It includes a state-of-the-art GPS/GLONASS receiver, a high-precision barometer,
+Zubax GNSS 2 is a multipurpose high-performance positioning module interfaced via CAN bus, USB, and UART.
+It includes a state-of-the-art multi-system GPS/GLONASS receiver, a high-precision barometric altimeter,
 and a 3-axis compass with thermal compensation.
+Zubax GNSS 2 supports variety of standard protocols, which ensures compatibility with most of existing
+software and hardware: [UAVCAN](/uavcan) (over CAN bus), NMEA 0183 (over USB and UART),
+and u-Blox M8 protocol.
 
 If you're just looking for a quick-start guide, check out the [tutorials](tutorials),
 but please return to this page afterwards.
@@ -55,7 +57,7 @@ Negative-going input threshold voltage  | 500           | 650           |       
 Differential output voltage, dominant   | 1.5           | 2.0           | 3.0           | V
 Differential output voltage, recessive  | -120          | 0             | 12            | mV
 
-#### DroneCode debug port UART
+#### UART
 
 Parameter                               | Minimum       | Typical       | Maximum       | Units
 ----------------------------------------|---------------|---------------|---------------|-------
@@ -94,16 +96,19 @@ Zubax GNSS 2 features three communication interfaces, each of which is described
 of this document. The interfaces are as follows:
 
 * Doubly redundant [UAVCAN interface](#UAVCAN_interface) with two connectors for each interface.
+This interface provides access to all features of Zubax GNSS 2, including measurements output,
+configuration, time synchronization, firmware update, etc.
 Connector type is UAVCAN Micro connector (Molex CLIK-Mate).
-* USB (CDC ACM profile, also known as virtual serial port).
+* [USB port](/usb_command_line_interface) (CDC ACM profile, also known as virtual serial port).
+This interface can be used for NMEA output and configuration.
 Connector type is USB micro B (which is the most common USB connector).
-* [DroneCode debug and diagnostics port. Connector type is DCD-M (JST SH)](/dronecode_probe).
+* [DroneCode port, used for NMEA output and diagnostics. Connector type is DCD-M (JST SH)](/dronecode_probe).
 
 The device can be powered via the following:
 
-* Any single UAVCAN port
-* Both UAVCAN ports simultaneously (the power supply circuit prevents direct current flow between these power inputs)
-* USB
+* Any single UAVCAN port.
+* Both UAVCAN ports simultaneously (the power supply circuit prevents direct current flow between these power inputs).
+* USB.
 
 It is allowed to power the device simultaneously via USB and UAVCAN, since the power supply circuit prevents
 back-powering via these interfaces.
@@ -291,11 +296,62 @@ Data type                                       | Note
 
 ## USB interface
 
-USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver,
-and also provides access to configuration parameters.
+USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver (also known as "GPS mouse")
+with standard NMEA 0183 protocol, and also provides access to configuration parameters.
 
 Please refer to the [USB command line interface documentation page](/usb_command_line_interface)
 for more information specific to this interface.
+
+### Protocol selection
+
+**Zubax GNSS 2 will automatically enable NMEA output via USB if the virtual serial port is opened with any baud rate
+within the range 4800 to 57600 baud, inclusive.
+If the port is open with any other baud rate, e.g. 115200, NMEA output will not be enabled,
+and only the command line interface will be available.**
+
+The baud rate range is chosen this way because all standard NMEA baud rates fall within this range,
+which allows to use Zubax GNSS 2 with GNSS software (e.g. GIS systems, navigation software, etc.) right out of the box
+without any preparatory configuration.
+
+### NMEA output
+
+Zubax GNSS 2 reports sensor data using the following standard NMEA sentences.
+Please also refer to the list of configuration parameters below to see what can be asjusted if necessary.
+
+NMEA sentence   | Component     | Purpose
+----------------|---------------|--------------------------------------------------------------
+`GPRMC`         | GNSS receiver | Recommended minimum navigation information
+`GPGGA`         | GNSS receiver | Global positioning system fix data
+`GPGSA`         | GNSS receiver | GPS DOP and active satellites
+`GPGSV`         | GNSS receiver | Information about satellites in view
+`HCHDG`         | Compass       | Magnetic heading
+`YXXDR` (type `P`)|Altimeter    | Static barometric pressure *(only if sensor is enabled)*
+`YXXDR` (type `C`)|Altimeter    | Static air temperature *(only if sensor is enabled)*
+
+More information on NMEA can be found here: <http://www.catb.org/gpsd/NMEA.html>,
+and here: <http://edu-observatory.org/gps/NMEA_0183.txt>.
+
+Refer to the tutorials to see examples of using Zubax GNSS 2 with
+<abbr title="Geographic information system">GIS</abbr> software.
+
+Sample NMEA output is shown below:
+
+```
+$GPRMC,072626.30,A,0036.27144,N,00042.93538,E,1.097,235.8,141215,,*35
+$GPGGA,072626.30,0036.27144,N,00042.93538,E,1,14,1.44,239.382,M,13.2,M,,*5E
+$GPGSV,4,1,15,08,52,283,17,10,80,126,26,14,27,155,34,15,15,039,08*74
+$GPGSV,4,2,15,16,00,216,16,18,49,073,13,21,25,109,22,22,77,181,25*7F
+$GPGSV,4,3,15,27,59,219,15,32,03,232,16,01,74,188,27,02,19,214,17*76
+$GPGSV,4,4,15,08,47,047,22,23,29,145,21,24,80,177,18*4A
+$HCHDG,266.0,,,,*40
+$YXXDR,P,0.98966,B*57
+$YXXDR,C,29.9,C*7F
+$GPRMC,072626.36,A,0036.27143,N,00042.93547,E,1.402,235.8,141215,,*34
+$GPGGA,072626.36,0036.27143,N,00042.93547,E,1,15,1.44,239.467,M,13.2,M,,*5A
+$GPGSA,A,3,08,10,14,18,21,22,27,01,02,23,24,12,2.24,1.44,1.71*04
+$HCHDG,266.2,,,,*42
+$YXXDR,P,0.98968,B*59
+```
 
 ### Command-line interface
 
@@ -325,6 +381,7 @@ Restarts the device. Note that sensors will not be restarted.
 #### `gnssbridge`
 
 Activates the direct bridge connection between USB CLI and the GNSS receiver.
+This feature allows to receive GNSS information using native u-Blox M8 protocol.
 
 Once the bridge is activated, the state of the device changes as follows until reboot:
 
@@ -339,13 +396,42 @@ other sensors are working (if enabled), etc.
 
 Print the list of available commands
 
-## Debug port
+## DroneCode port
 
-DroneCode debug port provides access to debug interfaces: SWD and UART.
-It allows to update firmware and provides access to the debug UART that is used to log events and report problems.
-Debug port can be accessed using [Zubax DroneCode Probe](/dronecode_probe).
+<img src="/dronecode_probe/image.jpg" class="thumbnail"
+     title="Zubax DroneCode Probe can be used to access the DroneCode port" />
 
-This port is not needed for normal usage of the device.
+DroneCode port provides access to JTAG/SWD and UART interfaces.
+This port allows to update firmware and provides access to the UART interface that is used to log events,
+report problems, and output measurements in NMEA format.
+
+DroneCode port can be accessed using [Zubax DroneCode Probe](/dronecode_probe).
+
+If outputting NMEA over UART is not of interest, this port will not be needed during normal use of the device.
+
+### NMEA output over UART
+
+For general information about NMEA output interface, [refer to the corresponding section above](#NMEA_output).
+Note that NMEA output over UART is disabled by default; refer to the
+[description of configuration parameters](#Configuration_parameters) to see how to enable it.
+
+The following connector pinout can be used to read NMEA over UART:
+
+Pin     | Type  | Name          | Comment
+--------|-------|---------------|--------------------------------------------------------------------------------------
+1       | N/C   |               |
+2       | OUT   | `UART_TX`     | NMEA output
+3       | N/C   |               |
+4       | N/C   |               |
+5       | N/C   |               |
+6       | GND   | `GND`         | Ground
+
+UART parameters are fixed and provided below:
+
+* Baud rate: 115200
+* Byte size: 8
+* Parity: None
+* Stop bits: 1
 
 ## Configuration parameters
 
@@ -405,10 +491,11 @@ When disabled:
 
 * The driver of the appropriate sensor will not be initialized.
 * The sensor will not be monitored - implying that, if it fails, it will not be detected and reported.
+* Measurements will not be reported via any of the available interfaces.
 
 This setting also affects `uavcan.equipment.air_data.StaticTemperature`.
 
-Default value: 0
+Default value: 0 (disabled)
 
 Units: Microsecond
 
@@ -497,6 +584,13 @@ Default value: 0
 Set the node status to WARNING if the number of satellites used in the GNSS solution is below this threshold.
 
 Default value: 0
+
+### `nmea.uart_on`
+
+Enable NMEA output via DroneCode port (UART).
+This configuration parameter does not affect NMEA output over USB.
+
+Default value: 0 (disabled)
 
 ## Identification information
 
