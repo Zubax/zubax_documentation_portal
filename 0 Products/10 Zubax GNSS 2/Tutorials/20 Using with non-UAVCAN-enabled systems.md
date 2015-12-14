@@ -112,12 +112,17 @@ A simpler way to make gpsd listen the right port is just to restart the daemon w
 
 ```bash
 killall -INT gpsd
-gpsd /dev/serial/by-id/usb-Zubax_Robotics_Zubax_GNSS_34FFD305435730343944224300000000-if00
+gpsd /dev/ttyACM0
 ```
 
-Note the long path used as an argument.
-It allows to directly refer to a particular virtual serial port, regardless of what TTY number was assigned to it.
-The long path is actually a symlink, in this case to `/dev/ttyACM0`:
+On most Linux systems, instead of directly specifying TTY device such as `/dev/ttyACM0`,
+it is possible to use persistent symlinks in `/dev/serial/by-id/`.
+These symlinks allow to refer directly to the device using its vendor name, product name, and unique ID,
+which is more convenient because unlike TTY number these parameters are persistent.
+For example, `/dev/ttyACM0` in the example above could be replaced with
+`/dev/serial/by-id/usb-Zubax_Robotics_Zubax_GNSS_34FFD305435730343944224300000000-if00`
+(unique ID of your Zubax GNSS will be different), or just
+`/dev/serial/by-id/usb-Zubax_Robotics_Zubax_GNSS*` to refer to any connected Zubax GNSS regardless of its unique ID.
 
 ```bash
 $ ls -l /dev/serial/by-id/
