@@ -55,7 +55,7 @@ PRODUCTS = []
 
 def find_product(item):
     for p in PRODUCTS:
-        if item.url_path.startswith(p.url_root):
+        if item.url_path.startswith(p.url_root + '/'):
             return p
 
 
