@@ -176,6 +176,7 @@ class ContentStructureItem:
 
         if self.type == 'leaf' and self.category == 'Products' and '/tutorials/' in self.url_path:
             find_product(self).tutorial_items.append(self)
+            find_product(self).tutorial_items = list(sorted(find_product(self).tutorial_items, key=lambda x: x.weight))
 
     @property
     def void(self):
