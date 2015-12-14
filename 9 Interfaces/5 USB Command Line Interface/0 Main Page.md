@@ -20,7 +20,8 @@ Zubax products with USB CLI use <abbr title="Communications Device Class">CDC</a
 e.g. `COMx` on Windows, `/dev/ttyACMx` on Linux, etc.
 
 Note that virtual serial ports are mostly indifferent to physical layer settings such as baudrate, parity,
-word size, etc, so when accessing a USB command shell they need not be configured explicitly.
+word size, etc, so when accessing a USB command shell they need not be configured explicitly, unless documentation
+specific to your product instructs you otherwise.
 
 USB CDC ACM devices can be used out of the box, without need to install special drivers, with all major operating
 systems except older versions of Windows (older than Windows 10).
