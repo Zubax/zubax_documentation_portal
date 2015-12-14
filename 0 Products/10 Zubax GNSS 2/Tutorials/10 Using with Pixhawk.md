@@ -1,17 +1,17 @@
 # Using with Pixhawk
 
+<img src="Zubax_GNSS2_with_UAVCAN_cable.jpg" class="thumbnail"
+     title="Zubax GNSS 2 with connected UAVCAN cable and CAN bus termination plug">
 <img src="UAVCAN_Micro_to_DF13_adapter_cable.jpg" class="thumbnail"
      title="UAVCAN Micro to DF13 adapter cable (non-twisted)">
 <img src="CAN_termination_plug.jpg" class="thumbnail" title="UAVCAN Micro termination plug">
-
-## Overview
 
 This tutorial shows how to connect and use [Zubax GNSS 2](/zubax_gnss_2) with [Pixhawk](http://pixhawk.org)
 running APM or the native PX4 firmware.
 
 Zubax GNSS 2 can be set up for use with any other [UAVCAN](http://uavcan.org)-enabled system in a very similar way.
 
-### Parts needed
+## Required parts
 
 Aside from Zubax GNSS 2 itself and the Pixhawk it will be connected to, the following parts are needed:
 
@@ -34,7 +34,7 @@ If you're using APM, the default configuration should be changed manually as fol
 * Possibly, some functionality that is disabled by default needs to be enabled
 (such as the time synchronization master or the air data sensor)
 
-[Connect USB, open CLI](/usb_command_line_interface), then execute:
+[Connect USB, open CLI](/usb_command_line_interface#How_to_connect), then execute:
 
 ```
 cfg set uavcan.node_id 50
