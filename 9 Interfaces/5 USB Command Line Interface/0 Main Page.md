@@ -53,16 +53,9 @@ cat: /dev/ttyACM0: Permission denied
 
 The problem can be solved in two ways.
 
-#### First way - add user to the `dialout` group
+#### First way
 
-```bash
-sudo usermod -a -G dialout $USER        # Adding the current user to the group 'dialout'
-exit                                    # It is necessary to re-login before changes take effect
-```
-
-Make sure to logout and then log back in, otherwise the changes may not take effect.
-
-#### Second way - configure udev to assign correct permissions automatically
+First way to fix the problem is to configure udev so that it assigns correct permissions automatically:
 
 ```bash
 echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60c7", MODE="0666"' | sudo tee /etc/udev/rules.d/42-zubax.rules
@@ -70,6 +63,17 @@ sudo udevadm control --reload
 ```
 
 Now connect your device.
+
+#### Second way
+
+Another way to fix the problem is to add the current user to the group `dialout`:
+
+```bash
+sudo usermod -a -G dialout $USER        # Adding the current user to the group 'dialout'
+exit                                    # It is necessary to re-login before changes take effect
+```
+
+Make sure to logout and then log back in, otherwise the changes may not take effect.
 
 ## How to connect
 
