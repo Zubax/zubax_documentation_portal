@@ -37,8 +37,39 @@ Please skip this section if you're not using Windows, or if your OS is not older
 3. Right-click the file and select `Install`.
 4. Follow the dialogs.
 
-If installation fails due to missing digital signature, please follow instructions on this page:
+If installation fails due to missing digital signature, please follow instructions provided on this page:
 <http://answers.microsoft.com/en-us/windows/forum/windows_8-hardware/how-to-install-a-driver-that-does-not-contain/7c3f299b-3483-4c96-8c44-87c7451af222>.
+
+### Configuring permissions on Linux
+
+Most Linux distributions assign very restrictive permissions to connected USB devices,
+which makes it impossible for regular users to access serial ports.
+This is what typically can be seen when an application fails to access the port due to insufficient permissions:
+
+```bash
+$ cat /dev/ttyACM0
+cat: /dev/ttyACM0: Permission denied
+```
+
+The problem can be solved in two ways.
+
+#### First way - add user to the `dialout` group
+
+```bash
+sudo usermod -a -G dialout $USER        # Adding the current user to the group 'dialout'
+exit                                    # It is necessary to re-login before changes take effect
+```
+
+Make sure to logout and then log back in, otherwise the changes may not take effect.
+
+#### Second way - configure udev to assign correct permissions automatically
+
+```bash
+echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="60c7", MODE="0666"' | sudo tee /etc/udev/rules.d/42-zubax.rules
+sudo udevadm control --reload
+```
+
+Now connect your device.
 
 ## How to connect
 
