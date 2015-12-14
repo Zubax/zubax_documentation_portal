@@ -112,6 +112,17 @@ screen /dev/ttyACM0
 
 To exit the application, press <kbd>Ctrl+A</kbd>, then <kbd>K</kbd>, then confirm by pressing <kbd>Y</kbd>.
 
+#### Note for Linux users
+
+On most Linux systems, instead of directly specifying TTY device such as `/dev/ttyACM0`,
+it is possible to use persistent symlinks in `/dev/serial/by-id/`.
+These symlinks allow to refer directly to the device using its vendor name, product name, and unique ID,
+which is more convenient because unlike TTY number these parameters are persistent.
+For example, `/dev/ttyACM0` could be replaced with persistent device path like
+`/dev/serial/by-id/usb-Zubax_Robotics_Zubax_GNSS_34FFD305435730343944224300000000-if00`,
+or just
+`/dev/serial/by-id/usb-Zubax_Robotics*` to refer to any connected Zubax product.
+
 ## How to identify the connected device
 
 All products by Zubax Robotics that implement USB CLI feature have one common CLI command: `zubax_id`.
