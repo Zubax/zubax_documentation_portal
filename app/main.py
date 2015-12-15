@@ -112,8 +112,8 @@ def make_content_page_endpoint(item):
                         docs.append({
                             'title': tut.title,
                             'url': tut.url_path,
-                            'excerpt': get_excerpt(tut.fs_path, tut.url_path),
-                            'image_url': get_image(tut.fs_path, tut.url_path),          # Not used now
+                            'excerpt': get_excerpt(tut.fs_path, tut.parent_url),
+                            'image_url': get_image(tut.fs_path, tut.parent_url),          # Not used now
                         })
                     page_title = product.title + ' &#8212; Tutorials'
                     return render_template('document_list.html', items=docs, title=page_title)

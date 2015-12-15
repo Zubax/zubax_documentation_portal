@@ -13,19 +13,14 @@
     {% endif %}
 
     <div class="col-lg-6">
-        <div class="panel panel-default product-panel">
+        <div class="panel panel-default item-panel">
             <div class="panel-heading"><a href="{{ p.url_root }}">{{ p.title }}</a></div>
             <div class="panel-body">
-                <div class="product-description">
+                <div class="item-description">
+                    <a href="{{ p.url_root }}"><img src="{{ p.image_url }}" align="right" /></a>
                     {{ p.short_description_html }}
                 </div>
-                <div class="product-image">
-                    <a href="{{ p.image_url }}" data-lightbox="product-image-{{ loop.index }}"
-                       data-title="{{ p.title }}">
-                        <img src="{{ p.image_url }}" />
-                    </a>
-                </div>
-                <div class="product-links btn-group btn-group-justified">
+                <div class="item-links btn-group btn-group-justified">
                     <div class="btn-group">
                         <button type="submit" class="btn btn-default" onclick="location.href='{{ p.url_root }}';">
                             <i class="fa fa-book"></i> Docs
