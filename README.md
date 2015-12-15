@@ -17,6 +17,8 @@ Also, a few custom extensions are introduced:
 so an image can be inserted simply like that: `<img src="image.jpg" title="Blah">`.
 * Add style `thumbnail` to make a thumbnail image: `<img src="image.jpg" title="Blah" class="thumbnail">`.
 * All links, including image `src` attributes, can be relative URLs.
+* In order to use an image in preview of the current document,
+add ID `preview`, e.g.: `<img src="picture.png" id="preview">`.
 
 File and directory naming pattern is as follows: `<weight> <title>`.
 Zero weight is a special case - it is used to indicate that the given page is the index page for the current section.
