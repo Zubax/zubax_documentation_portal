@@ -85,7 +85,7 @@ Remember that it may be necessary to restart Pixhawk before the changes take ful
 
 In order to make APM receive measurements from an UAVCAN-interfaced GNSS receiver, set the parameter `GPS_TYPE` to 9.
 
-<img src="mission_planner_gps_type_9.png" width=500 title="Enabling UAVCAN GPS via Mission Planner">
+<img src="mission_planner_gps_type_9.png" width=500 title="Enabling UAVCAN GPS via Mission Planner" id="preview">
 
 ### Compass
 

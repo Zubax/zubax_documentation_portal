@@ -30,7 +30,7 @@ Make sure to close the terminal before continuing. Do not restart the device.
 
 ## Setting up u-blox u-center
 
-<img src="u-center.png" title="u-blox u-center" class="thumbnail">
+<img src="u-center.png" title="u-blox u-center" class="thumbnail" id="preview" />
 
 [u-blox u-center can be downloaded directly from u-blox.com](http://www.u-blox.com/en/evaluation-tools-a-software/u-center/u-center.html).
 

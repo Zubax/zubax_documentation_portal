@@ -26,6 +26,13 @@ def get_excerpt(markdown_source_path, url_root):
 def get_image(markdown_source_path, url_root):
     main_page = render_markdown_from_file(markdown_source_path, url_root)
     borscht = BeautifulSoup(main_page, 'html5lib')
+    # Looking for an image tag with the correct ID
+    for tag in borscht.recursiveChildGenerator():
+        if tag.name is None:
+            continue
+        if tag.name == 'img' and tag.attrs.get('id') == 'preview':
+            return tag.attrs['src']
+    # Looking for an image before first h2 tag
     for tag in borscht.recursiveChildGenerator():
         if tag.name is None:
             continue

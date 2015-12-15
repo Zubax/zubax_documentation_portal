@@ -49,4 +49,4 @@ Having installed the plugin, click `Web` &rarr; `OpenLayers plugin` &rarr; `Open
 
 The result is shown on the screenshot below.
 
-<img src="qgis_e.jpg" title="Real-time position shown on OpenStreetMap" height=300 />
+<img src="qgis_e.jpg" title="Real-time position shown on OpenStreetMap" id="preview" height=300 />

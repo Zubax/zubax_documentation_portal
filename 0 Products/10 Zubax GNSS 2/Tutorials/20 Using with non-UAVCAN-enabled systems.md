@@ -98,7 +98,7 @@ Few examples below will show how to use some popular software with Zubax GNSS 2.
 
 ### Using with [gpsd](http://www.catb.org/gpsd/)
 
-<img src="xgps.png" class="thumbnail" title="xgps can be used to test gpsd and connected hardware"/>
+<img src="xgps.png" class="thumbnail" id="preview" title="xgps can be used to test gpsd and connected hardware"/>
 
 gpsd is a daemon for Unix platforms that connects to variety of GNSS hardware.
 On Ubuntu gpsd can be installed via APT as follows:
