@@ -146,6 +146,12 @@ monitor swdp_scan
 attach 1
 ```
 
+<info>
+ChibiOS users:
+You can install ChibiOS plugins from the following update site: <http://www.chibios.org/eclipse/chibistudio>.
+More info: <http://cxkg.net/chibios-board-generator>
+</info>
+
 ### Powering the target from DroneCode Probe
 
 Examples below are for the GDB's internal command line.
