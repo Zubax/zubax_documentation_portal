@@ -44,14 +44,14 @@ Connect one end of the cable to Zubax GNSS 2's DroneCode port using the followin
 
 Pin     | Type  | Name          | Comment
 --------|-------|---------------|--------------------------------------------------------------------------------------
-1       | N/C   |               |
+1       | Power | `+5VDC`       | Power supply (hardware v2.1 and newer). On hardware v2.0 this pin must be left unconnected. More info on power supply can be found in the product specification.
 2       | OUT   | `UART_TX`     | NMEA output
 3       | N/C   |               |
 4       | N/C   |               |
 5       | N/C   |               |
 6       | GND   | `GND`         | Ground
 
-Connect the other end to your hardware.
+Connect the other end of the cable to your hardware.
 
 Parameters of UART are provided below:
 
