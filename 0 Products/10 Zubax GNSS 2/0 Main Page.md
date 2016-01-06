@@ -109,6 +109,7 @@ The device can be powered via the following:
 * Any single UAVCAN port.
 * Both UAVCAN ports simultaneously (the power supply circuit prevents direct current flow between these power inputs).
 * USB.
+* DroneCode port (hardware revisions v2.1 and newer).
 
 It is allowed to power the device simultaneously via USB and UAVCAN, since the power supply circuit prevents
 back-powering via these interfaces.
@@ -404,6 +405,7 @@ Print the list of available commands
 DroneCode port provides access to JTAG/SWD and UART interfaces.
 This port allows to update firmware and provides access to the UART interface that is used to log events,
 report problems, and output measurements in NMEA format.
+Hardware revisions v2.1 and newer can also be powered via this port.
 
 DroneCode port can be accessed using [Zubax DroneCode Probe](/dronecode_probe).
 
