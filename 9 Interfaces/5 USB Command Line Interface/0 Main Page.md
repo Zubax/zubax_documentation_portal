@@ -99,10 +99,29 @@ If necessary, configure the following terminal options (although they should be 
 
 See the screenshot for an example.
 
+### Picocom
+
+Picocom is a minimal dumb-terminal emulation program. It is like Minicom, only it's "pico" instead of "mini".
+It is the recommended option for Linux and Mac users.
+
+The following example shows how to start picocom on the serial port `/dev/ttyACM0`:
+
+```bash
+picocom /dev/ttyACM0
+```
+
+If necessary (typically it's not), baudrate can be specified with `-b`, e.g.:
+
+```bash
+picocom /dev/ttyACM0 -b 115200
+```
+
+To exit the application, press <kbd>Ctrl+A</kbd>, then <kbd>Ctrl+X</kbd>.
+
 ### GNU Screen
 
 GNU Screen is an open source command line application that can be used to access serial CLI.
-It is the recommended option for Linux and Mac users.
+[Screen cannot be used with baudrates higher than 460800](http://savannah.gnu.org/bugs/?45741).
 
 Assuming that the serial port name is `/dev/ttyACM0`, GNU Screen can be started trivially as follows:
 
