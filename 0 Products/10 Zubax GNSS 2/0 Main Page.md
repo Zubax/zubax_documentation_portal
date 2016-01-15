@@ -421,7 +421,7 @@ The following connector pinout can be used to read NMEA over UART:
 
 Pin     | Type  | Name          | Comment
 --------|-------|---------------|--------------------------------------------------------------------------------------
-1       | N/C   | `+5VDC`       | Power supply (hardware v2.1 and newer). On hardware v2.0 this pin must be left unconnected.
+1       | POWER | `+5VDC`       | Power supply (hardware v2.1 and newer). On hardware v2.0 this pin must be left unconnected.
 2       | OUT   | `UART_TX`     | NMEA output
 3       | N/C   |               |
 4       | N/C   |               |
