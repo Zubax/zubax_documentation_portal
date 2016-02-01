@@ -78,6 +78,8 @@ RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       | 
 
 ## UAVCAN interface
 
+<img src="epm_connected_to_pixhawk_via_uavcan.jpg" class="thumbnail" title="EPM connected to Pixhawk via UAVCAN">
+
 This section describes the properties specific for this product only.
 For general info about the UAVCAN interface, please refer to the [UAVCAN interface documentation page](/uavcan).
 
