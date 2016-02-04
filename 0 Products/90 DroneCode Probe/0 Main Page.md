@@ -136,6 +136,7 @@ and make sure that the option for GDB (DSF) is disabled.
         * Untick `Use remote target`.
     * Tab `Startup`:
         * If a boot loader is used, make sure that `Image offset` is configured correctly.
+        * *[Optional]* Enter the following line in the field `Run Commands`: `run`.
         * Enter the following in the field `Initialization Commands`:
 
 ```
