@@ -233,7 +233,7 @@ immediately followed by the node name in lowercase with an underscore as a word 
 For instance, a device named "Sub-Etha Sens-O-Matic" may have the following name string:
 
 ```
- com.zubax.subetha_sensomatic
+com.zubax.subetha_sensomatic
 ```
 
 Please refer to your product's documentation for its node name string value.
