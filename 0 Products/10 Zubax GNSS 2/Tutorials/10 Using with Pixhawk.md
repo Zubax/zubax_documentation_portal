@@ -24,44 +24,22 @@ custom needs, in which case they should refer to the relevant documentation for 
 
 ## Configuring Zubax GNSS 2
 
-<info>
-If you're using PX4 flight software, Zubax GNSS 2 will be able to auto-configure itself, so this step can be skipped.
-</info>
-
-If you're using APM, the default configuration should be changed manually as follows:
-
-* The parameter `uavcan.node_id` needs to be set manually
-* Possibly, some functionality that is disabled by default needs to be enabled
-(such as the time synchronization master or the air data sensor)
-
-[Connect USB, open CLI](/usb_command_line_interface#How_to_connect), then execute:
-
-```
-cfg set uavcan.node_id 50
-```
-
-This command will set the Node ID to 50.
-You can use any other value as long as it doesn't conflict with other nodes.
-
-Save the configuration into the non-volatile memory and then restart the device to apply new configuration:
-
-```
-cfg save
-reboot
-```
-
-Configuration is complete.
+Zubax GNSS 2 will be able to auto-configure itself upon connection to the vehicle bus.
+However, it may be needed to enable some features that are disabled by default, such as barometer.
+Please [refer to the doc page to learn how to alter configuration parameters](/zubax_gnss_2#Configuration_parameters).
 
 ## Configuring Pixhawk with APM firmware
 
 <info>If you don't know what firmware you're using - you're using APM.</info>
 
-UAVCAN driver is enabled in APM by default, but it is necessary to change some configuration parameters
-to make APM listen to external UAVCAN-connected sensors.
 The following chapters assume that [Mission Planner](http://planner.ardupilot.com/) is installed on the user's computer,
 and that Pixhawk is otherwise properly configured.
 
 Remember that it may be necessary to restart Pixhawk before the changes take full effect.
+
+### Enabling UAVCAN in APM
+
+Open Mission Planner, navigate to the tab `CONFIG/TUNING`, and set the parameter `BRD_CAN_ENABLE` to `2`.
 
 ### GPS
 
@@ -72,14 +50,14 @@ In order to make APM receive measurements from an UAVCAN-interfaced GNSS receive
 ### Compass
 
 In order to make APM receive measurements from an UAVCAN-interfaced compass, open the tab `INITIAL SETUP`,
-then select `Mandatory Hardware` &rarr; `Compass`. On the displayed page:
-
-* Check the checkbox `Enable`.
-* In the `Orientation` frame, select the option `Manual`, `ROTATION_NONE`.
-You may need to select a different rotation if the arrow printed on Zubax GNSS 2 is not aligned with
-vehicle's longitudinal axis.
+then select `Mandatory Hardware` &rarr; `Compass`.
+Find the compass that is marked with the check `Externally mounted`, and make sure that it is selected in
+the drop-down field `Primary Compass`. See the screenshot below for an example.
 
 <img src="mission_planner_compass.png" width=500 title="Enabling external compass via Mission Planner">
+
+You may need to select a different rotation if the arrow printed on Zubax GNSS 2 is not aligned with the
+vehicle's longitudinal axis.
 
 Don't forget to perform compass calibration when done.
 
@@ -119,9 +97,7 @@ otherwise it will fall back to internal barometer.
 
 ## Configuring Pixhawk with PX4 firmware
 
-Set the configuration parameter `UAVCAN_ENABLE` to 2, then reboot.
-
-<info>All other GNSS drivers must be disabled.</info>
+Set the configuration parameter `UAVCAN_ENABLE` to `2` or `3`, then reboot.
 
 Please refer to the [Pixhawk documentation](http://pixhawk.org/firmware/apps/uavcan) for extra info.
 
@@ -132,7 +108,7 @@ Since Zubax GNSS 2 can be powered directly from the bus, the electrical connecti
 1. Connect Zubax GNSS 2 with Pixhawk using the appropriate cable.
 In case you're using a non-redundant CAN interface (which is the only available option for Pixhawk v1),
 only CAN1 must be used, leaving CAN2 empty.
-2. Insert the termination plug into another connector of the used CAN interface on the Zubax GNSS 2.
+2. Terminate the CAN bus using the termination plug.
 
 Now the setup is ready to work.
 
