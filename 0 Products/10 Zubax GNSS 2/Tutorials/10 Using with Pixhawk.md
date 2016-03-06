@@ -63,37 +63,8 @@ Don't forget to perform compass calibration when done.
 
 ### Barometer
 
-APM does not have proper support for external barometers, so proposed solution is a bit hackish, but it still works.
-This modification is not required if external barometer is not needed.
-Also, make sure that [the barometer is enabled on Zubax GNSS 2](/zubax_gnss_2#Configuration_parameters).
-
-Power off the Pixhawk, extract its microSD card and mount it on a computer.
-Create a file `etc/rc.txt` on the card and put the following script in it:
-
-```bash
-# uORB will be started again by the main init script later, it's OK
-if uorb start
-then
-    echo "ext: uORB started"
-    if uavcan start 1
-    then
-        echo "ext: UAVCAN started"
-    else
-        echo "ext: Could not start UAVCAN"
-    fi
-else
-    echo "ext: Could not start uORB"
-fi
-
-# This delay allows UAVCAN to pick external sensors before internal ones
-sleep 8
-```
-
-Insert the card back into Pixhawk.
-
-Done, now the Pixhawk will be using barometer installed on Zubax GNSS 2,
-provided that Zubax GNSS 2 was connected to the bus at the time of boot;
-otherwise it will fall back to internal barometer.
+External barometer should be recognized by APM automatically, no special preparations are needed.
+Make sure that [the barometer is enabled on Zubax GNSS 2](/zubax_gnss_2#Configuration_parameters).
 
 ## Configuring Pixhawk with PX4 firmware
 
