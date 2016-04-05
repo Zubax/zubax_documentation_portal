@@ -1,6 +1,12 @@
 # Sapog BLDC Controller Firmware
 
+<img src="px4-logo.png" class="thumbnail"
+     title="Sapog has been developed in cooperation with the PX4 Autopilot project">
+
 Sapog is an advanced open source multiplatform BLDC motor controller firmware for electric aerial vehicles.
+
+The source git repository together with the developer documentation is located at
+<https://github.com/PX4/sapog>.
 
 ## Overview
 
