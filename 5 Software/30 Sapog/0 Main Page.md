@@ -47,6 +47,11 @@ The firmware maps its status and the hardware health onto the following set of h
     - The motor cannot be started.
     - The temperature sensor is not responding correctly.
 
+In the mode `SOFTWARE_UPDATE`, the following health codes are used:
+
+- `OK` - Everything is OK.
+- `CRITICAL` - Firmware update has failed; another attempt will be made soon.
+
 ### Power-on self test
 
 Sapog performs a self test after powering on.
@@ -62,6 +67,10 @@ The following components are tested during the self test:
 - Cross-phase short circuit (only if the motor is not connected).
 
 ## Configuration parameters
+
+Valid range and default values for each parameter can be retrieved using the communication interfaces
+documented below (CAN, UART).
+Also note that the list below may not present complete list of all available parameters.
 
 ### Motor control settings
 
@@ -262,10 +271,149 @@ Index of the current ESC's RGB LED.
 
 ## UAVCAN interface
 
+This section describes the properties specific for this product only.
+For general info about the UAVCAN interface, please refer to the [UAVCAN interface documentation page](/uavcan).
+
+<info>If Sapog is used in a setup with non-redundant CAN bus, only CAN1 must be used.</info>
+
+UAVCAN node name: `io.px4.sapog`.
+
+### Messages
+
+#### Input messages
+
+##### `uavcan.equipment.esc.RawCommand`
+
+Sets the duty cycle (open loop) set point.
+
+##### `uavcan.equipment.esc.RPMCommand`
+
+Sets the RPM setpoint (closed loop mode).
+
+##### `uavcan.equipment.indication.BeepCommand`
+
+Makes the ESC beep with the motor windings, with defined frequency and duration.
+
+##### `uavcan.equipment.indication.LightsCommand`
+
+Assigns the RGB LED state.
+
+##### `uavcan.protocol.enumeration.Begin`
+
+Used for automatic motor index identification; refer to the UAVCAN specification for details.
+
+The indication input is implemented through manual rotation of the motor;
+the direction of rotation will be remembered and used to initialize the motor reverse.
+
+##### `uavcan.protocol.dynamic_node_id.Allocation`
+
+Used for dynamic node ID allocation; refer to the UAVCAN specification for details.
+
+#### Output messages
+
+##### `uavcan.protocol.NodeStatus`
+
+UAVCAN node status.
+Node mode and health codes are mapped durectly onto the UAVCAN node status constants.
+
+##### `uavcan.equipment.esc.Status`
+
+Standard ESC status message.
+
+##### `uavcan.protocol.enumeration.Indication`
+
+Used for automatic motor index identification; refer to the UAVCAN specification for details.
+
+##### `uavcan.protocol.debug.LogMessage`
+
+Used to publish status reports, e.g. during software update.
+
+##### `uavcan.protocol.dynamic_node_id.Allocation`
+
+Used for dynamic node ID allocation; refer to the UAVCAN specification for details.
+
+### Services
+
+#### Node control servers
+
+##### `uavcan.protocol.GetNodeInfo`
+
+##### `uavcan.protocol.GetTransportStats`
+
+##### `uavcan.protocol.RestartNode`
+
+##### `uavcan.protocol.file.BeginFirmwareUpdate`
+
+Request arguments will be ignored;
+the device will reboot into the bootloader shortly after receiving request.
+
+#### Configuration control servers
+
+##### `uavcan.protocol.param.GetSet`
+
+Configuration parameters are described later in this document.
+
+##### `uavcan.protocol.param.ExecuteOpcode`
+
+This service must not be invoked while the motor is running.
+
 ## RCPWM interface
+
+RCPWM input features:
+
+- Can be disabled completely (refer to configuration parameters).
+- Pulse width range from 1 ms to 2 ms (configurable).
+- Safety feature - the motor will not start if the setpoint went straight to a high value.
 
 ## Serial CLI
 
+### Parameters
+
+- Baudrate: 115200
+- Word width: 8
+- Parity: no
+- Stop bits: 1
+- Echo enabled
+
+The board prints diagnostic info at power on, which can be used for troubleshooting.
+
+### Basic commands
+
+- `help` - Get basic usage info.
+- `cfg` - Change, save or reset the board configuration.
+    - `cfg help` - Crash course on command usage.
+- `dc` - Set duty cycle.
+    - `dc arm` - Needs to be executed once before the command can be used.
+    - `dc X` - Set duty cycle to (X * 100) percent, e.g. 0.5 for 50%
+    - `dc` - Stop.
+- `rpm` - Set RPM setpoint.
+    - `rpm arm` - Needs to be executed once before the command can be used.
+    - `rpm X` - Set RPM setpoint to X RPM.
+    - `rpm` - Stop.
+- `test` - Run the self test.
+- `stat` - Print the basic motor control state (RPM, duty cycle, mode, voltage, current).
+
 ## Indication
 
+### Sound
 
+Note that sound indication only works if the motor is connected.
+
+After power on:
+
+- Two short high-pitched beeps - Self test OK, ready to work.
+- One short low-pitched beep every few seconds - Self test failed, the motor will not start.
+
+### RGB LED
+
+State           | Meaning
+----------------|----------------------------------------------------------------------------------
+Solid white     | Initialization is in progress, not ready to work yet
+Solid green     | Everything is OK
+Blinking cyan   | UAVCAN auto-enumeration is in progress, awaiting confirmation
+Solid yellow    | Unable to start the motor (e.g. rotor is stuck)
+Solid red       | Fatal error, or self test failure. Use CLI to obtain detailed info
+
+Note that if the LED is being controlled externally (e.g. via UAVCAN), the firmware won't indicate its status via LED in order to not interfere with external LED commands.
+
+While the firmware update is in progress, LED indication is different. **TODO: document.**
