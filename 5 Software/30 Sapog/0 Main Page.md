@@ -1,12 +1,11 @@
-# Sapog BLDC Controller Firmware
+# PX4 Sapog BLDC Controller Firmware
 
 <img src="px4-logo.png" class="thumbnail"
      title="Sapog has been developed in cooperation with the PX4 Autopilot project">
 
-Sapog is an advanced open source multiplatform BLDC motor controller firmware for electric aerial vehicles.
+PX4 Sapog is an advanced open source multiplatform BLDC motor controller firmware for electric aerial vehicles.
 
-The source git repository together with the developer documentation is located at
-<https://github.com/PX4/sapog>.
+The source git repository and developer documentation are located at <https://github.com/PX4/sapog>.
 
 ## Overview
 
@@ -145,6 +144,18 @@ Number of unsuccessfull attemts to start the motor before locking up.
 The lock can be removed by setting the target duty cycle or RPM to zero.
 
 #### BLDC commutation settings
+
+##### `mot_pwm_hz`
+
+Motor PWM frequency.
+
+Units: Hertz.
+
+##### `mot_i_shunt_mr`
+
+Resistance of the current shunt.
+
+Units: MilliOhm.
 
 ##### `mot_tim_adv`
 
@@ -325,6 +336,14 @@ Node mode and health codes are mapped durectly onto the UAVCAN node status const
 ##### `uavcan.equipment.esc.Status`
 
 Standard ESC status message.
+The following data fields are populated:
+
+- Error count
+- Voltage
+- Current
+- Temperature
+- RPM
+- Power rating, in percent
 
 ##### `uavcan.protocol.enumeration.Indication`
 
