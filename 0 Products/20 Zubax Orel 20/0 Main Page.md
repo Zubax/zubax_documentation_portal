@@ -5,6 +5,7 @@
 Zubax Orel 20 is an advanced ESC (BLDC motor controller) with doubly redundant CAN bus interface designed for
 unmanned aerial vehicles.
 Zubax Orel 20 runs [PX4 Sapog - an advanced open source multiplatform BLDC motor controller firmware](/sapog).
+Power capability: 9~18 V, 20 A.
 
 This page contains only information that is relevant to the hardware.
 Information about the firmware and its usage is provided in the section dedicated to [Sapog](/sapog).
@@ -32,7 +33,7 @@ Relative humidity       | 0             | 100           | %RH           | Non-co
 Parameter       | Minimum       | Typical       | Maximum       | Units | Note
 ----------------|---------------|---------------|---------------|-------|----------------------------------------------
 Supply voltage  | 9             | 14.8          | 18            | V     |
-Average motor current   |       |               | 20            | A     | Assuming good thermal dissipation
+Average motor current   |       |               | 20            | A     | Assuming good heat dissipation
 Average motor current   |       |               | 30            | A     | Assuming perfect heat dissipation
 Peak phase current      |       |               | 100           | A     | Assuming perfect heat dissipation
 Power stage thermal resistance || 50            |               | K/W   | Junction to air
