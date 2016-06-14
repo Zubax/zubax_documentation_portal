@@ -1,6 +1,8 @@
 # Zubax Orel 20
 
-<img src="image.jpg" class="thumbnail" title="Zubax Orel 20">
+<img src="image.jpg" class="thumbnail" title="Zubax Orel 20, top view">
+<img src="image2.jpg" class="thumbnail" title="Top view">
+<img src="bottom.jpg" class="thumbnail" title="Bottom view">
 
 Zubax Orel 20 is an advanced ESC (BLDC motor controller) with doubly redundant CAN bus interface, designed for
 unmanned aerial vehicles.
