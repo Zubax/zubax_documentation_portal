@@ -2,6 +2,8 @@
 
 <img src="px4-logo.png" class="thumbnail"
      title="Sapog has been developed in cooperation with the PX4 Autopilot project">
+<img src="zubax_orel_20.jpg" class="thumbnail"
+     title="Zubax Orel 20 is an advanced ESC running the PX4 Sapog firmware">
 
 PX4 Sapog is an advanced open source multiplatform BLDC motor controller firmware for electric aerial vehicles.
 
