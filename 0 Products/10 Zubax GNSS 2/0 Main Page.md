@@ -88,7 +88,7 @@ Sensor model:
 Please refer to the specifications provided by the sensor manufacturer.
 
 Sensor model:
-[Honeywell HMC5983](https://aerospace.honeywell.com/~/media/Images/Plymouth%20Website%20PDFs/Magnetic%20Sensors/Data%20Sheets/HMC5983_3_Axis_Compass_IC.ashx)
+[Honeywell HMC5983](http://www51.honeywell.com/aero/common/documents/myaerospacecatalog-documents/Defense_Brochures-documents/HMC5983_3_Axis_Compass_IC.pdf)
 
 ## Interfaces
 
