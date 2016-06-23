@@ -325,7 +325,7 @@ NMEA sentence   | Component     | Purpose
 `GPGGA`         | GNSS receiver | Global positioning system fix data
 `GPGSA`         | GNSS receiver | GPS DOP and active satellites
 `GPGSV`         | GNSS receiver | Information about satellites in view
-`HCHDG`         | Compass       | Magnetic heading
+`HCHDG`         | Compass       | Raw magnetic heading; not calibrated, only valid if the board is mounted horizontal
 `YXXDR` (type `P`)|Altimeter    | Static barometric pressure *(only if sensor is enabled)*
 `YXXDR` (type `C`)|Altimeter    | Static air temperature *(only if sensor is enabled)*
 
