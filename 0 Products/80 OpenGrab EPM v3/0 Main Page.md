@@ -250,6 +250,7 @@ Under high bus load, this LED indicator is expected to glow constantly.
 Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicator to blink.
 
 ### DIP switch
+<img src="DIP_switch.jpg" class="thumbnail" title="DIP Switch">
 
 The device is equipped with 4-position DIP switch that allows to configure Hardpoint ID and enable or disable
 UAVCAN dynamic node ID allocation:
