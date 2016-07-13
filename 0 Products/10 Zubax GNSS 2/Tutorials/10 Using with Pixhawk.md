@@ -63,7 +63,7 @@ Don't forget to perform compass calibration when done.
 
 ### Barometer
 
-External barometer should be recognized by APM automatically, no special preparations are needed.
+Set the configuration parameter `GND_PRIMARY` to 1.
 Make sure that [the barometer is enabled on Zubax GNSS 2](/zubax_gnss_2#Configuration_parameters).
 
 ## Configuring Pixhawk with PX4 firmware
