@@ -157,13 +157,54 @@ Units: Hertz.
 
 Resistance of the current shunt.
 
-Units: MilliOhm.
+Units: milliohm.
 
-##### `mot_tim_adv`
+##### `mot_tim_adv_min`
 
-Commutation advance angle.
+Minimum commutation advance angle.
 
-Units: angular degrees.
+Refer to `mot_tim_adv_max` for more info.
+
+Units: angular degrees electrical.
+
+##### `mot_tim_adv_max`
+
+<img src="timing_advance_interpolation.png" class="thumbnail" title="Timing advance interpolation logic">
+
+Maximum commutation advance angle.
+
+The angle is specified in electrical degrees; one electrical degree is equivalent to 3 phase degrees.
+For example, 90&deg; of phase advance is equivalent to 30&deg; of electrical advance.
+
+Refer to `mot_tim_cp_min` and `mot_tim_cp_max` for even more info.
+
+Contract: `mot_tim_adv_max` &ge; `mot_tim_adv_min`.
+
+Units: angular degrees electrical.
+
+##### `mot_tim_cp_min`
+
+When the commutation period is **longer** than this value, the **minimum** advance angle will be used
+(see `mot_tim_adv_min`).
+
+Refer to `mot_tim_cp_max` for more info.
+
+Units: microseconds.
+
+##### `mot_tim_cp_max`
+
+When the commutation period is **shorter** than this value, the **maximum** advance angle will be used
+(see `mot_tim_adv_max`).
+
+When the commutation period is between `mot_tim_cp_max` and `mot_tim_cp_min`, the advance angle will be
+proportionally linearly interpolated between `mot_tim_adv_min` and `mot_tim_adv_max`.
+The interpolation feature allows the controller to use low advance angles at low RPM,
+and high advance angles at high RPM,
+which allows to significantly extent the range of stable operating RPM of the motor.
+
+Contract: `mot_tim_cp_max` &le; `mot_tim_cp_min`.
+
+Units: microseconds.
 
 ##### `mot_blank_usec`
 
