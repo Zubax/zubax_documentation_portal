@@ -169,8 +169,6 @@ Units: angular degrees electrical.
 
 ##### `mot_tim_adv_max`
 
-<img src="timing_advance_interpolation.png" class="thumbnail" title="Timing advance interpolation logic">
-
 Maximum commutation advance angle.
 
 The angle is specified in electrical degrees; one electrical degree is equivalent to 3 phase degrees.
@@ -183,6 +181,8 @@ Contract: `mot_tim_adv_max` &ge; `mot_tim_adv_min`.
 Units: angular degrees electrical.
 
 ##### `mot_tim_cp_min`
+
+<img src="timing_advance_interpolation.png" class="thumbnail" title="Timing advance interpolation logic">
 
 When the commutation period is **longer** than this value, the **minimum** advance angle will be used
 (see `mot_tim_adv_min`).
