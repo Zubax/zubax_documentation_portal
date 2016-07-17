@@ -34,10 +34,9 @@ Relative humidity       | 0             | 100           | %RH           | Non-co
 
 Parameter       | Minimum       | Typical       | Maximum       | Units | Note
 ----------------|---------------|---------------|---------------|-------|----------------------------------------------
-Supply voltage  | 9             | 14.8          | 18            | V     |
-Average motor current   |       |               | 20            | A     | Assuming good heat dissipation
-Average motor current   |       |               | 30            | A     | Assuming perfect heat dissipation
-Peak phase current      |       |               | 100           | A     | Assuming perfect heat dissipation
+Supply voltage  | 9             | 14.8          | 18.3          | V     | Suitable Lithium-ion battery packs: LiCoO<sub>2</sub>: 3S ~ 4S; LiFePO<sub>4</sub>: 4S ~ 5S
+Average motor current   |       |               | 20            | A     | See temperature limits
+Peak phase current      |       |               | 100           | A     | See temperature limits
 Power stage thermal resistance || 50            |               | K/W   | Junction to air
 
 #### CAN bus
