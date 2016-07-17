@@ -200,7 +200,7 @@ When the commutation period is between `mot_tim_cp_max` and `mot_tim_cp_min`, th
 proportionally linearly interpolated between `mot_tim_adv_min` and `mot_tim_adv_max`.
 The interpolation feature allows the controller to use low advance angles at low RPM,
 and high advance angles at high RPM,
-which allows to significantly extent the range of stable operating RPM of the motor.
+which allows to significantly extend the range of stable operating RPM of the motor.
 
 Contract: `mot_tim_cp_max` &le; `mot_tim_cp_min`.
 
