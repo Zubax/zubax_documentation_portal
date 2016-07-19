@@ -37,6 +37,11 @@ and that Pixhawk is otherwise properly configured.
 
 Remember that it may be necessary to restart Pixhawk before the changes take full effect.
 
+Please note that the APM firmware needs to be not older than the specified below version numbers:
+
+* ArduCopter 3.4
+* ArduPlane 3.5
+
 ### Enabling UAVCAN in APM
 
 Open Mission Planner, navigate to the tab `CONFIG/TUNING`, and set the parameter `BRD_CAN_ENABLE` to `2`.
