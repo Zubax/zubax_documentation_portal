@@ -435,6 +435,10 @@ RCPWM input features:
 
 ## Serial CLI
 
+<info>
+It is recommended to use [Zubax DroneCode Probe](/dronecode_probe) to access the CLI.
+</info>
+
 ### Parameters
 
 - Baudrate: 115200
