@@ -29,13 +29,14 @@ cache = SimpleCache()
 logger = logging.getLogger('app')
 
 
-class MarkdownRenderer(misaka.HtmlRenderer, misaka.SmartyPants):
+class MarkdownRenderer(misaka.HtmlRenderer):
     def block_code(self, text, lang):
         if not lang:
             return '\n<pre><code>%s</code></pre>\n' % Markup.escape(text)
         lexer = pygments.lexers.get_lexer_by_name(lang, stripall=True)
         formatter = pygments.formatters.HtmlFormatter()
-        return pygments.highlight(text, lexer, formatter)
+        rendered = pygments.highlight(text, lexer, formatter)
+        return rendered
 
 
 def resolve_relative_path(p):
@@ -49,7 +50,8 @@ def render_markdown(source, relative_url):
     renderer = MarkdownRenderer()
     md = misaka.Markdown(renderer, extensions=misaka.EXT_TABLES | misaka.EXT_FENCED_CODE | misaka.EXT_AUTOLINK |
                          misaka.EXT_STRIKETHROUGH)
-    rendered = md.render(source)
+    pre_rendered = md(source)
+    rendered = misaka.smartypants(pre_rendered)
 
     # Yay slowest markdown renderer ever
     hygiene = BeautifulSoup(rendered, 'html5lib')
