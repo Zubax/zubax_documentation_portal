@@ -26,8 +26,6 @@ Make sure that the following dependencies are installed on the computer:
 One code sample is worth 1024 words:
 
 ```python
-#!/usr/bin/env python3
-
 import uavcan, time, math
 
 # Initializing UAVCAN node instance
