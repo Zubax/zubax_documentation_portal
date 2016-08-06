@@ -77,7 +77,7 @@ power_rating_pct: 13
 esc_index: 3
 ```
 
-# Using UAVCAN GUI Tool
+## Using UAVCAN GUI Tool
 
 It is also possible to control ESC directly from the interactive console of the
 [UAVCAN GUI Tool](https://github.com/UAVCAN/gui_tool).
