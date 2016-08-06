@@ -60,14 +60,6 @@ node.add_handler(uavcan.equipment.esc.Status, lambda msg: print(uavcan.to_yaml(m
 node.spin()
 ```
 
-It is also possible to control ESC directly from the interactive console of the
-[UAVCAN GUI Tool](https://github.com/UAVCAN/gui_tool).
-In that case you won't need to create a new node yourself in the script - just use the application's own node,
-it is accessible from the interactive console.
-For details, please read the documentation of the UAVCAN GUI Tool.
-
-<img src="uavcan_gui_tool_sine_setpoint_demo.png" title="Generating sine setpoint with UAVCAN GUI Tool">
-
 ## Running the script
 
 Save the code somewhere and run it.
@@ -84,3 +76,13 @@ rpm: 1514
 power_rating_pct: 13
 esc_index: 3
 ```
+
+# Using UAVCAN GUI Tool
+
+It is also possible to control ESC directly from the interactive console of the
+[UAVCAN GUI Tool](https://github.com/UAVCAN/gui_tool).
+In that case you won't need to create a new node yourself in the script - just use the application's own node,
+it is accessible from the interactive console.
+For details, please read the documentation of the UAVCAN GUI Tool.
+
+<img src="uavcan_gui_tool_sine_setpoint_demo.png" title="Generating sine setpoint with UAVCAN GUI Tool">
