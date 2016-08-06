@@ -29,16 +29,17 @@ One code sample is worth 1024 words:
 import uavcan, time, math
 
 # Initializing UAVCAN node instance
+# In this example we're using an SLCAN adapter on the port '/dev/ttyACM0'
+# PyUAVCAN also supports other types of adapters, refer to its docs to learn more
 node = uavcan.make_node('/dev/ttyACM0', node_id=1, bitrate=1000000)
 
 # Initializing a dynamic node ID allocator
 node_monitor = uavcan.app.node_monitor.NodeMonitor(node)
 dynamic_node_id_allocator = uavcan.app.dynamic_node_id.CentralizedServer(node, node_monitor)
 
-# Waiting for at least one ESC to appear online
+# Waiting for at least one other node to appear online (our local node is already online)
 while len(dynamic_node_id_allocator.get_allocation_table()) <= 1:
     print('Waiting for other nodes to become online...')
-    print(dynamic_node_id_allocator.get_allocation_table())
     node.spin(timeout=1)
 
 # Publishing setpoint values from this function; it is invoked periodically from the node thread
