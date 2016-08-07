@@ -21,6 +21,12 @@ such as the placement of connectors and mounting holes (click to enlarge):
 
 <img src="drawing.png" height=500 title="Drawing, top view">
 
+Both connectors of the primary CAN interface are located on the top side of the board.
+They are explicitly marked as `CAN1` on the PCB silkscreen.
+Connectors of the secondary CAN interface are located on the bottom side of the board,
+and marked as `CAN2`.
+For reference, the red (positive) power supply wire is connected to the top side of the board.
+
 ### General
 
 #### Environment
@@ -81,6 +87,11 @@ Zubax Orel 20 has two CAN bus interfaces available via the standard UAVCAN Micro
 two connectors per interface in parallel.
 
 The device does not use the 5V supply from the UAVCAN bus.
+
+<warning>
+CAN2 (secondary CAN bus interface) can only be used in configurations with redundant CAN bus.
+If the bus is not redundant, only CAN1 (primary CAN bus interface) can be used.
+</warning>
 
 ### DroneCode Debug Port
 
