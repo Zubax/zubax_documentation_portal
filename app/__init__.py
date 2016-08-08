@@ -30,7 +30,7 @@ logger = logging.getLogger('app')
 
 
 class MarkdownRenderer(misaka.HtmlRenderer):
-    def block_code(self, text, lang):
+    def blockcode(self, text, lang):
         if not lang:
             return '\n<pre><code>%s</code></pre>\n' % Markup.escape(text)
         lexer = pygments.lexers.get_lexer_by_name(lang, stripall=True)
