@@ -69,4 +69,6 @@ You may use the UAVCAN GUI Tool to check what ESC setpoints are being sent to th
 
 ArduPilot documentation portal: [ardupilot.org](http://ardupilot.org/).
 
+A somewhat related article on the ArduPilot website: <http://ardupilot.org/copter/docs/common-uavcan-escs.html>.
+
 If you have any questions, bring them to the [support forum](https://productforums.zubax.com).
