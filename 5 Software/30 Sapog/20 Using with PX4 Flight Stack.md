@@ -1,8 +1,8 @@
 # Using with PX4 Flight Stack
 
-This article demonstrates how to install a [Sapog](/sapog)-based ESC into a UAV controlled by the
+This article demonstrates how to install [Sapog](/sapog)-based ESC into a UAV controlled by the
 [PX4 Flight Stack](http://px4.io).
-Autopilots based on the PX4 Flight Stack include Pixhawk, Pixracer, and many other.
+Autopilots based on the PX4 Flight Stack include Pixhawk, Pixracer, and many others.
 
 The concepts explained here are applicable to any Sapog-based ESC design, such as [Zubax Orel 20](/zubax_orel_20).
 
