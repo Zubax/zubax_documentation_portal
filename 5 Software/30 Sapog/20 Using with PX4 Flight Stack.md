@@ -22,6 +22,13 @@ The theory behind the process of auto-enumeration can be learned from the [UAVCA
 A hands-on example from the developer perspective can be found on the page dedicated to
 [direct control via UAVCAN](/sapog/direct_control_via_uavcan).
 
+During auto-enumeration, the following configuration parameters will be assigned:
+
+* `esc_index`
+* `ctl_dir`
+
+Learn more about configuration parameters on the [main page](/sapog).
+
 ## Configuring the flight controller
 
 First of all, make sure the PX4 stack is of version 1.4.2 or newer.
@@ -34,6 +41,9 @@ connect [QGroundControl](http://qgroundcontrol.com) to the UAV, and navigate to 
 Set the configuration parameter `UAVCAN_ENABLE` to the value of 4, then reboot the flight controller.
 
 ### Enumerating the ESC
+
+You can skip this section if there is only one ESC in your setup,
+because the ESC index is already set to zero by default.
 
 Start the process of ESC auto-enumeration as shown on the screenshot below:
 

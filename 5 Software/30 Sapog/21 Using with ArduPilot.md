@@ -39,6 +39,8 @@ ch> cfg save
 ch> reboot
 ```
 
+You may also want to set the parameter `ctl_dir` to change the direction of rotation to the opposite.
+
 ## Configuring the flight controller
 
 You will need a version of ArduPilot that is not older than the ones specified below:
