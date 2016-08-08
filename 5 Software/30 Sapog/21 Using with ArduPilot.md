@@ -48,7 +48,7 @@ You will need a version of ArduPilot that is not older than the ones specified b
 * ArduCopter 3.4
 * ArduPlane 3.5
 
-Set the configuration parameter `BRD_CAN_ENABLE` to the value of 4, then reboot the flight controller
+Set the configuration parameter `BRD_CAN_ENABLE` to the value of 3, then reboot the flight controller
 (at the time of writing this,
 the documentation of ArduPilot wrongly stated that the only valid values of `BRD_CAN_ENABLE` are 0 and 1;
 this is not true).
