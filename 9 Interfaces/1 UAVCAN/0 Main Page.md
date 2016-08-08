@@ -15,26 +15,32 @@ The UAVCAN specification is available at [uavcan.org](http://uavcan.org).
 
 Products by Zubax Robotics incorporate two UAVCAN Micro connectors in parallel for each available CAN interface.
 Such parallel connection allows to eliminate an external T-connector when attaching the device to a CAN bus.
-
-<img src="CAN_bus_connection.png" width=500 title="Connecting a node to CAN bus">
-
-If a given CAN node is the last node of the bus, it must terminate the bus with termination plugs,
-as shown in the diagram below.
-
-<img src="CAN_bus_termination.png" width=500 title="Terminating the CAN bus after the last node">
-
-If the device incorporates redundant CAN interfaces,
-the CAN bus connection circuitry prevents direct current flow between power inputs from different interface connectors,
-so that if one bus suffers a power failure (e.g., a short circuit), it won’t be propagated to the other bus.
-The power inputs of all available interfaces are always protected by a self-recovering fuse or some other
-overcurrent protection circuit.
-
-[UAVCAN Micro connector documentation and pinouts](http://uavcan.org/Specification/8._Hardware_design_recommendations/#uavcan-micro-connector).
-
-### Connecting to a non-redundant bus
+End nodes of the daisy chain must terminate the bus with 120&#8486; termination resistors,
+typically in the form of termination plugs (pictured on the right).
 
 The UAVCAN stack allows to use any redundantly interfaced node with a non-redundant bus by design.
 In this case, **only the first interface must be used**, and the redundant interfaces should be simply left unconnected.
+
+Non-redundant bus connection diagram:
+
+<img src="can_bus_daisy_chaining_non_redundant.png" title="CAN bus daisy chaining - non-redundant CAN bus">
+
+Doubly redundant bus connection diagram:
+
+<img src="can_bus_daisy_chaining_redundant.png" title="CAN bus daisy chaining - doubly redundant CAN bus">
+
+Note that some nodes have embedded termination resistors, and therefore they do not require an
+external termination plug on the unused connectors.
+Such nodes are sometimes implemented with only one CAN connector, and therefore they
+must be placed at the ends of the bus.
+
+If the device incorporates redundant CAN interfaces,
+the CAN bus connection circuitry prevents direct current flow between power inputs from different interface connectors,
+so that if one bus suffers a power failure (e.g., a short circuit), it won’t affect the other bus.
+The power inputs of all available interfaces are always protected by a self-recovering fuse or some other
+overcurrent protection circuit.
+
+[More information can be gathered from the relevant part of the UAVCAN specification](http://uavcan.org/Specification/8._Hardware_design_recommendations).
 
 ## Cables
 

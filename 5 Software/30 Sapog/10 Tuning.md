@@ -1,6 +1,6 @@
 # Tuning PX4 Sapog
 
-<img src="uavcan_gui_tool_param_change.png" title="Editing configuration parameters using UAVCAN GUI Tool" class="thumbnail">
+<img src="uavcan_gui_tool_setting_esc_index.png" title="Editing configuration parameters using UAVCAN GUI Tool" class="thumbnail">
 
 This tutorial covers the basics of how to configure and tune PX4 Sapog to maximize its performance with a given motor.
 
