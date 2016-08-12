@@ -39,10 +39,12 @@ Relative humidity       | 0             | 100           | %RH           | Non-co
 
 #### Power
 
-Parameter       | Minimum       | Typical       | Maximum       | Units |
-----------------|---------------|---------------|---------------|-------|
-Supply voltage  | 4.1           | 5.0           | 5.5           | V     |
-Supply current  | 30            | 50            | 80            | mA    |
+Parameter                       | Minimum       | Typical       | Maximum       | Units | Note
+--------------------------------|---------------|---------------|---------------|-------|------------------------------
+Supply voltage                  | 4.1           | 5.0           | 5.5           | V     |
+Supply current                  | 30            | 50            | 80            | mA    | SMD pads floating, UART and SWD lines floating
+3.3 V rail output voltage       | 3.2           | 3.3           | 3.4           | V     |
+3.3 V rail external load        |               |               | 100           | mA    |
 
 #### CAN bus
 
