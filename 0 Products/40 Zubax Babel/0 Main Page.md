@@ -24,7 +24,7 @@ such as the placement of connectors and mounting holes (click to enlarge):
 
 <img src="drawing.png" height=500 title="Drawing, top view">
 
-Pinout is shown on the diagram:
+Pinout is shown on the diagram (click to enlarge):
 
 <img src="pinout.png" height=500 title="Zubax Babel pinout">
 
