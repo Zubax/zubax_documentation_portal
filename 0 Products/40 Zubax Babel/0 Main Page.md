@@ -214,6 +214,11 @@ All parameters can be stored into the non-volatile memory on the adapter,
 in which case they will be re-initialized to the saved values autimatically every time the adapter is turned on.
 The non-volatile memory feature is explained later in this section.
 
+Keep in mind that Zubax Babel can be communicated with either via USB or via DCD Port (UART),
+but not both at the same time.
+When USB is connected, only USB is used, the UART port is ignored.
+In order to use UART, USB must be disconnected.
+
 ### SLCAN commands
 
 #### CAN controller configuration
@@ -357,6 +362,9 @@ When timestamping is enabled, frame notification blocks will be extended with fo
 containing the time, in milliseconds, when they were received.
 The millisecond timestamp overflows every 60000 milliseconds (once a minute),
 so the valid values lie in the range from 0 to 59999, inclusive.
+The frame timestamp can be converted into the target clock domain, e.g. monotonic clock of the host system,
+using the [Olson algorithm](https://april.eecs.umich.edu/pdfs/olson2010.pdf)
+(timestamp synchronization in PyUAVCAN is based on the Olson algorithm too).
 In loopback mode with timestamping enabled,
 the loopback frames will have the timestamp of the moment when they were delivered to the bus.
 
@@ -557,7 +565,69 @@ More information about the bootloader can be gathered in the dedicated section.
 
 ## Bootloader
 
+The embedded bootloader enables firmware update via the following protocols and interfaces:
 
+Interface       | Parameters            | Protocol                                              | Note
+----------------|-----------------------|-------------------------------------------------------|----------------------
+USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, DCD Port is inactive
+DCD port (UART) | 115200-8N1 (fixed)    | Same as USB CDC ACM                                   | Available only while USB is disconnected
+CAN bus         | Autodetect            | UAVCAN firmware update protocol (refer to the PX Brickproof Bootloader) | *Coming soon*
+
+As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed later.
+
+Once started, the bootloader initializes the interfaces and exposes a CLI interface via either DCD port or USB.
+The USB is always preferred if it is connected to the host;
+otherwise the CLI falls back to the UART interface of the DCD port.
+As is the case with SLCAN, CLI operates in echoless mode, providing any response only if it receives a valid command.
+This is done this way in order to prevent the outside systems connected to Zubax Babel from
+engaging in interation with the bootloader when they expect to see the SLCAN interface of Zubax Babel.
+
+### CLI commands
+
+#### `reboot`
+
+Restarts the bootloader.
+
+#### `zubax_id`
+
+Same as if it was executed in the application's CLI,
+with the addition of at least the following fields:
+
+* `bl_version` - bootloader version, major and minor.
+* `bl_vcs_commit` - git commit hash of the bootloader sources.
+* `mode` - set to the string `bootloader` to indicate that the bootloader is running.
+
+#### `state`
+
+Prints the bootloader state, which can be one of the following:
+
+State ID| State name            | Comment
+--------|-----------------------|--------------------------------------------------------------------------------------
+0       | `NoAppToBoot`         | There is no valid application to boot; the bootloader will be waiting for commands forever.
+1       | `BootDelay`           | The bootloader will start the application in a few seconds, unless the boot is cancelled or a firmware update is requested.
+2       | `BootCancelled`       | There is a valid application to boot, however, boot was cancelled by an external command.
+3       | `AppUpgradeInProgress`| Application is currently being upgraded. If interrupted, the bootloader will go into `NoAppToBoot`.
+4       | `ReadyToBoot`         | The application is already booting. This state is very transient.
+
+<img src="bootloader_state_machine.png" width=600 title="Bootloader state machine">
+
+#### `wait`
+
+Do not boot the application.
+
+#### `download`
+
+Start the serial receiver and prepare to receive the new firmware image as a flat binary via the serial link
+using either YMODEM, XMODEM, or XMODEM-1K.
+There are heaps of software products and scripts that support these protocols.
+For instance, the standard program `sz` can be used as follows:
+
+```bash
+sz -vv --ymodem --1k $file > $port < $port
+```
+
+If the application was successfully received and CRC verification confirmed that it is not damaged,
+the bootloader will automatically transition into the state `BootDelay`.
 
 ## Accessories
 
@@ -576,3 +646,4 @@ Zubax Orel 20 can be used with the following accesories:
 
 * [Purchase](https://zubax.com/sales-network)
 * [Product description](http://zubax.com/product/zubax-babel)
+* [Source repository](https://github.com/Zubax/zubax_babel)
