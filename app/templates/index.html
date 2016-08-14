@@ -29,7 +29,7 @@
                 {% if p.tutorials_url %}
                     <div class="btn-group">
                         <button type="submit" class="btn btn-default" onclick="location.href='{{ p.tutorials_url }}';">
-                            <i class="fa fa-graduation-cap"></i> Tutorials
+                            <i class="fa fa-graduation-cap"></i> {{ p.tutorials_name or 'Tutorials' }}
                         </button>
                     </div>
                 {% endif %}

@@ -49,6 +49,7 @@ class ProductInfo:
         self.url_root = url_root
         self.weight = weight
         self.tutorials_url = None
+        self.tutorials_name = None
         self.tutorial_items = []
         self.short_description_html = get_excerpt(main_page_path, url_root) or Markup(self.title)
 
@@ -59,6 +60,10 @@ class ProductInfo:
         except OSError:
             logger.info('Could not read config file for product %r', self.title)
             self.config = {}
+
+        if 'tutorials' in self.config:
+            self.tutorials_url = self.config['tutorials'].get('link')
+            self.tutorials_name = self.config['tutorials'].get('name')
 
     @property
     def support_url(self):
