@@ -645,5 +645,5 @@ Zubax Orel 20 can be used with the following accesories:
 ## Links
 
 * [Purchase](https://zubax.com/sales-network)
+* [Source repository (includes 3D printable enclosure models)](https://github.com/Zubax/zubax_babel)
 * [Product description](http://zubax.com/product/zubax-babel)
-* [Source repository](https://github.com/Zubax/zubax_babel)
