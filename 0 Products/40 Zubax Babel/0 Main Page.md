@@ -190,9 +190,7 @@ Zubax Babel also implements an extension on top of SLCAN that allows the host to
 This feature is documented later in this section.
 
 Note that some commands alter the configuration parameters of the adapter.
-Changes in adapter configuration take effect shortly after the corresponding command changing them is executed,
-typically within 100 milliseconds, unless stated otherwise.
-All parameter changes can be stored into the non-volatile memory on the adapter,
+All parameters can be stored into the non-volatile memory on the adapter,
 in which case they will be re-initialized to the saved values autimatically every time the adapter is turned on.
 The non-volatile memory feature is explained later in this section.
 
@@ -470,6 +468,23 @@ What bootloader is needed for and how to use it is documented in the dedicated s
 Reboots the device.
 
 ## Configuration parameters
+
+Configuration parameters can be stored in the non-volatile memory on the adapter.
+Stored parameters will be re-initialized to the saved values autimatically every time the adapter is turned on.
+
+Changes in adapter configuration take effect shortly after the corresponding command changing them is executed,
+typically within 100 milliseconds, unless stated otherwise elsewhere.
+
+Some configuration parameters are aliased via dedicated standard SLCAN commands.
+
+Name                    | SLCAN alias   | Default value | Purpose
+------------------------|---------------|---------------|--------------------------------------------------------------
+`can.bitrate`           | `S`           |               | CAN bitrate.
+`can.power_on`          |               | 0             | Open the CAN power switch (see the power supply diagram).
+`can.terminator_on`     |               | 0             | Enable the 120&#8486; termination resistor.
+`slcan.timestamping_on` | `Z`           | 1             | Provide timestamp information for CAN frame indications.
+`slcan.flags_on`        |               | 0             | Append flags to CAN frame indications (this is a non-standard SLCAN extension).
+`uart.baudrate`         | `U`           | 115200        | UART baud rate.
 
 ## <abbr title="Original Equipment Manufacturer">OEM</abbr> mode
 
