@@ -178,15 +178,7 @@ from Zubax Babel (see the power system diagram).
 
 ### SMD pads
 
-<img src="breadboard.jpg" class="thumbnail" title="Zubax Babel inserted into a breadboard, controlling a servo">
-
-SMD pads address two use cases:
-
-* Use of Zubax Babel in larger devices as a PCB component.
-* Use of Zubax Babel as a prototyping platform or as a UAVCAN development board.
-The SMD pads are placed with the standard 2.54mm pitch, which facilitates installation into breadboards.
-
-More information is provided in the OEM section below.
+Please refer to the OEM section below.
 
 ## SLCAN protocol
 
@@ -229,9 +221,9 @@ The non-volatile memory feature is explained later in this section.
 Block ID| Arguments             | Purpose
 --------|-----------------------|--------------------------------------------------------------------------------------
 `S`     | Decimal number, see below | Set CAN bitrate.
-`O`     | None                  | Open CAN channel at the specified bitrate in normal mode; re-open if already open.
-`L`     | None                  | Open CAN channel at the specified bitrate in silent mode (listen only); re-open if already open.
-`l`     | None                  | Open CAN channel at the specified bitrate in normal mode with loopback enabled; re-open if already open.
+`O`     | None                  | Open CAN channel at the specified earlier bitrate in normal mode; re-open if already open.
+`L`     | None                  | Open CAN channel at the specified earlier bitrate in silent mode (listen only); re-open if already open.
+`l`     | None                  | Open CAN channel at the specified earlier bitrate in normal mode with loopback enabled; re-open if already open.
 `C`     | None                  | Close CAN channel; do nothing if channel is not open.
 `M`     | Any, not checked      | This command is not applicable for Zubax Babel, it is implemented only for compatibility reasons.
 `m`     | Any, not checked      | See `M`
@@ -464,6 +456,8 @@ This use case does not serve any useful purpose during normal use of the device.
 
 ##### `stat`
 
+<img src="uavcan_gui_tool_adapter_state.png" class="thumbnail" title="Viewing the adapter state using UAVCAN GUI Tool">
+
 Returns a YAML dictionary containing the immediate state information of the adapter.
 Example output:
 
@@ -486,6 +480,9 @@ tx_mailbox_peak_usage : 0
 bus_voltage           : 4.8
 ```
 
+The statistics is reset every time the channel is open.
+Note that it is kept intact after the channel is closed.
+
 ##### `bootloader`
 
 Reboots the device into the bootloader, where it will wait forever for commands.
@@ -496,6 +493,8 @@ What bootloader is needed for and how to use it is documented in the dedicated s
 Reboots the device.
 
 ## Configuration parameters
+
+<img src="uavcan_gui_tool_adapter_configuration.png" class="thumbnail" title="Managing adapter configuration using UAVCAN GUI Tool">
 
 Configuration parameters can be stored in the non-volatile memory on the adapter.
 Stored parameters will be re-initialized to the saved values autimatically every time the adapter is turned on.
@@ -514,9 +513,51 @@ Name                    | SLCAN alias   | Default value | Purpose
 `slcan.flags_on`        |               | 0             | Append flags to CAN frame indications (this is a non-standard SLCAN extension).
 `uart.baudrate`         | `U`           | 115200        | UART baud rate.
 
-## <abbr title="Original Equipment Manufacturer">OEM</abbr> mode
+## <abbr title="Original Equipment Manufacturer">OEM</abbr> applications
+
+<img src="breadboard.jpg" class="thumbnail" title="Zubax Babel inserted into a breadboard, controlling a servo">
+
+Besides the primary role as a USB/UART-CAN adapter tool,
+Zubax Babel can be effectively applied as an integral part of a larger system or device,
+either as a CAN adapter or, if loaded with a user-developed firmware, in a completely different role.
+These use cases are referred to as <abbr title="Original Equipment Manufacturer">OEM</abbr> applications.
+
+Additionally, Zubax Babel can be used as a prototyping platform for quick development of CAN (particularly UAVCAN)
+dependent applications.
+
+### SMD pads
+
+It is expected that OEM applications may require the adapter to be installed onto the custom PCB.
+For this reason, Zubax Babel is given SMD pads spaced at the standard 2.54 mm pitch.
+Soldering 0.1'' pin connectors to the SMD pads will also enable easy integration with standard breadboards,
+as shown on the picture on the right.
+
+The signals that are routed on the pads are shown on the diagram in the beginning of this document.
+
+### Custom applications
+
+Please refer to the dedicated tutorial for detailed information about development of custom applications.
+
+Zubax Babel is based on the microcontroller STM32F373CBT6;
+its main characteristics are outlines below:
+
+* Core: ARM&reg; Cortex&reg;-M4F (with hardware floating point unit) at 72 MHz.
+* Flash memory capacity: 128 KB.
+    * First 32 KB are occupied by the bootloader and auxiliary persistent data.
+    * Following 94 KB are available for the user application.
+    * Last 2 KB are reserved for non-volatile configuration storage.
+* RAM capacity: 24 KB.
+    * First 256 bytes are reserved for the bootloader operation.
+    * Remaining 24320 bytes are available for the user application.
+
+Custom applications can be loaded either directly via SWD,
+in which case great care should be taken to not accidentally erase the bootloader;
+or via the bootloader itself.
+More information about the bootloader can be gathered in the dedicated section.
 
 ## Bootloader
+
+
 
 ## Accessories
 
