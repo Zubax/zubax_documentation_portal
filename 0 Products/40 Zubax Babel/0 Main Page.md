@@ -112,6 +112,34 @@ See the following diagram:
 
 <img src="power_supply.png" title="Zubax Babel power supply system">
 
+## LED indicators
+
+Color   | Indicates
+--------|--------------------------------------------------------------------------------------------------------------
+Red     | CAN power switch is turned ON.
+Orange  | 120&#8486; CAN terminator is turned ON.
+Blue    | Status, see below.
+Green   | Blinks once if there was at least one CAN frame sent or received in the last 25 milliseconds. This allows to visually evaluate the load of the CAN bus.
+
+The status LED behaves as follows:
+
+Status                                          | Pattern
+------------------------------------------------|----------------------------------------------------------------------
+Bootloader is running                           | Glowing continuously
+CAN channel is closed                           | Turned OFF
+CAN channel is open and operating normally      | Blinking 1 Hz (slowly), short pulses (50 ms)
+CAN channel is open, CAN error passive          | Blinking 4 Hz (quickly)
+CAN channel is open, CAN bus off                | Blinking 10 Hz (frantically)
+
+While the bootloader is running, the green LED is used to indicate the bootloader's status as follows:
+
+Status                                                  | Pattern
+--------------------------------------------------------|--------------------------------------------------------------
+Ready to boot, or waiting for boot delay expiration     | Turned OFF
+Boot cancelled by external request (e.g. CLI command)   | Blinking 1 Hz, short pulses (50 ms)
+Application upgrade is in progress                      | Blinking 1 Hz, long pulses (500 ms)
+No valid application found, boot is not possible        | Blinking 10 Hz (frantically)
+
 ## Interfaces
 
 ### USB
