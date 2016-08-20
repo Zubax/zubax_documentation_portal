@@ -25,7 +25,7 @@ When using UART interface, the throughput of the device is limited by the UART b
 * Proper prioritization of outgoing CAN frames.
 The adapter properly schedules the outgoing frames, avoiding the inner priority inversion in the TX queue.
 * Large RX buffer (255 CAN frames plus 2KB of serial buffers) allows the device to handle short-term traffic bursts
-without frame losses, even when interfaced with a low-speed UART.
+without frame losses when interfaced via low-speed UART.
 
 Zubax Babel is primarily intended for UAVCAN applications, although other CAN bus protocols are supported equally well.
 We recommend the [UAVCAN GUI Tool](http://uavcan.org/GUI_Tool) for use with Zubax Babel; however,
@@ -97,7 +97,7 @@ Source/sink current (magnitude)         |               |               | 10    
 
 ## Power supply
 
-The device is powered by 5VDC which can be delivered via any (or multiple) of the interface connectors:
+The device is powered by +5 VDC which can be delivered via any (or multiple) of the interface connectors:
 
 * USB connector (input only)
 * CAN connectors (input, optional output)
@@ -106,9 +106,9 @@ The device is powered by 5VDC which can be delivered via any (or multiple) of th
 
 The device has a reverse current protection on the USB power input,
 to prevent back-powering the USB host when it is turned off.
-The CAN power output has a key that can be enabled and disabled programmatically
+The CAN power output has a solid state switch that can be enabled and disabled programmatically
 (more on this in the later sections); however, the device can be powered from the CAN
-bus regardless of the state of the power key.
+bus regardless of the state of the power switch.
 Additional 3.3VDC output on the SMD pads can be used to power the external circuit when the device is used in OEM mode.
 See the following diagram:
 
@@ -121,9 +121,9 @@ Color   | Indicates
 Red     | CAN power switch is turned ON.
 Orange  | 120&#8486; CAN terminator is turned ON.
 Blue    | Status, see below.
-Green   | Blinks once if there was at least one CAN frame sent or received in the last 25 milliseconds. This allows to visually evaluate the load of the CAN bus.
+Green   | Blinks once if there was at least one CAN frame sent or received in the last 25 milliseconds. This feature allows the user to visually evaluate the load of the CAN bus.
 
-The status LED behaves as follows:
+The status LED (blue) behaves as follows:
 
 Status                                          | Pattern
 ------------------------------------------------|----------------------------------------------------------------------
@@ -133,7 +133,7 @@ CAN channel is open and operating normally      | Blinking 1 Hz (slowly), short 
 CAN channel is open, CAN error passive          | Blinking 4 Hz (quickly)
 CAN channel is open, CAN bus off                | Blinking 10 Hz (frantically)
 
-While the bootloader is running, the green LED is used to indicate the bootloader's status as follows:
+While the bootloader is running, the traffic LED (green) is used to indicate the bootloader's status as follows:
 
 Status                                                  | Pattern
 --------------------------------------------------------|--------------------------------------------------------------
@@ -147,7 +147,7 @@ No valid application found, boot is not possible        | Blinking 10 Hz (franti
 ### USB
 
 Zubax Babel exposes a USB CDC ACM interface (a.k.a. virtual serial port) via full-speed USB 2.0 port.
-For more information about the serial port and drivers, please refer to the
+For more information about the serial port and appropriate drivers, please refer to the
 [dedicated article](/usb_command_line_interface).
 
 The device implements the SLCAN protocol with custom extensions on top of the CDC ACM interface,
@@ -169,13 +169,14 @@ In order to use UART, USB must be disconnected.
 
 Zubax Babel implements [ISO 11898](http://www.can-cia.org/index.php?id=systemdesign-can-physicallayer#high),
 also known as high-speed CAN.
+The CAN interface recovers from bus-off and other error states automatically.
 
 The CAN bus interface is exposed via two parallel 4-pin JST GH connectors.
 These are the [standard UAVCAN Micro Connectors](http://uavcan.org/Specification/8._Hardware_design_recommendations).
 
 The device has an embedded 120&#8486; termination resistor that can be enabled and disabled via the SLCAN interface.
 
-A power key, when turned on, delivers the 5VDC supply to the CAN bus, which can be used to power other CAN bus nodes
+The power switch, when turned on, delivers the +5 VDC supply to the CAN bus, which can be used to power other CAN bus nodes
 from Zubax Babel (see the power system diagram).
 
 ### SMD pads
@@ -216,10 +217,13 @@ All parameters can be stored into the non-volatile memory on the adapter,
 in which case they will be re-initialized to the saved values autimatically every time the adapter is turned on.
 The non-volatile memory feature is explained later in this section.
 
-Keep in mind that Zubax Babel can be communicated with either via USB or via DCD Port (UART),
+Keep in mind that Zubax Babel can be communicated with either via USB or via the DCD Port (UART),
 but not both at the same time.
 When USB is connected, only USB is used, the UART port is ignored.
 In order to use UART, USB must be disconnected.
+
+Decent implementation of a host-side SLCAN driver in Python can be found in the
+[PyUAVCAN library](http://uavcan.org/Implementations/Pyuavcan/).
 
 ### SLCAN commands
 
@@ -272,10 +276,10 @@ Symbol  | Meaning
 
 Block ID| Arguments     | Purpose                       | Example
 --------|---------------|-------------------------------|--------------------------------------------------------------
-`T`     | `iiiiiiiid*`  | Transmit 29-bit data frame    | `T0123456780102030405060708`
-`t`     | `iiid*`       | Transmit 11-bit data frame    | `t7FF0`
-`R`     | `iiiiiiiid`   | Transmit 29-bit RTR frame     | `R1234f00d8` (RTR frames have no payload)
-`r`     | `iiid`        | Transmit 11-bit RTR frame     | `r0008` (RTR frames have no payload)
+`T`     | `iiiiiiiid*`  | Transmit 29-bit data frame    | `T0123456780102030405060708\r`
+`t`     | `iiid*`       | Transmit 11-bit data frame    | `t7FF0\r`
+`R`     | `iiiiiiiid`   | Transmit 29-bit RTR frame     | `R1234f00d8\r` (RTR frames have no payload)
+`r`     | `iiid`        | Transmit 11-bit RTR frame     | `r0008\r` (RTR frames have no payload)
 
 All above listed commands may generate the following responses:
 
@@ -295,9 +299,10 @@ Block ID| Arguments     | Purpose
 `V`     | None          | Get hardware and software version
 `N`     | None          | Get unique ID (conventional SLCAN adapters return the serial number, which Zubax products may not have)
 
-The command `U` accepts a non-negative decimal number which represents the desired UART bitrate.
+The command `U` accepts a non-negative decimal number which represents the desired UART baud rate.
 Changes will take effect shortly after the command was executed (typically within 100 milliseconds),
-no reboot is necessary.
+no reboot is necessary;
+therefore, the host should adjust the baud rate of the serial port immediately after execution of this command.
 The number is interpreted as follows:
 
 Value           | Interpretation, baud per second
@@ -330,6 +335,7 @@ Bit     |2<sup>Bit</sup>| Name          | Meaning
 7       | 128           | Bus Off       | The CAN controller is in the bus off mode (refer to the CAN bus specification for details).
 
 Other bits should be ignored.
+Note that the CAN interface recovers from bus-off and other error states automatically.
 
 The command `V` produces `V????\r`, where the fields are hexadecimal numbers with the following meanings, in that order:
 
@@ -379,10 +385,10 @@ For example, a frame `T12345678401234568` will be returned back as follows, depe
 
 Flags enabled   | Timestamping enabled  | Representation
 ----------------|-----------------------|------------------------------------------------------------------------------
-No              | No                    | `T12345678401234568` (no changes)
-No              | Yes                   | `T123456784012345680BED` (timestamp 3053 milliseconds)
-Yes             | No                    | `T12345678401234568L` (added flag `L`)
-Yes             | Yes                   | `T123456784012345680BEDL` (both of the above)
+No              | No                    | `T12345678401234568\r` (no changes)
+No              | Yes                   | `T123456784012345680BED\r` (transmission timestamp 3053 milliseconds)
+Yes             | No                    | `T12345678401234568L\r` (added flag `L`)
+Yes             | Yes                   | `T123456784012345680BEDL\r` (both of the above)
 
 ### CLI extensions
 
@@ -392,13 +398,13 @@ over the same serial port that is used for SLCAN communications, while maintaini
 A CLI command is a sequence of printable ASCII characters terminated with `\r\n` (ASCII codes 13, 10).
 Every CLI command returns a response, which may be empty. Response begins with the exact copy of the received command,
 terminated with `\r\n`, then followed by an arbitrary number of lines, each terminated with `\r\n`,
-and finalized with the ASCII ENF-OF-TEXT character (code 3) immediately followed by the final `\r\n`.
+and finalized with the ASCII END-OF-TEXT character (code 3) immediately followed by the final `\r\n`.
 
-For example, a command `cfg   list` (the excessive spaces were added for demonstrational purposes)
+For example, a command `cfg   list  ` (the excessive spaces were added for demonstrational purposes)
 may produce the following response (non-printable characters are shown with escape sequences, e.g. `\r`):
 
 ```
-cfg   list\r\n
+cfg   list  \r\n
 can.bitrate           = 1000000     [10000, 1000000] (1000000)\r\n
 can.power_on          = 0           [0, 1] (0)\r\n
 can.terminator_on     = 0           [0, 1] (0)\r\n
@@ -412,16 +418,16 @@ Where `\x03` is the ASCII END-OF-TEXT character.
 
 The fact that CLI commands and their responses are terminated with `\r\n` rather than plain `\r`
 can be used to distinguish SLCAN data from CLI data in real time.
-A compliant SLCAN driver that is capable of dealing with CLI extensions at virtually zero performance penalty can
+A compliant SLCAN driver that is capable of dealing with CLI extensions with virtually zero performance penalty can
 be found in the [PyUAVCAN library](http://uavcan.org/Implementations/Pyuavcan).
 
 CLI commands can be executed manually if the SLCAN port is open in a terminal emulator program
 (it is recommended to enable local echo, since SLCAN does not provide remote echo).
-Read this article for reference: [USB command line interface](/usb_command_line_interface).
+Read this article for more info: [USB command line interface](/usb_command_line_interface).
 
 #### CLI commands
 
-This section documents what CLI commands are implemented.
+This section documents what CLI commands are implemented and how to use them.
 
 ##### `cfg`
 
@@ -430,12 +436,13 @@ Execute without arguments to see usage info.
 More detailed description of configuration parameters is provided in a dedicated section.
 The following use cases are the most important:
 
-* `cfg list` - list all configuration params, one per line, each line is formatted as follows:
+* `cfg list` - list all configuration parameters, one per line, each line is formatted as follows:
 `name = value [min, max] (default)`.
 Floating point parameters are rendered with explicit decimal separator, e.g. `1.0` rather than `1`.
 
 * `cfg set <name> <value>` - assign the parameter a new value.
 The response may contain `Error:` followed by the description of the error in case of failure.
+It is recommended to execute `cfg list` afterwards to check if the value was updated.
 
 * `cfg save` - save the current configuration into the non-volatile memory.
 
@@ -445,7 +452,7 @@ Next restart will reset all parameters to defaults.
 ##### `zubax_id`
 
 When executed without arguments, returns the device identification information
-formatted as YAML dictionary, such as name, version, unique ID, and so on.
+formatted as a YAML dictionary, such as name, version, unique ID, and so on.
 Example output:
 
 ```
@@ -496,7 +503,7 @@ Note that it is kept intact after the channel is closed.
 ##### `bootloader`
 
 Reboots the device into the bootloader, where it will wait forever for commands.
-What bootloader is needed for and how to use it is documented in the dedicated section below.
+What the bootloader is needed for and how to use it is documented in the dedicated section below.
 
 ##### `reboot`
 
@@ -504,14 +511,12 @@ Reboots the device.
 
 ## Configuration parameters
 
-<img src="uavcan_gui_tool_adapter_configuration.png" class="thumbnail" title="Managing adapter configuration using UAVCAN GUI Tool">
+<img src="uavcan_gui_tool_adapter_configuration.png" class="thumbnail" title="Managing adapter configuration using the UAVCAN GUI Tool">
 
 Configuration parameters can be stored in the non-volatile memory on the adapter.
 Stored parameters will be re-initialized to the saved values autimatically every time the adapter is turned on.
-
 Changes in adapter configuration take effect shortly after the corresponding command changing them is executed,
 typically within 100 milliseconds, unless stated otherwise elsewhere.
-
 Some configuration parameters are aliased via dedicated standard SLCAN commands.
 
 Name                    | SLCAN alias   | Default value | Purpose
@@ -553,7 +558,7 @@ its main characteristics are outlines below:
 
 * Core: ARM&reg; Cortex&reg;-M4F (with hardware floating point unit) at 72 MHz.
 * Flash memory capacity: 128 KB.
-    * First 32 KB are occupied by the bootloader and auxiliary persistent data.
+    * First 32 KB are occupied by the bootloader and some auxiliary persistent data.
     * Following 94 KB are available for the user application.
     * Last 2 KB are reserved for non-volatile configuration storage.
 * RAM capacity: 24 KB.
@@ -582,7 +587,7 @@ The USB is always preferred if it is connected to the host;
 otherwise the CLI falls back to the UART interface of the DCD port.
 As is the case with SLCAN, CLI operates in echoless mode, providing any response only if it receives a valid command.
 This is done this way in order to prevent the outside systems connected to Zubax Babel from
-engaging in interation with the bootloader when they expect to see the SLCAN interface of Zubax Babel.
+engaging in interaction with the bootloader when they expect to see the SLCAN interface of Zubax Babel.
 
 ### CLI commands
 
@@ -609,7 +614,7 @@ State ID| State name            | Comment
 1       | `BootDelay`           | The bootloader will start the application in a few seconds, unless the boot is cancelled or a firmware update is requested.
 2       | `BootCancelled`       | There is a valid application to boot, however, boot was cancelled by an external command.
 3       | `AppUpgradeInProgress`| Application is currently being upgraded. If interrupted, the bootloader will go into `NoAppToBoot`.
-4       | `ReadyToBoot`         | The application is already booting. This state is very transient.
+4       | `ReadyToBoot`         | The application is already booting. This state is very transient and is left automatically as soon as possible.
 
 <img src="bootloader_state_machine.png" width=600 title="Bootloader state machine">
 
