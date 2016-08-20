@@ -530,7 +530,7 @@ Zubax Babel can be effectively applied as an integral part of a larger system or
 either as a CAN adapter or, if loaded with a user-developed firmware, in a completely different role.
 These use cases are referred to as <abbr title="Original Equipment Manufacturer">OEM</abbr> applications.
 
-Additionally, Zubax Babel can be used as a prototyping platform for quick development of CAN (particularly UAVCAN)
+Additionally, Zubax Babel can be used as a prototyping platform for quick development of CAN (especially UAVCAN)
 dependent applications.
 
 ### SMD pads
@@ -634,7 +634,7 @@ the bootloader will automatically transition into the state `BootDelay`.
 <img src="UAVCAN_Micro_to_DF13_adapter_cable.jpg" height=200 title="UAVCAN Micro to DF13 adapter cable (non-twisted)"
      class="thumbnail">
 
-Zubax Orel 20 can be used with the following accesories:
+Zubax Babel can be used with the following accesories:
 
 * [UAVCAN Micro Patch Cable](/uavcan#UAVCAN_Micro_Patch_Cable)
 * [UAVCAN Micro to DF13 Adapter Cable](/uavcan#UAVCAN_Micro_to_DF13_Adapter_Cable)
