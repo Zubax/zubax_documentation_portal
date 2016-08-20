@@ -38,7 +38,8 @@ connect [QGroundControl](http://qgroundcontrol.com) to the UAV, and navigate to 
 
 ### Enabling the UAVCAN driver
 
-Set the configuration parameter `UAVCAN_ENABLE` to the value of 3, then reboot the flight controller.
+Set the configuration parameter `UAVCAN_ENABLE` to `Motors/Update` (the corresponding numeric value is 3),
+then reboot the flight controller.
 
 ### Enumerating the ESC
 
