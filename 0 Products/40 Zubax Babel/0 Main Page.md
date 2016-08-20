@@ -3,6 +3,8 @@
 <img src="image.jpg" class="thumbnail" title="Zubax Babel, top view">
 <img src="enclosure.jpg" class="thumbnail" title="Zubax Babel in an enclosure">
 <img src="bottom.jpg" class="thumbnail" title="Zubax Babel, bottom view">
+<img src="uavcan_gui_tool_general.png" class="thumbnail"
+     title="Diagnosing UAVCAN bus using the UAVCAN GUI Tool with Zubax Babel">
 
 Zubax Babel is an advanced USB-CAN and UART-CAN adapter that can be used as a standalone device
 or as an embeddable module for <abbr title="Original Equipment Manufacturers">OEM</abbr>.
