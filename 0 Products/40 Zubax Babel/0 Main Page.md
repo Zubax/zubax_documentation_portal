@@ -651,6 +651,6 @@ Zubax Babel can be used with the following accesories:
 
 ## Links
 
-* [Purchase](https://zubax.com/sales-network)
+* [Purchase](http://shop.titaneliteinc.com/index.php?route=product/product&product_id=1004)
 * [Source repository (includes 3D printable enclosure models)](https://github.com/Zubax/zubax_babel)
 * [Product description](http://zubax.com/product/zubax-babel)

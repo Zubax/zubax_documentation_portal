@@ -648,7 +648,7 @@ Please refer to the [DroneCode probe documentation page](/dronecode_probe) for i
 
 ## Links
 
-* [Purchase](https://zubax.com/sales-network)
+* [Purchase](http://shop.titaneliteinc.com/index.php?route=product/product&product_id=987)
 * [Product description](http://zubax.com/product/zubax-gnss-2)
 * [Source repository (firmware sources, 3D printable models, etc)](https://github.com/Zubax/zubax_gnss)
 * [Tutorials](tutorials)
