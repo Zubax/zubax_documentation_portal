@@ -35,7 +35,8 @@ This is achieved by the reliable rotor position tracking algorithm and capabilit
 
 The Sapog firmware can be used with any hardware based on the microcontroller STM32F105RCT with compatible
 wiring.
-The wiring diagram will be published soon.
+Please refer to the reference hardware design published under CC BY-SA 3.0 at the
+[PX4 Hardware repository](https://github.com/PX4/Hardware).
 
 ## Self-diagnostics
 
