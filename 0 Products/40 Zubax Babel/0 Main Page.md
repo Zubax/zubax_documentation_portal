@@ -643,6 +643,7 @@ the bootloader will automatically transition into the state `BootDelay`.
 
 Zubax Babel can be used with the following accesories:
 
+* [**Enclosure** (suitable for 3D printing)](https://github.com/Zubax/zubax_babel/tree/master/hardware/enclosure)
 * [UAVCAN Micro Patch Cable](/uavcan#UAVCAN_Micro_Patch_Cable)
 * [UAVCAN Micro to DF13 Adapter Cable](/uavcan#UAVCAN_Micro_to_DF13_Adapter_Cable)
 * [UAVCAN Micro to D-SUB DB9F CAN Adapter Cable](#UAVCAN_Micro_to_D-SUB_DB9F_CAN_Adapter_Cable)

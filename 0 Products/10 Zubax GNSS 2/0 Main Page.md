@@ -606,6 +606,7 @@ CLI command `zubax_id` and UAVCAN service `uavcan.protocol.GetNodeInfo`.
 
 Zubax GNSS 2 can be used with the following accesories:
 
+* [**Enclosure** (suitable for 3D printing)](https://github.com/Zubax/zubax_gnss/tree/master/hardware)
 * [UAVCAN Micro Patch Cable](/uavcan#UAVCAN_Micro_Patch_Cable)
 * [UAVCAN Micro to DF13 Adapter Cable](/uavcan#UAVCAN_Micro_to_DF13_Adapter_Cable)
 * [UAVCAN Micro Termination Plug](/uavcan#UAVCAN_Micro_Termination_Plug)
