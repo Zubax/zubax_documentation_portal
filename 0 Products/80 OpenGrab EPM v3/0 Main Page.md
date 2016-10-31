@@ -3,13 +3,13 @@
 ## Overview
 
 V3R5C
+
 <img src="EPMV3R5C.jpg" class="thumbnail" title="Top view">
 
 V3R4B
+
 <img src="image.jpg" class="thumbnail" title="Top view">
 <img src="bottom.jpg" class="thumbnail" title="Bottom view">
-
-
 
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
