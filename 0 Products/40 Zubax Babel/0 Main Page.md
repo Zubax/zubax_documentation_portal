@@ -547,14 +547,14 @@ For this reason, Zubax Babel is given SMD pads spaced at the standard 2.54 mm pi
 Soldering 0.1'' pin connectors to the SMD pads will also enable easy integration with standard breadboards,
 as shown on the picture on the right.
 
-The signals that are routed on the pads are shown on the diagram in the beginning of this document.
+The signals that are routed to the pads are shown on the diagram in the beginning of this document.
 
 ### Custom applications
 
 Please refer to the dedicated tutorial for detailed information about development of custom applications.
 
 Zubax Babel is based on the microcontroller STM32F373CBT6;
-its main characteristics are outlines below:
+its main characteristics are outlined below:
 
 * Core: ARM&reg; Cortex&reg;-M4F (with hardware floating point unit) at 72 MHz.
 * Flash memory capacity: 128 KB.
