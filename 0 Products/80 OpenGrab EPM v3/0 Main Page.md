@@ -59,6 +59,11 @@ when the magnet is turning on, causing an insulation breakdown.
 
 The diagrams below document the mechanical arrangement and dimensions (click to enlarge):
 
+### R5C and newer
+<img src="Pinout_R5C.png" width=350 title="Top view">
+<img src="Dim_R5C.png" width=350 title="Drawing">
+
+### R4B and older
 <img src="pinout.jpg" width=350 title="Top view">
 <img src="EPM_V3_simple.jpg" width=350 title="Drawing">
 
@@ -68,13 +73,17 @@ Symbol                  |Parameter                                  | Minimum | 
 ------------------------|-------------------------------------------|---------|---------|---------|------
 T<sub>cycle(ON)</sub>   | Time to complete one cycle                |         | 0.75    |         | s
 T<sub>cycle(OFF)</sub>  | Time to complete one cycle                |         | 1.2     |         | s
-F<sub>max</sub>         | Max holding force                         |         | 200     |         | N
-V<sub>supply</sub>      | Operating voltage                         | 4.75    | 5.0     | 5.5     | V
+F<sub>max</sub>         | Max holding force                         | 200     | 300     |         | N
+V<sub>supply</sub>      | Operating voltage                         | 4.75    | 5.0     | 6.5     | V
 I<sub>steady</sub>      | Steady state current draw                 |         | 10      |         | mA
 I<sub>peak</sub>        | Peak current draw during cycle execution  |         |         | 1000    | mA
 m                       | Mass of the device                        |         | 65      |         | g
 t<sub>operating</sub>   | Operating temperature                     | -40     |         | +70     | &deg;C
 RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       |         | 75      | %
+
+
+
+
 
 ## UAVCAN interface
 
