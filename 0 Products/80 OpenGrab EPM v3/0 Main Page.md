@@ -81,9 +81,52 @@ m                       | Mass of the device                        |         | 
 t<sub>operating</sub>   | Operating temperature                     | -40     |         | +70     | &deg;C
 RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       |         | 75      | %
 
+## Human-machine interface
 
+### Push button
 
+Pressing this button for at least 200 milliseconds will toggle the EPM.
 
+### LED indication
+
+#### Status LED
+
+This LED indicator shows the status of the device derived from the continuous self-diagnostics,
+according to the UAVCAN node status code:
+
+Health                | Blinking ON/OFF duration, milliseconds
+----------------------|---------------------------------------
+OK                    | 50/950
+WARNING               | 50/500
+ERROR or CRITICAL     | 50/100
+
+#### CAN LED
+
+This LED indicator shows the CAN bus traffic.
+
+Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
+received during the last few milliseconds.
+Under high bus load, this LED indicator is expected to glow constantly.
+
+Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicator to blink.
+
+## RC PWM interface
+
+Connect an RC receiver or some other hardware capable of producing RC PWM signal (e.g. Pixhawk) to the RC PWM connector.
+
+The device divides the PWM pulse duration into three ranges:
+
+* Neutral - while the signal is in this range, the device ignores it.
+* OFF - while the signal is in this range, the device will be continuously performing the turn-off sequence.
+* ON - while the signal is in this range, the device will be continuously performing the turn-on sequence.
+
+Symbol                  |Parameter                                  | Minimum | Typical | Maximum | Unit
+------------------------|-------------------------------------------|---------|---------|---------|------
+T<sub>RCPWM(ON)</sub>   | RC PWM pulse duration to turn ON          | 1.75    |         | 2.5     | ms
+T<sub>RCPWM(OFF)</sub>  | RC PWM pulse duration to turn OFF         | 0.5     |         | 1.25    | ms
+f<sub>RCPWM</sub>       | RC PWM input frequency                    | 1       | 50      | 50      | Hz
+V<sub>RCPWM(low)</sub>  | Low-level RC PWM input voltage            |         |         | 0.3 V<sub>supply</sub> | V
+V<sub>RCPWM(high)</sub> | High-level RC PWM input voltage           | 0.7 V<sub>supply</sub> | |  | V
 
 ## UAVCAN interface
 
@@ -210,53 +253,6 @@ I<sub>CAN(out)dom</sub> | CAN dominant output current               | 40      | 
 I<sub>CAN(out)dom</sub> | CAN recessive output current              | -5      |         | 5       | mA
 R<sub>CAN(in)diff</sub> | CAN differential input resistance         | 19      | 30      | 52      | &#8486;
 t<sub>CAN(out)to-dom</sub> | CAN dominant time-out time             | 0.3     | 1       | 12      | ms
-
-## RC PWM interface
-
-Connect an RC receiver or some other hardware capable of producing RC PWM signal (e.g. Pixhawk) to the RC PWM connector.
-
-The device divides the PWM pulse duration into three ranges:
-
-* Neutral - while the signal is in this range, the device ignores it.
-* OFF - while the signal is in this range, the device will be continuously performing the turn-off sequence.
-* ON - while the signal is in this range, the device will be continuously performing the turn-on sequence.
-
-Symbol                  |Parameter                                  | Minimum | Typical | Maximum | Unit
-------------------------|-------------------------------------------|---------|---------|---------|------
-T<sub>RCPWM(ON)</sub>   | RC PWM pulse duration to turn ON          | 1.75    |         | 2.5     | ms
-T<sub>RCPWM(OFF)</sub>  | RC PWM pulse duration to turn OFF         | 0.5     |         | 1.25    | ms
-f<sub>RCPWM</sub>       | RC PWM input frequency                    | 1       | 50      | 50      | Hz
-V<sub>RCPWM(low)</sub>  | Low-level RC PWM input voltage            |         |         | 0.3 V<sub>supply</sub> | V
-V<sub>RCPWM(high)</sub> | High-level RC PWM input voltage           | 0.7 V<sub>supply</sub> | |  | V
-
-## Human-machine interface
-
-### Push button
-
-Pressing this button for at least 200 milliseconds will toggle the EPM.
-
-### LED indication
-
-#### Status LED
-
-This LED indicator shows the status of the device derived from the continuous self-diagnostics,
-according to the UAVCAN node status code:
-
-Health                | Blinking ON/OFF duration, milliseconds
-----------------------|---------------------------------------
-OK                    | 50/950
-WARNING               | 50/500
-ERROR or CRITICAL     | 50/100
-
-#### CAN LED
-
-This LED indicator shows the CAN bus traffic.
-
-Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
-received during the last few milliseconds.
-Under high bus load, this LED indicator is expected to glow constantly.
-
-Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicator to blink.
 
 ### DIP switch
 <img src="DIP_switch.jpg" class="thumbnail" title="DIP Switch">
