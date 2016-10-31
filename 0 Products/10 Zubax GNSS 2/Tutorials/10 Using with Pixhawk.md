@@ -64,7 +64,11 @@ the drop-down field `Primary Compass`. See the screenshot below for an example.
 You may need to select a different rotation if the arrow printed on Zubax GNSS 2 is not aligned with the
 vehicle's longitudinal axis.
 
+<info>
 Don't forget to perform compass calibration when done.
+If the autopilot reports issues with high magnetic field offsets,
+set the parameter `mag.scaling_coef` to approximately 0.6 and try calibration again.
+</info>
 
 ### Barometer
 
@@ -76,6 +80,12 @@ Make sure that [the barometer is enabled on Zubax GNSS 2](/zubax_gnss_2#Configur
 Set the configuration parameter `UAVCAN_ENABLE` to `2` or `3`, then reboot.
 
 Please refer to the [Pixhawk documentation](http://pixhawk.org/firmware/apps/uavcan) for extra info.
+
+<info>
+Don't forget to perform compass calibration when done.
+If the autopilot reports issues with high magnetic field offsets,
+set the parameter `mag.scaling_coef` to approximately 0.6 and try calibration again.
+</info>
 
 ## Connecting
 

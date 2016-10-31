@@ -574,6 +574,20 @@ Default value: 0.005
 
 Units: Gauss<sup>2</sup>
 
+### `mag.scaling_coef`
+
+**New in firmware v3.1.**
+
+Magnetic field vector scale.
+Some UAV autopilot systems (PX4, APM) do not correclty handle magnetic field measurements made in highly
+magnetically distorted environments.
+It is possible to work around these issues by reducing the magnitude of the magnetic field vector.
+
+For PX4 and APM users: if your autopilot reports that magnetometer offsets are too high,
+reduce this parameter to approximately 0.6 and recalibrate the magnetometer.
+
+Default value: 1.0, i.e. no rescaling.
+
 ### `gnss.warn_dimens`
 
 Set the node status to WARNING if the number of dimensions in the GNSS solution is below this threshold.
