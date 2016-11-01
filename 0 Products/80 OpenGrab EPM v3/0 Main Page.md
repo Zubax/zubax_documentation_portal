@@ -2,14 +2,9 @@
 
 ## Overview
 
-V3R5C
-
-<img src="EPMV3R5C.jpg" class="thumbnail" title="Top view">
-
-V3R4B
-
-<img src="image.jpg" class="thumbnail" title="Top view">
-<img src="bottom.jpg" class="thumbnail" title="Bottom view">
+<img src="image.jpg" class="thumbnail" title="Version 3R5C, top view">
+<img src="V3R4B.jpg" class="thumbnail" title="Version 3R4B, top view">
+<img src="bottom.jpg" class="thumbnail" title="Version 3R4B, bottom view">
 
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
@@ -65,13 +60,13 @@ when the magnet is turning on, causing an insulation breakdown.
 
 The diagrams below document the mechanical arrangement and dimensions (click to enlarge):
 
-### R5C and newer
-<img src="Pinout_R5C.png" width=350 title="Top view">
-<img src="Dim_R5C.png" width=350 title="Drawing">
+### Version 3R5C and newer
+<img src="Pinout_R5C.png" height=350 title="Version 3R5C, pinout">
+<img src="Dim_R5C.png" height=350 title="Version 3R5C, dimension">
 
-### R4B and older
-<img src="pinout.jpg" width=350 title="Top view">
-<img src="EPM_V3_simple.jpg" width=350 title="Drawing">
+### Version 3R4B and older
+<img src="pinout.jpg" height=350 title="Version 3R4B, pinout">
+<img src="EPM_V3_simple.jpg" height=350 title="Version 3R4B, dimension">
 
 ## Characteristics
 
