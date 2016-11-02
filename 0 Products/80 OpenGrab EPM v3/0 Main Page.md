@@ -5,7 +5,7 @@
 <img src="image.jpg" class="thumbnail" title="Version 3R5C, top view">
 <img src="V3R4B.jpg" class="thumbnail" title="Version 3R4B, top view">
 <img src="bottom.jpg" class="thumbnail" title="Version 3R4B, bottom view">
-
+<img src="pixhawk_epm1.jpg" class="thumbnail" title="Pixhawk EPM">
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
 It supports [UAVCAN](/uavcan), RC PWM and push button operation.
