@@ -5,7 +5,6 @@
 <img src="image.jpg" class="thumbnail" title="Version 3R5C, top view">
 <img src="V3R4B.jpg" class="thumbnail" title="Version 3R4B, top view">
 <img src="bottom.jpg" class="thumbnail" title="Version 3R4B, bottom view">
-<img src="pixhawk_epm.jpg" class="thumbnail" title="Pixhawk connected to two EPM modules via UAVCAN">
 
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
@@ -134,6 +133,7 @@ V<sub>RCPWM(high)</sub> | High-level RC PWM input voltage           | 0.7 V<sub>
 
 ## UAVCAN interface
 
+<img src="pixhawk_epm.jpg" class="thumbnail" title="Pixhawk connected to two EPM modules via UAVCAN">
 <img src="epm_connected_to_pixhawk_via_uavcan.jpg" class="thumbnail" title="EPM connected to Pixhawk via UAVCAN">
 
 This section describes the properties specific for this product only.
