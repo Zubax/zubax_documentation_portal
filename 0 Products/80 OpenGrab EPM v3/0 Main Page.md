@@ -2,8 +2,9 @@
 
 ## Overview
 
-<img src="image.jpg" class="thumbnail" title="Top view">
-<img src="bottom.jpg" class="thumbnail" title="Bottom view">
+<img src="image.jpg" class="thumbnail" title="Version 3R5C, top view">
+<img src="V3R4B.jpg" class="thumbnail" title="Version 3R4B, top view">
+<img src="bottom.jpg" class="thumbnail" title="Version 3R4B, bottom view">
 
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
@@ -59,8 +60,15 @@ when the magnet is turning on, causing an insulation breakdown.
 
 The diagrams below document the mechanical arrangement and dimensions (click to enlarge):
 
-<img src="pinout.jpg" width=350 title="Top view">
-<img src="EPM_V3_simple.jpg" width=350 title="Drawing">
+### Version 3R5C and newer
+
+<img src="pinout_R5C.png" height=350 title="Version 3R5C, pinout">
+<img src="dim_R5C.png" height=350 title="Version 3R5C, dimension">
+
+### Version 3R4B and older
+
+<img src="pinout.jpg" height=350 title="Version 3R4B, pinout">
+<img src="EPM_V3_simple.jpg" height=350 title="Version 3R4B, dimension">
 
 ## Characteristics
 
@@ -68,16 +76,64 @@ Symbol                  |Parameter                                  | Minimum | 
 ------------------------|-------------------------------------------|---------|---------|---------|------
 T<sub>cycle(ON)</sub>   | Time to complete one cycle                |         | 0.75    |         | s
 T<sub>cycle(OFF)</sub>  | Time to complete one cycle                |         | 1.2     |         | s
-F<sub>max</sub>         | Max holding force                         |         | 200     |         | N
-V<sub>supply</sub>      | Operating voltage                         | 4.75    | 5.0     | 5.5     | V
+F<sub>max</sub>         | Max holding force                         | 200     | 300     |         | N
+V<sub>supply</sub>      | Operating voltage                         | 4.75    | 5.0     | 6.5     | V
 I<sub>steady</sub>      | Steady state current draw                 |         | 10      |         | mA
 I<sub>peak</sub>        | Peak current draw during cycle execution  |         |         | 1000    | mA
 m                       | Mass of the device                        |         | 65      |         | g
 t<sub>operating</sub>   | Operating temperature                     | -40     |         | +70     | &deg;C
 RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       |         | 75      | %
 
+## Human-machine interface
+
+### Push button
+
+Pressing this button for at least 200 milliseconds will toggle the EPM.
+
+### LED indication
+
+#### Status LED
+
+This LED indicator shows the status of the device derived from the continuous self-diagnostics,
+according to the UAVCAN node status code:
+
+Health                | Blinking ON/OFF duration, milliseconds
+----------------------|---------------------------------------
+OK                    | 50/950
+WARNING               | 50/500
+ERROR or CRITICAL     | 50/100
+
+#### CAN LED
+
+This LED indicator shows the CAN bus traffic.
+
+Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
+received during the last few milliseconds.
+Under high bus load, this LED indicator is expected to glow constantly.
+
+Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicator to blink.
+
+## RC PWM interface
+
+Connect an RC receiver or some other hardware capable of producing RC PWM signal (e.g. Pixhawk) to the RC PWM connector.
+
+The device divides the PWM pulse duration into three ranges:
+
+* Neutral - while the signal is in this range, the device ignores it.
+* OFF - while the signal is in this range, the device will be continuously performing the turn-off sequence.
+* ON - while the signal is in this range, the device will be continuously performing the turn-on sequence.
+
+Symbol                  |Parameter                                  | Minimum | Typical | Maximum | Unit
+------------------------|-------------------------------------------|---------|---------|---------|------
+T<sub>RCPWM(ON)</sub>   | RC PWM pulse duration to turn ON          | 1.75    |         | 2.5     | ms
+T<sub>RCPWM(OFF)</sub>  | RC PWM pulse duration to turn OFF         | 0.5     |         | 1.25    | ms
+f<sub>RCPWM</sub>       | RC PWM input frequency                    | 1       | 50      | 50      | Hz
+V<sub>RCPWM(low)</sub>  | Low-level RC PWM input voltage            |         |         | 0.3 V<sub>supply</sub> | V
+V<sub>RCPWM(high)</sub> | High-level RC PWM input voltage           | 0.7 V<sub>supply</sub> | |  | V
+
 ## UAVCAN interface
 
+<img src="pixhawk_epm.jpg" class="thumbnail" title="Pixhawk connected to two EPM modules via UAVCAN">
 <img src="epm_connected_to_pixhawk_via_uavcan.jpg" class="thumbnail" title="EPM connected to Pixhawk via UAVCAN">
 
 This section describes the properties specific for this product only.
@@ -201,53 +257,6 @@ I<sub>CAN(out)dom</sub> | CAN dominant output current               | 40      | 
 I<sub>CAN(out)dom</sub> | CAN recessive output current              | -5      |         | 5       | mA
 R<sub>CAN(in)diff</sub> | CAN differential input resistance         | 19      | 30      | 52      | &#8486;
 t<sub>CAN(out)to-dom</sub> | CAN dominant time-out time             | 0.3     | 1       | 12      | ms
-
-## RC PWM interface
-
-Connect an RC receiver or some other hardware capable of producing RC PWM signal (e.g. Pixhawk) to the RC PWM connector.
-
-The device divides the PWM pulse duration into three ranges:
-
-* Neutral - while the signal is in this range, the device ignores it.
-* OFF - while the signal is in this range, the device will be continuously performing the turn-off sequence.
-* ON - while the signal is in this range, the device will be continuously performing the turn-on sequence.
-
-Symbol                  |Parameter                                  | Minimum | Typical | Maximum | Unit
-------------------------|-------------------------------------------|---------|---------|---------|------
-T<sub>RCPWM(ON)</sub>   | RC PWM pulse duration to turn ON          | 1.75    |         | 2.5     | ms
-T<sub>RCPWM(OFF)</sub>  | RC PWM pulse duration to turn OFF         | 0.5     |         | 1.25    | ms
-f<sub>RCPWM</sub>       | RC PWM input frequency                    | 1       | 50      | 50      | Hz
-V<sub>RCPWM(low)</sub>  | Low-level RC PWM input voltage            |         |         | 0.3 V<sub>supply</sub> | V
-V<sub>RCPWM(high)</sub> | High-level RC PWM input voltage           | 0.7 V<sub>supply</sub> | |  | V
-
-## Human-machine interface
-
-### Push button
-
-Pressing this button for at least 200 milliseconds will toggle the EPM.
-
-### LED indication
-
-#### Status LED
-
-This LED indicator shows the status of the device derived from the continuous self-diagnostics,
-according to the UAVCAN node status code:
-
-Health                | Blinking ON/OFF duration, milliseconds
-----------------------|---------------------------------------
-OK                    | 50/950
-WARNING               | 50/500
-ERROR or CRITICAL     | 50/100
-
-#### CAN LED
-
-This LED indicator shows the CAN bus traffic.
-
-Each blink indicates that there was a CAN frame that was *successfully* transmitted or *successfully*
-received during the last few milliseconds.
-Under high bus load, this LED indicator is expected to glow constantly.
-
-Note that CAN frames filtered out by the hardware acceptance filters will not cause the LED indicator to blink.
 
 ### DIP switch
 <img src="DIP_switch.jpg" class="thumbnail" title="DIP Switch">
