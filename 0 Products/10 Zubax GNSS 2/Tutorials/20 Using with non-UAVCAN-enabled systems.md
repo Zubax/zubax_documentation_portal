@@ -28,7 +28,7 @@ as well as from [other places](https://www.sparkfun.com/products/9123) (it's rat
 
 NMEA output over UART is disabled by default, so we need to enable it.
 
-[Connect USB, open CLI at 115200 baud](/usb_command_line_interface#How_to_connect), then execute:
+[Connect USB, open CLI at 115200 baud](/usb#How_to_connect), then execute:
 
 ```
 cfg set nmea.uart_on 1
@@ -85,7 +85,7 @@ $YXXDR,P,0.98968,B*59
 ## Connecting via USB
 
 If your system is running Windows version earlier than 10, you will need to
-[install the driver first as described on the USB interface documentation page](/usb_command_line_interface#Configuring_older_versions_of_Windows).
+[install the driver first as described on the USB interface documentation page](/usb#Configuring_older_versions_of_Windows).
 All other operating systems, including all distributions of Linux, Mac OS, and Windows versions starting from 10,
 will recognize Zubax GNSS 2 automatically.
 

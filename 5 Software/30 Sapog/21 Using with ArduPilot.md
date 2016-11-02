@@ -29,7 +29,7 @@ If you chose to use the UAVCAN GUI Tool,
 refer to its documentation to learn how to change configuration parameters using it.
 
 If you prefer CLI, you will need a [DroneCode Probe](/dronecode_probe) to connect to the
-debug port of your ESC ([here's how to connect](/usb_command_line_interface#How_to_connect)).
+debug port of your ESC ([here's how to connect](/usb#How_to_connect)).
 Once connected, execute the following commands on each ESC, using the correct values for the ESC index:
 
 ```

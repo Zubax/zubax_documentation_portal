@@ -148,7 +148,7 @@ No valid application found, boot is not possible        | Blinking 10 Hz (franti
 
 Zubax Babel exposes a USB CDC ACM interface (a.k.a. virtual serial port) via full-speed USB 2.0 port.
 For more information about the serial port and appropriate drivers, please refer to the
-[dedicated article](/usb_command_line_interface).
+[dedicated article](/usb).
 
 The device implements the SLCAN protocol with custom extensions on top of the CDC ACM interface,
 which is documented in the later sections.
@@ -423,7 +423,7 @@ be found in the [PyUAVCAN library](http://uavcan.org/Implementations/Pyuavcan).
 
 CLI commands can be executed manually if the SLCAN port is open in a terminal emulator program
 (it is recommended to enable local echo, since SLCAN does not provide remote echo).
-Read this article for more info: [USB command line interface](/usb_command_line_interface).
+Read this article for more info: [USB command line interface](/usb).
 
 #### CLI commands
 

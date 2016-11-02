@@ -99,7 +99,7 @@ of this document. The interfaces are as follows:
 This interface provides access to all features of Zubax GNSS 2, including measurements output,
 configuration, time synchronization, firmware update, etc.
 Connector type is UAVCAN Micro connector (Molex CLIK-Mate).
-* [USB port](/usb_command_line_interface) (CDC ACM profile, also known as virtual serial port).
+* [USB port](/usb) (CDC ACM profile, also known as virtual serial port).
 This interface can be used for NMEA output and configuration.
 Connector type is USB micro B (which is the most common USB connector).
 * [DroneCode port, used for NMEA output and diagnostics. Connector type is DCD-M (JST SH)](/dronecode_probe).
@@ -300,7 +300,7 @@ Data type                                       | Note
 USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver (also known as "GPS mouse")
 with standard NMEA 0183 protocol, and also provides access to configuration parameters.
 
-Please refer to the [USB command line interface documentation page](/usb_command_line_interface)
+Please refer to the [USB command line interface documentation page](/usb)
 for more information specific to this interface.
 
 ### Protocol selection
@@ -362,7 +362,7 @@ This section documents supported CLI commands.
 
 This is the standard Zubax identification command.
 It is supported by all devices that implement a command line interface.
-Please refer to the [USB command line interface documentation page](/usb_command_line_interface) for more info.
+Please refer to the [USB command line interface documentation page](/usb) for more info.
 
 #### `cfg`
 

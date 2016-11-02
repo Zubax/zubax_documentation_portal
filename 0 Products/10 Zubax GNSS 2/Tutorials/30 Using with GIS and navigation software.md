@@ -16,7 +16,7 @@ e.g. on Ubuntu: `sudo apt-get install qgis`.
 
 Once QGIS is installed, launch it, and connect Zubax GNSS 2 to the computer via USB.
 Note that if you're running Windows version older than 10, you will likely need to install the driver -
-please refer to the [USB interface documentation page for details](/usb_command_line_interface).
+please refer to the [USB interface documentation page for details](/usb).
 
 ## Configuring QGIS
 
