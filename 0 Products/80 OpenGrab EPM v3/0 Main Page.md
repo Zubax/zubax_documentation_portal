@@ -63,8 +63,8 @@ The diagrams below document the mechanical arrangement and dimensions (click to 
 
 ### Version 3R5C and newer
 
-<img src="Pinout_R5C.png" height=350 title="Version 3R5C, pinout">
-<img src="Dim_R5C.png" height=350 title="Version 3R5C, dimension">
+<img src="pinout_R5C.png" height=350 title="Version 3R5C, pinout">
+<img src="dim_R5C.png" height=350 title="Version 3R5C, dimension">
 
 ### Version 3R4B and older
 
