@@ -6,6 +6,7 @@
 <img src="V3R4B.jpg" class="thumbnail" title="Version 3R4B, top view">
 <img src="bottom.jpg" class="thumbnail" title="Version 3R4B, bottom view">
 <img src="pixhawk_epm1.jpg" class="thumbnail" title="Pixhawk EPM">
+
 The OpenGrab EPM v3 is an electropermanent magnet, combining the advantages of electro and permanent magnets.
 The device creates a very strong magnetic contact with a ferrous target.
 It supports [UAVCAN](/uavcan), RC PWM and push button operation.
@@ -61,10 +62,12 @@ when the magnet is turning on, causing an insulation breakdown.
 The diagrams below document the mechanical arrangement and dimensions (click to enlarge):
 
 ### Version 3R5C and newer
+
 <img src="Pinout_R5C.png" height=350 title="Version 3R5C, pinout">
 <img src="Dim_R5C.png" height=350 title="Version 3R5C, dimension">
 
 ### Version 3R4B and older
+
 <img src="pinout.jpg" height=350 title="Version 3R4B, pinout">
 <img src="EPM_V3_simple.jpg" height=350 title="Version 3R4B, dimension">
 
