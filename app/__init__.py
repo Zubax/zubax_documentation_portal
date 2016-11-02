@@ -160,7 +160,8 @@ def try_desperate_redirect(path):
         '/Main_Page': '/',
         '/Zubax_GNSS': '/zubax_gnss',
         '/DroneCode_Probe': '/dronecode_probe',
-        '/UAVCAN_Interface': '/uavcan'
+        '/UAVCAN_Interface': '/uavcan',
+        '/usb_command_line_interface': '/usb'
     }
 
     if path in redirects:
