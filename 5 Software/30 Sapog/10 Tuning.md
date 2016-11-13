@@ -2,13 +2,13 @@
 
 <img src="uavcan_gui_tool_setting_esc_index.png" title="Editing configuration parameters using UAVCAN GUI Tool" class="thumbnail">
 
-This tutorial covers the basics of how to configure and tune PX4 Sapog to maximize its performance with a given motor.
+This tutorial covers the basics of how to configure and tune PX4 Sapog to maximize its performance with a particular motor.
 
 The tuning process requires to change configuration parameters of the device.
 Depending on your setup, this can be done in a variety of ways:
 
-* Via UAVCAN using the [UAVCAN GUI Tool](https://github.com/UAVCAN/gui_tool)
-(requires a CAN adapter connected to your PC).
+* Via UAVCAN using the [UAVCAN GUI Tool](http://uavcan.org/GUI_Tool)
+(requires a CAN adapter connected to your PC; we recommend [Zubax Babel](/zubax_babel)).
 * Via serial <abbr title="Command Line Interface">CLI</abbr> using the command `cfg`.
 Learn more [here](/sapog#Serial_CLI).
 * Using other means provided by your setup.
@@ -110,6 +110,18 @@ This value typically can be found in the motor documentation.
 
 Current RPM can be observed via UAVCAN message `uavcan.equipment.esc.Status`,
 or via CLI using the command `stat` (use [DroneCode Probe](/dronecode_probe) to access the CLI).
+
+### PWM dead time
+
+PWM dead time is the parameter that defines the time interval between turning off of one gate and
+turning on of the opposite gate in the three phase inverter bridge.
+The name of the corresponding configuration parameter is `mot_pwm_dt_ns`, the units are nanoseconds.
+The default value is optimized to suit all use cases; however, you may achieve higher power output
+in your particular application by lowering this value.
+The general rule of thumb is to reduce the dead time until the board starts to dissipate excessive power at the maximum
+throttle under full load.
+
+If highest efficiency is required, it is recommended to keep the default value, unless you fully understand the issue.
 
 ### RPM governor mode
 
