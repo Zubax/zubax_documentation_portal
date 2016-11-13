@@ -20,10 +20,14 @@ We're going to need the following hardware:
 
 Make sure that the following dependencies are installed on the computer:
 
-* Python 3.4 or newer, or just [UAVCAN GUI Tool](https://github.com/UAVCAN/gui_tool).
+* Python 3.4 or newer, or just [UAVCAN GUI Tool](http://uavcan.org/GUI_Tool).
 * PyUAVCAN; install as follows: `pip install uavcan` (skip this if you're using UAVCAN GUI Tool).
 
 ## Controlling throttle setpoint
+
+<info>
+Make sure that no other node on the bus (e.g. autopilot) issues contradictory ESC commands concurrently.
+</info>
 
 Here we'll write a script that changes ESC setpoints in a sine pattern.
 
