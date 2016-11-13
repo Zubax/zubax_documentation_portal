@@ -151,8 +151,17 @@ The lock can be removed by setting the target duty cycle or RPM to zero.
 ##### `mot_pwm_hz`
 
 Motor PWM frequency.
+Do not reduce this value unless you know what you're doing.
+Low PWM frequency values may compromise the stability of the rotor position tracking algorithm.
 
 Units: Hertz.
+
+##### `mot_pwm_dt_ns`
+
+Dead time of the PWM modulator.
+Lower values may enable higher power output.
+
+Units: nanoseconds.
 
 ##### `mot_i_shunt_mr`
 
