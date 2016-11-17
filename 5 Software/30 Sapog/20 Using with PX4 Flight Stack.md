@@ -38,8 +38,16 @@ connect [QGroundControl](http://qgroundcontrol.com) to the UAV, and navigate to 
 
 ### Enabling the UAVCAN driver
 
-Set the configuration parameter `UAVCAN_ENABLE` to `Motors/Update` (the corresponding numeric value is 3),
-then reboot the flight controller.
+Set the configuration parameter `UAVCAN_ENABLE` to `Sensors and Motors`
+(in the older versions of PX4 this parameter was named `Motors/Update`).
+The corresponding numeric value is 3.
+Any higher value, if supported, should also be acceptable.
+Afterwards, reboot the flight controller.
+
+If applicable, it is also recommended to set the parameter `UAVCAN_ESC_IDLT` to 1,
+which will ensure that the motors are always running at least at the idle throttle
+while the system is armed.
+Some systems, however, will not benefit from this behavior, e.g. glider drones.
 
 ### Enumerating the ESC
 
