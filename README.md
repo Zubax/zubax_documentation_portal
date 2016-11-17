@@ -40,7 +40,7 @@ Install the following dependencies:
 On a Debian-based system the dependencies can be installed as follows:
 
 ```bash
-sudo apt-get install python3 python3-pip node-less libffi-dev
+sudo apt-get install python3-dev python3-pip node-less libffi-dev
 ```
 
 Once the dependencies are satisfied, clone this repo and then execute the following:
