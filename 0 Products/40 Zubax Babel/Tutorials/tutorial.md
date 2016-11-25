@@ -32,7 +32,7 @@ Go to terminal and start gdb
 
 Then connect to DCP load your firmware and run it
 
-    (gdb) tar ext COM6
+```    (gdb) tar ext COM6
     Remote debugging using COM6
     (gdb) mon swdp_scan
     Target voltage: 4.4V
@@ -60,9 +60,8 @@ Then connect to DCP load your firmware and run it
     The program being debugged has been started already.
     Start it from the beginning? (y or n) y
     Starting program: C:\zubax_babel\firmware\build\compound.elf
-    
+```
 
-----------
 ## Loading firware with bootloader ##
 cooming soon
 
