@@ -62,7 +62,7 @@ Then connect to DCP load your firmware and run it
     Starting program: C:\zubax_babel\firmware\build\compound.elf
     
 
-
+----------
 ## Loading firware with bootloader ##
 cooming soon
 
