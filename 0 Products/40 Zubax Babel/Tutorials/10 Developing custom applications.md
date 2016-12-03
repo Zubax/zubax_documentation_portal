@@ -116,11 +116,11 @@ Now we have blinking led, but I find it a little bit rough. Let’s make it glow
 In order to enable timer3 pwm generation ChibiOS must be configured a little bit. 
 
 
-Find macro ```HAL_USE_PWM``` in ```halconf.h``` and make it `TRUE`
+Find macro `HAL_USE_PWM` in `halconf.h` and make it `TRUE`
 
-Find macro `STM32_PWM_USE_TIM3` in ```mcuconf.h``` and make it `TRUE`
+Find macro `STM32_PWM_USE_TIM3` in `mcuconf.h` and make it `TRUE`
 
-Now add breath_thread to you code: 
+Now add `breath_thread` to you code: 
 ```c
 static PWMConfig pwmcfg =	//initialization structure for ChibiOS PWM hal 
 {
