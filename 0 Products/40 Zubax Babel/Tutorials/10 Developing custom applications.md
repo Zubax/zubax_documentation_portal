@@ -1,4 +1,4 @@
-# Developing custom applications
+# Developing custom applications #
 Ok, you have your Zubax babel and want it to do something special. First of all you will need babel firmware source code, which can be found [here](https://github.com/Zubax/zubax_babel)
 In order to build babel firmware *nix-environment will be needed.  If you use any kind of Linux - good for you, you probably already have everything needed(except for gnu arm toolchain). If (like me) you have only win machine, you will need:
 
@@ -15,18 +15,16 @@ Now its time to try to build the original firmware. Go to console and clone the 
 
 ```git clone https://github.com/Zubax/zubax_babel```
 
-Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find file compound.elf in directory /%reponame%/firmware/build/. This is firmware in binary form, which may be loaded to the device with Drone code probe. 
+Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find file compound.elf in directory `/%reponame%/firmware/build/`. This is firmware in binary form, which may be loaded to the device with Drone code probe. 
 You should try that. There are two ways of loading firmware to the device: 
 
 - Using DroneCode probe(DCP)
 - Using bootloader
 
-# Loading firmware in windows environment #
+## Loading firmware in windows environment ##
 ### Loading with DCP ###
 Go to terminal and start gdb
-
-```C:\Users\j3qq4hch>arm-none-eabi-gdb```
-
+`C:\Users\j3qq4hch>arm-none-eabi-gdb`
 Then connect to DCP load your firmware and run it
 
 ```
@@ -63,14 +61,14 @@ Starting program: C:\zubax_babel\firmware\build\compound.elf
 coming soon
 
 ----------
-# Loading firmware in *nix environment #
+## Loading firmware in *nix environment ##
 ### Loading with DCP ###
 ### Loading with bootloader ###
 ----------
 
-# Tutorials #
+## Tutorials ##
 
-## Blink ##
+### Blink ###
 
 A couple words about general code organisation must be said first.
 Zubax Babel firmware uses ChibiOS and therefore this tutorial also relies on ChibiOS and its HAL in particular.
@@ -78,7 +76,7 @@ Firmware is written in C++, but it is OK to write in C too.
 As in any OS code is organised as threads which are executed in a pseudo-parallel way. Each thread is represented as separate endless function, which is called by the OS-scheduler according to its rules and desires. If you are interested how ChibiOS works (and even if not), it is highly recommended to read tutorial and manuals from [here](http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:start). 
 
 Finally, lets start.
-We should begin with writing HELLO_WORLD for MCU - blinking an onboard LED. According to babel schematic one of the LEDs is connected to ```pin8``` of ```PORTE```. Let’s blink it. Create blink function. Something like this:
+We should begin with writing HELLO_WORLD for MCU - blinking an onboard LED. According to babel schematic one of the LEDs is connected to `pin8` of `PORTE`. Let’s blink it. Create blink function. Something like this:
 
 
 ```c
@@ -113,7 +111,7 @@ int main()
 Now compile and load it and watch red LED blinking. 
 
 ---
-# BREATH #
+### BREATH ###
 Now we have blinking led, but I find it a little bit rough. Let’s make it glow. We will need PWM. According to babel schematic one of the LEDS is connected to channel4 of timer3.
 In order to enable timer3 pwm generation ChibiOS must be configured a little bit. 
 
@@ -181,5 +179,5 @@ int main()
 Load it and watch green led blinking ON and OFF and red led smoothly chaging its brightness. Isn’t it fancy?
 
 ---
-# Command line interface(CLI) #
+### Command line interface(CLI) ###
 coming soon
