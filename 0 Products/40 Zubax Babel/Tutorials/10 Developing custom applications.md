@@ -68,7 +68,7 @@ coming soon
 
 ## Tutorials ##
 
-### Blink ###
+### Blink (in C) ###
 
 A couple words about general code organisation must be said first.
 Zubax Babel firmware uses ChibiOS and therefore this tutorial also relies on ChibiOS and its HAL in particular.
@@ -100,27 +100,25 @@ Now find function ```int main()``` in ```zubax_babel\firmware\src\main.cpp```. T
 ```c
 int main()
 { 
-    auto watchdog = app::init();	
     chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO+1, blink_thread,  NULL);
     while(1)
     {
-        watchdog.reset();
     }
 }
 ```
 Now compile and load it and watch red LED blinking. 
 
 ---
-### BREATH ###
+### BREATH (in C) ###
 Now we have blinking led, but I find it a little bit rough. Let’s make it glow. We will need PWM. According to babel schematic one of the LEDS is connected to channel4 of timer3.
 In order to enable timer3 pwm generation ChibiOS must be configured a little bit. 
 
 
-Find macro `HAL_USE_PWM` in `halconf.h` and make it `TRUE`
+Find macro ```HAL_USE_PWM``` in ```halconf.h``` and make it `TRUE`
 
-Find macro `STM32_PWM_USE_TIM3` in `mcuconf.h` and make it `TRUE`
+Find macro `STM32_PWM_USE_TIM3` in ```mcuconf.h``` and make it `TRUE`
 
-Now add `breath_thread` to you code: 
+Now add breath_thread to you code: 
 ```c
 static PWMConfig pwmcfg =	//initialization structure for ChibiOS PWM hal 
 {
@@ -166,12 +164,10 @@ And change your ```main()``` to start this thread:
 ```c
 int main()
 {
-    auto watchdog = app::init();	
     chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO+1, blink_thread,  NULL);
     chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO+1, breath_thread, NULL);
     while(1)
     {
-        watchdog.reset();
     }
 }
 ```    
@@ -179,5 +175,89 @@ int main()
 Load it and watch green led blinking ON and OFF and red led smoothly chaging its brightness. Isn’t it fancy?
 
 ---
+
+### BLINK and BREATH in C++ ###
+Now when we can blink a LED differently lets make it in a more civilized way - in C++
+Although Chibios is written in C it offers rich C++ capabilities and we can rewrite out blinking threads like this:
+
+```
+class BlinkerThread : public chibios_rt::BaseStaticThread<128>
+{
+    void main() override
+    {
+        setName("blinker");
+        palSetPadMode(GPIOE, 8, PAL_MODE_OUTPUT_PUSHPULL);
+        while (true)
+        {
+            palSetPad(GPIOE,8);
+            chThdSleepMilliseconds(100);
+            palClearPad(GPIOE, 8);
+            chThdSleepMilliseconds(100);
+        }
+    }
+
+public:
+    virtual ~BlinkerThread() { }
+} blinker_thread_;
+```
+
+and
+
+```
+static const PWMConfig pwmcfg = {
+  10000,                                    //10KHz PWM clock frequency.   
+  255,                                      //255 ticks is pwm resolution                                    
+  NULL,
+  {
+    {PWM_OUTPUT_DISABLED, NULL},
+    {PWM_OUTPUT_DISABLED, NULL},
+    {PWM_OUTPUT_DISABLED, NULL},
+    {PWM_OUTPUT_ACTIVE_HIGH, NULL}
+  },
+  0,
+  0
+};
+
+ class BreatheThread : public chibios_rt::BaseStaticThread<128>
+{
+    void main() override
+    {
+    setName("breath");
+    uint8_t brightness = 0;
+    palSetPadMode(GPIOB, 1, PAL_MODE_ALTERNATE(2));
+    pwmStart(&PWMD3, &pwmcfg);
+    pwmEnableChannelI(&PWMD3, 3, 128);
+
+    while (true) 
+    {
+        while (brightness <= 250)
+        {
+            pwmEnableChannelI(&PWMD3, 3, brightness++);
+            chThdSleepMilliseconds(3);
+        }
+
+        while (brightness >= 5)
+        {
+            pwmEnableChannelI(&PWMD3, 3, brightness--);
+            chThdSleepMilliseconds(3);
+        }
+    }
+    }
+
+public:
+    virtual ~BreatheThread() { }
+} breathe_thread_; 
+```
+Our main() function should be also modified.
+```
+int main()
+{  
+  blinker_thread_.start(NORMALPRIO + 1);
+  breathe_thread_.start(NORMALPRIO + 1);
+  while(1){}
+}
+```
+---
+
 ### Command line interface(CLI) ###
 coming soon
