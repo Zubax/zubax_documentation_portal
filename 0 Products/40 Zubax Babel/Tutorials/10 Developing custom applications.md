@@ -1,22 +1,21 @@
 # Developing custom applications #
-Ok, you have your Zubax babel and want it to do something special. First of all you will need babel firmware source code, which can be found [here](https://github.com/Zubax/zubax_babel)
-In order to build babel firmware *nix-environment will be needed.  If you use any kind of Linux - good for you, you probably already have everything needed(except for gnu arm toolchain). If (like me) you have only win machine, you will need:
+Zubax Babel is a miniature USB-CAN adapter.  But beside its direct purpose it can also be used as a development board for custom applications. To start with this Babel firmware source code is needed. It can be found [here](https://github.com/Zubax/zubax_babel)
+In order to build babel firmware *nix-environment will be needed.  If you use any kind of Linux -  you probably already have everything needed(except for gnu arm toolchain). If you have win machine, you will need:
 
 - [git](https://git-scm.com/download/win)
 - gnu utilities, which may be found [here](http://gnuwin32.sourceforge.net/)
 - [Python 3+](https://www.python.org/downloads/)
 - gnu arm toolchain. It is very version-dependant, so you should use [this version](https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q3-update)
 
-After you download and install everything make sure you have all these your environment variable PATH set up correctly and have access to all necessary utilities from console. For example, my PATH variable looks like this:
+After you download and install everything make sure you have all these your environment variable PATH set up correctly and have access to all necessary utilities from console. For example, PATH variable should look like this:
 
 <img src="path.png" class="thumbnail" title="PATH">
 
 Now its time to try to build the original firmware. Go to console and clone the repository
 
-```git clone https://github.com/Zubax/zubax_babel```
+`git clone https://github.com/Zubax/zubax_babel`
 
-Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find file compound.elf in directory `/%reponame%/firmware/build/`. This is firmware in binary form, which may be loaded to the device with Drone code probe. 
-You should try that. There are two ways of loading firmware to the device: 
+Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find file `compound.elf` in directory `/%reponame%/firmware/build/`. This is firmware in binary form, which may be loaded to the device with Drone code probe. There are two ways of loading firmware to the device: 
 
 - Using DroneCode probe(DCP)
 - Using bootloader
@@ -26,7 +25,6 @@ You should try that. There are two ways of loading firmware to the device:
 Go to terminal and start gdb
 `C:\Users\j3qq4hch>arm-none-eabi-gdb`
 Then connect to DCP load your firmware and run it
-
 ```
 (gdb) tar ext COM6
 Remote debugging using COM6
@@ -72,115 +70,12 @@ coming soon
 
 A couple words about general code organisation must be said first.
 Zubax Babel firmware uses ChibiOS and therefore this tutorial also relies on ChibiOS and its HAL in particular.
-Firmware is written in C++, but it is OK to write in C too. 
-As in any OS code is organised as threads which are executed in a pseudo-parallel way. Each thread is represented as separate endless function, which is called by the OS-scheduler according to its rules and desires. If you are interested how ChibiOS works (and even if not), it is highly recommended to read tutorial and manuals from [here](http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:start). 
+Firmware is written in C++ and you should use C++ too . 
+As in any OS code is organised as threads which are executed in a pseudo-parallel way. Each thread is represented as separate endless function, which is called by the OS-scheduler according to its rules and desires. It is highly recommended to read [ChibiOS tutorial and manuals](http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:start). 
 
-Finally, lets start.
-We should begin with writing HELLO_WORLD for MCU - blinking an onboard LED. According to babel schematic one of the LEDs is connected to `pin8` of `PORTE`. Let’s blink it. Create blink function. Something like this:
+You should begin with writing HELLO_WORLD for MCU - blinking an onboard LED. According to Babel schematic one of the LEDs is connected to `pin8` of `PORTE`. Create a blink thread:
 
-
-```c
-static THD_WORKING_AREA(waThread1, 128);
-static THD_FUNCTION(blink_thread, arg) 
-{   
-    (void)arg;
-    chRegSetThreadName("blinker"); 
-    palSetPadMode(GPIOE, 8, PAL_MODE_OUTPUT_PUSHPULL);
-    while (true) 
-    {
-        palSetPad(GPIOE,8);
-        chThdSleepMilliseconds(100);
-        palClearPad(GPIOE, 8);
-        chThdSleepMilliseconds(100);
-    }
-}
-```
-Now find function ```int main()``` in ```zubax_babel\firmware\src\main.cpp```. This is program entry point. Comment it all and write your own version like this:
-
-```c
-int main()
-{ 
-    chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO+1, blink_thread,  NULL);
-    while(1)
-    {
-    }
-}
-```
-Now compile and load it and watch red LED blinking. 
-
----
-### BREATH (in C) ###
-Now we have blinking led, but I find it a little bit rough. Let’s make it glow. We will need PWM. According to babel schematic one of the LEDS is connected to channel4 of timer3.
-In order to enable timer3 pwm generation ChibiOS must be configured a little bit. 
-
-
-Find macro ```HAL_USE_PWM``` in ```halconf.h``` and make it `TRUE`
-
-Find macro `STM32_PWM_USE_TIM3` in ```mcuconf.h``` and make it `TRUE`
-
-Now add breath_thread to you code: 
-```c
-static PWMConfig pwmcfg =	//initialization structure for ChibiOS PWM hal 
-{
-    10000,        //10KHz PWM clock frequency.   
-    255,          //255 ticks is pwm resolution
-    NULL,
-    {
-        {PWM_OUTPUT_DISABLED, NULL},
-        {PWM_OUTPUT_DISABLED, NULL},
-        {PWM_OUTPUT_DISABLED, NULL},
-        {PWM_OUTPUT_ACTIVE_HIGH, NULL}
-    },
-    /* HW dependent part.*/
-    0,
-    0
-};
-
-static THD_WORKING_AREA(waThread2, 255);
-static THD_FUNCTION(breath_thread, arg) 
-{
-    (void)arg;
-    uint8_t brightness = 0;
-    chRegSetThreadName("breath");
-    palSetPadMode(GPIOB, 1, PAL_MODE_ALTERNATE(2));
-    pwmStart(&PWMD3, &pwmcfg);  			//Timer activation in PWM mode
-    pwmEnableChannelI(&PWMD3, 3, 128);	//Brightness setting
-    while (true) 
-    {   
-        while (brightness <= 250)
-        {
-            pwmEnableChannelI(&PWMD3, 3, brightness++);
-            chThdSleepMilliseconds(3);
-        }
-        while (brightness >= 5)
-        {
-            pwmEnableChannelI(&PWMD3, 3, brightness--);
-            chThdSleepMilliseconds(3);
-        }
-    }
-}
-```
-And change your ```main()``` to start this thread: 
-```c
-int main()
-{
-    chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO+1, blink_thread,  NULL);
-    chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO+1, breath_thread, NULL);
-    while(1)
-    {
-    }
-}
-```    
-
-Load it and watch green led blinking ON and OFF and red led smoothly chaging its brightness. Isn’t it fancy?
-
----
-
-### BLINK and BREATH in C++ ###
-Now when we can blink a LED differently lets make it in a more civilized way - in C++
-Although Chibios is written in C it offers rich C++ capabilities and we can rewrite out blinking threads like this:
-
-```
+```c++
 class BlinkerThread : public chibios_rt::BaseStaticThread<128>
 {
     void main() override
@@ -200,13 +95,26 @@ public:
     virtual ~BlinkerThread() { }
 } blinker_thread_;
 ```
-
-and
-
+And start it from `main()`
+```c++
+int main()
+{  
+  blinker_thread_.start(NORMALPRIO + 1);
+  while(1){}
+}
 ```
+Build and flash the firmware. If everything is fine, you should see red led blinking.
+
+---
+### BREATH (basic PWM) ###
+The easiest way to test PWM is to use another onboard LED which is connected to one of the MCU timers. According to Babel schematic one of the LEDS is connected to channel4 of timer3. Prior to using timer3 pwm generation ChibiOS must be configured. 
+Find macro `HAL_USE_PWM` in `halconf.h` and make it `TRUE`.
+Find macro `STM32_PWM_USE_TIM3` in `mcuconf.h` and make it `TRUE`.
+Now add `breath_thread` to you code: 
+```c++
 static const PWMConfig pwmcfg = {
-  10000,                                    //10KHz PWM clock frequency.   
-  255,                                      //255 ticks is pwm resolution                                    
+  10000, //10KHz PWM clock frequency.   
+  255, //255 ticks is pwm resolution                                    
   NULL,
   {
     {PWM_OUTPUT_DISABLED, NULL},
@@ -248,15 +156,18 @@ public:
     virtual ~BreatheThread() { }
 } breathe_thread_; 
 ```
-Our main() function should be also modified.
-```
+And change your `main()` to start this thread: 
+```c++
 int main()
 {  
   blinker_thread_.start(NORMALPRIO + 1);
   breathe_thread_.start(NORMALPRIO + 1);
   while(1){}
 }
-```
+```    
+Build firmware, flash it and if everything is fine you should  watch green led blinking ON and OFF and red led smoothly chaging its brightness. 
+
+---
 ---
 
 ### Command line interface(CLI) ###
