@@ -327,5 +327,5 @@ V<sub>UART(out-high)</sub>| High-level UART output voltage          | V<sub>supp
 ## Links
 
 * [Source repository (firmware sources, drawings, etc)](https://github.com/Zubax/opengrab_epm_v3)
-* [PCB layout and schematic] (https://upverter.com/ctech4285/1dada3422c772add/OpenGrab-EPM-V3R3/)
-* [Purchase from NicaDrone] (http://nicadrone.com/index.php?id_product=66&controller=product)
+* [PCB layout and schematic] (https://upverter.com/ctech4285/b115a1af887107bc/OpenGrab-EPM-V3R5C/)
+* [Purchase from NicaDrone] (http://nicadrone.com/index.php?id_product=72&controller=product)
