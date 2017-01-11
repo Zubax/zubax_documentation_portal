@@ -175,24 +175,21 @@ There is access to `USART1` and `USART3` on Babel PCB. `USART3` may be found on 
 <img src="usb-uart.jpg" class="thumbnail" title="usb-uart">
 Connect its `RX` to `TX` of `USART1` and `TX` to `RX` of `USART1`
 
-First enable `USART1` by finding string  `#define STM32_SERIAL_USE_USART1    FALSE` and making it `#define STM32_SERIAL_USE_USART1    TRUE` in `mcuconf.h`
-To test if it is working lets make HelloWorld routine. 
-
+There are two ways to use USARTs in ChibiOS: relative high-level using Serial Driver and low-level using Uart Driver. In this tutorial Serial Driver will be used. First enable serial driver `SD1` associated with `USART1` by finding string  `#define STM32_SERIAL_USE_USART1    FALSE` and making it `#define STM32_SERIAL_USE_USART1    TRUE` in `mcuconf.h`
+To test if it is working lets make HelloWorld routine, which will just send a string to serial interface every 0.5 sec.
 ```c++
+char data[] = "Hello World !\r\n";
 class HelloWorldThread : public chibios_rt::BaseStaticThread<128>
 {
-    void main() override
-    {
-        setName("Hello");
-        palSetPadMode(GPIOE, 8, PAL_MODE_OUTPUT_PUSHPULL);
-        while (true)
-        {
-            palSetPad(GPIOE,8);
-            chThdSleepMilliseconds(100);
-            palClearPad(GPIOE, 8);
-            chThdSleepMilliseconds(100);
-        }
-    }
+   void main() override
+   {
+      setName("Hello");
+      while (true)
+      {
+         sdWrite(&SD1, (uint8_t *) data, strlen(data)); 
+         chThdSleepMilliseconds(100);
+      }
+}
 
 public:
     virtual ~HelloWorldThread() { }
@@ -201,14 +198,77 @@ public:
 And change your `main()` to start this thread:
 
 ```c++
+static SerialConfig uartCfg = //Init structure for serial driver. Only baudrate is crucial for now
+{
+    9600, // baudrate
+    0,
+    0,
+    0
+};
+
 int main()
 {  
-  blinker_thread_.start(NORMALPRIO + 1);
-  breathe_thread_.start(NORMALPRIO + 1);
-  hello_world_thread_.start()(NORMALPRIO + 1);
-  while(1){}
+    halInit();
+    chSysInit();
+    palSetPadMode(GPIOA, 9,  PAL_MODE_ALTERNATE(7)); //Config pin PA9 for uart use
+    palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7)); //Config pin PA10 for uart use
+    sdStart(&SD1, &uartCfg);
+
+	blinker_thread_.start(NORMALPRIO + 1);
+    breathe_thread_.start(NORMALPRIO + 1);
+    hello_world_thread_.start(NORMALPRIO + 1);
+    while(1){}
 }
 ```
 You must see something like that in your terminal:
 <img src="hello_world.png" class="thumbnail" title="Terminal">
 If terminal is empty - check your connections and try again.
+
+Now its time to read something from `SD1`. Lets write a simple thread, that reads one symbol from serial interface and writes it back. 
+```c++
+class LoopbackThread : public chibios_rt::BaseStaticThread<128>
+{
+    void main() override
+    {
+        setName("Loopback");
+        uint8_t c;
+        sdWrite(&SD1, (uint8_t *) "Give me something\r\n", strlen("Give me something\r\n")); 
+        while (true) 
+        {
+            sdRead (&SD1, &c, 1);
+            sdWrite(&SD1, (uint8_t *) "You gave me: ", strlen("You gave me: ")); 
+            sdWrite(&SD1, &c, 1); 
+            sdWrite(&SD1, (uint8_t *) "\r\n", 2); 
+        }
+    }
+public:
+    virtual ~LoopbackThread() { }
+} loopback_thread_;
+```
+And change your `main()` to launch it instead of `hello_world_thread_`
+```c++
+static SerialConfig uartCfg = //Init structure for serial driver. Only baudrate is crucial for now
+{
+    9600, // baudrate
+    0,
+    0,
+    0
+};
+
+int main()
+{  
+    halInit();
+    chSysInit();
+    palSetPadMode(GPIOA, 9,  PAL_MODE_ALTERNATE(7)); //Config pin PA9 for uart use
+    palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7)); //Config pin PA10 for uart use
+    sdStart(&SD1, &uartCfg);
+
+	blinker_thread_.start(NORMALPRIO + 1);
+    breathe_thread_.start(NORMALPRIO + 1);
+    //hello_world_thread_.start(NORMALPRIO + 1);
+    loopback_thread_.start(NORMALPRIO + 1);
+    while(1){}
+}
+```
+Now open the terminal, flash the firmware and hit any button on the keyboard. You must see something like this:
+<img src="loopback.png" class="thumbnail" title="loopback">
