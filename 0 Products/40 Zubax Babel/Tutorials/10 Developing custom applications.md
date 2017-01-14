@@ -171,8 +171,8 @@ Build firmware, flash it and if everything is fine you should  watch green led b
 ---
 
 ### Command line interface(CLI) ###
-There is access to `USART1` and `USART3` on Babel PCB. `USART3` may be found on CAN pins. `USART1` is available on debug connector and dedicated edge pins. We will use `USART1` further, but there is not much difference since it is the same hardware. You can use dronecode probe to connect to `USART1` via debug connector or you can use any USB-UART adapter(IMPORTANT NOTE: using USB-RS232 adapter may damage your Babel) to connect via edge pads. For example, this CH340 adapter will do the job: 
-<img src="usb-uart.jpg" class="thumbnail" title="usb-uart">
+There is access to `USART1` and `USART3` on Babel PCB. `USART3` may be found on CAN pins. `USART1` is available on debug connector and dedicated edge pins. We will use `USART1` further, but there is not much difference since it is the same hardware. You can use dronecode probe to connect to `USART1` via debug connector or you can use any USB-UART adapter(IMPORTANT NOTE: using USB-RS232 adapter may damage your Babel) to connect via edge pads. 
+<img src="dcp.jpg" class="thumbnail" title="usb-uart">
 Connect its `RX` to `TX` of `USART1` and `TX` to `RX` of `USART1`
 
 There are two ways to use USARTs in ChibiOS: relative high-level using Serial Driver and low-level using Uart Driver. In this tutorial Serial Driver will be used. First enable serial driver `SD1` associated with `USART1` by finding string  `#define STM32_SERIAL_USE_USART1    FALSE` and making it `#define STM32_SERIAL_USE_USART1    TRUE` in `mcuconf.h`
