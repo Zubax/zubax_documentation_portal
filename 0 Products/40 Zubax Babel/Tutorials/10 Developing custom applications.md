@@ -15,15 +15,13 @@ Now its time to try to build the original firmware. Go to console and clone the 
 
 `git clone https://github.com/Zubax/zubax_babel`
 
-Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find file `compound.elf` in directory `/%reponame%/firmware/build/`. This is firmware in binary form, which may be loaded to the device with Drone code probe. There are two ways of loading firmware to the device: 
+Then follow [instructions from the repository](https://github.com/Zubax/zubax_babel/blob/master/firmware/src/board/board.hpp). If everything is fine, you will find files `*****.application.bin` and `compound.elf` in directory `/%reponame%/firmware/build/`.  `compound.elf` includes application firmware and bootloader. Normally you should never avoid using bootloader and all further applications described here include it too. `compound.elf` may be loaded to the device with Drone code probe via SWD interface. `*****.application.bin` is application only in binary form and can be loaded to the device using bootloader. More details below
 
-- Using DroneCode probe(DCP)
-- Using bootloader
 
-## Loading firmware in windows environment ##
+## Loading firmware ##
 ### Loading with DCP ###
 Go to terminal and start gdb
-`C:\Users\j3qq4hch>arm-none-eabi-gdb`
+`>arm-none-eabi-gdb`
 Then connect to DCP load your firmware and run it
 ```
 (gdb) tar ext COM6
@@ -56,13 +54,11 @@ Start it from the beginning? (y or n) y
 Starting program: C:\zubax_babel\firmware\build\compound.elf
 ```
 ### Loading with bootloader ###
-coming soon
-
-----------
-## Loading firmware in *nix environment ##
-### Loading with DCP ###
-### Loading with bootloader ###
-----------
+Babel's firmware includes a bootloader, which can be used over USB, UART of CAN interfaces. Good description of it can be found [here](https://docs.zubax.com/zubax_babel#Bootloader)
+In short: bootloader is activated each time Babel is reset and waits for commands for some time. It also checks if there is a valid application in flash memory. If bootloader receives no commands and finds valid application in flash, it passes control to the application. Otherwise Babel stays in bootloader waiting for commands. If you don't modify command line interface from original Babel's firmware, you can use script `flash_via_serial_bootloader.sh` to update firmware(note: this will only work in *nix-environmet). 
+But if your application does not include any kind of command line interface and you have no way to reset Babel in software, there is another script to use bootloader: `bare_bootloader.py`. To use it you have to know Babel's name in system(e.x. COM3). You should first start script: `python bare_bootloader.py -p COM3 -f C:\tmp\application.bin` and then connect Babel to USB of your PC. Script will recognize it and upload the firmware. 
+All scripts descrivbed may be found in `\zubax_chibios\tools` directory
+Note: It is important to remember that hardware watchdog is activated in bootloader thus care must be taken to reset it in application. 
 
 ## Tutorials ##
 
@@ -72,6 +68,31 @@ A couple words about general code organisation must be said first.
 Zubax Babel firmware uses ChibiOS and therefore this tutorial also relies on ChibiOS and its HAL in particular.
 Firmware is written in C++ and you should use C++ too . 
 As in any OS code is organised as threads which are executed in a pseudo-parallel way. Each thread is represented as separate endless function, which is called by the OS-scheduler according to its rules and desires. It is highly recommended to read [ChibiOS tutorial and manuals](http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:start). 
+
+You should find a bootloader descriptor structure somewhere in the beginning of `main.cpp`. It will look like this:
+```C++
+namespace app
+{
+namespace
+{
+/**
+ * This is the Brickproof Bootloader's app descriptor.
+ * Details: https://github.com/PX4/Firmware/tree/nuttx_next/src/drivers/bootloaders/src/uavcan
+ */
+static const volatile struct __attribute__((packed))
+{
+    std::uint8_t signature[8]   = {'A','P','D','e','s','c','0','0'};
+    std::uint64_t image_crc     = 0;
+    std::uint32_t image_size    = 0;
+    std::uint32_t vcs_commit    = GIT_HASH;
+    std::uint8_t major_version  = FW_VERSION_MAJOR;
+    std::uint8_t minor_version  = FW_VERSION_MINOR;
+    std::uint8_t reserved[6]    = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+} _app_descriptor __attribute__((section(".app_descriptor")));
+}
+}
+```
+This structure is needed for proper bootloader operation and should not be deleted. This structure is what defines a valid application. It will be excluded from further code examples to make them shorter but you must be aware, that this structure must be present in `main.cpp`. With this said it is finally time to proceed to practice.
 
 You should begin with writing HELLO_WORLD for MCU - blinking an onboard LED. According to Babel schematic one of the LEDs is connected to `pin8` of `PORTE`. Create a blink thread:
 
