@@ -3,7 +3,7 @@
 Lightweight protocol designed for reliable communication in aerospace and robotic applications via CAN bus.
 
 In this tutorial creation of a custom UAVCAN-application will be shown. It is supposed that at this point you have everything needed to compile and flash firmware to Zubax Babel.
-It is highly recommended to have a look at UAVCAN documentation, which may be found here(http://uavcan.org/Specification/1._Introduction/)
+It is highly recommended to have a look at UAVCAN documentation, which may be found [here](http://uavcan.org/Specification/1._Introduction/)
 First thing you need is UAVCAN library itself. It should be put to the firmware source code root directors(e.g. /zubax_babel/custom_app_template). Clone UAVCAN
 ```
 cd C:\zubax_babel\custom_app_template 
