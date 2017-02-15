@@ -68,7 +68,6 @@ Supply current                  | 30            | 50            | 80            
 Parameter                               | Minimum       | Typical       | Maximum       | Units
 ----------------------------------------|---------------|---------------|---------------|-------
 Bit rate (manually configurable)        | 20            | 1000          | 1000          | Kbps
-Bit rate (autodetect)                   |        | 1000<br/>500<br/>250<br/>125 |       | Kbps
 Positive-going input threshold voltage  |               | 750           | 900           | mV
 Negative-going input threshold voltage  | 500           | 650           |               | mV
 Differential output voltage, dominant   | 1.5           | 2.0           | 3.0           | V
@@ -121,7 +120,7 @@ Color   | Indicates
 Red     | CAN power switch is turned ON.
 Orange  | 120&#8486; CAN terminator is turned ON.
 Blue    | Status, see below.
-Green   | Blinks once if there was at least one CAN frame sent or received in the last 25 milliseconds. This feature allows the user to visually evaluate the load of the CAN bus.
+Green   | Blinks once if there was at least one CAN frame successfully sent or received in the last 25 milliseconds. This feature allows the user to visually evaluate the load of the CAN bus.
 
 The status LED (blue) behaves as follows:
 
@@ -129,9 +128,9 @@ Status                                          | Pattern
 ------------------------------------------------|----------------------------------------------------------------------
 Bootloader is running                           | Glowing continuously
 CAN channel is closed                           | Turned OFF
-CAN channel is open and operating normally      | Blinking 1 Hz (slowly), short pulses (50 ms)
+CAN channel is open and operating normally      | Blinking 1 Hz (slowly)
 CAN channel is open, CAN error passive          | Blinking 4 Hz (quickly)
-CAN channel is open, CAN bus off                | Blinking 10 Hz (frantically)
+CAN channel is open, CAN bus off                | Blinking 10 Hz (very quickly)
 
 While the bootloader is running, the traffic LED (green) is used to indicate the bootloader's status as follows:
 
@@ -140,7 +139,7 @@ Status                                                  | Pattern
 Ready to boot, or waiting for boot delay expiration     | Turned OFF
 Boot cancelled by external request (e.g. CLI command)   | Blinking 1 Hz, short pulses (50 ms)
 Application upgrade is in progress                      | Blinking 1 Hz, long pulses (500 ms)
-No valid application found, boot is not possible        | Blinking 10 Hz (frantically)
+No valid application found, boot is not possible        | Blinking 10 Hz (very quickly)
 
 ## Interfaces
 
