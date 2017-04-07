@@ -34,9 +34,18 @@ If your Zubax GNSS 2 was supplied with a protective tape on the barometer, make 
 
 #### Environment
 
+##### Hardware v2.2 and newer
+
 Parameter               | Minimum       | Maximum       | Units | Note
 ------------------------|---------------|---------------|-------|------------------------------------------------------
-Temperature             | -30           | 60            | &deg;C|GNSS hot start is not expected to work reliably below -20&deg;C
+Board temperature       | -40           | 70            | &deg;C| GNSS hot start is not expected to work reliably below -20&deg;C.
+Magnetic field strength |               | 9             | Gauss |
+
+##### Hardware v2.1 and older
+
+Parameter               | Minimum       | Maximum       | Units | Note
+------------------------|---------------|---------------|-------|------------------------------------------------------
+Board temperature       | -30           | 60            | &deg;C| GNSS hot start is not expected to work reliably below -20&deg;C.
 Magnetic field strength |               | 1.3           | Gauss |
 
 #### Power supply
@@ -251,10 +260,7 @@ WARNING                 | Not used.
 ERROR                   | Not used.
 CRITICAL                | Firmware update has failed; another attempt will be made soon.
 
-<info>
-Linux users: You can use [`uavcan_status_monitor`](http://uavcan.org/Implementations/Libuavcan/Platforms/Linux#uavcan_monitor)
-to see the status code of each node on the bus.
-</info>
+<info>See [UAVCAN GUI Tool](http://uavcan.org/GUI_Tool)</info>
 
 ### Time synchronization
 
@@ -724,31 +730,46 @@ Zubax GNSS 2 can be used with the following accesories:
 
 ## Firmware update
 
-Note that firmware update may cause the configuration stored in the non-volatile memory to reset to defaults.
+<info>Instructions below are only applicable to Zubax GNSS v2.2 and newer.</info>
+
+Zubax GNSS 2 employs the Zubax Embedded Bootloader for purposes of firmware update and integrity checking.
+The following state machine lies at the core of the bootloader.
+
+<img src="bootloader_state_machine.png" title="State machine of the Zubax Embedded Bootloader">
+
+State ID| State name            | Comment
+--------|-----------------------|--------------------------------------------------------------------------------------
+0       | `NoAppToBoot`         | There is no valid application to boot; the bootloader will be waiting for commands forever.
+1       | `BootDelay`           | The bootloader will start the application in a few seconds, unless the boot is cancelled or a firmware update is requested.
+2       | `BootCancelled`       | There is a valid application to boot, however, boot was cancelled by an external command.
+3       | `AppUpgradeInProgress`| Application is currently being upgraded. If interrupted, the bootloader will go into either `NoAppToBoot` or `BootCancelled`.
+4       | `ReadyToBoot`         | The application is already booting. This state is very transient and is left automatically as soon as possible.
+
+On Zubax GNSS 2, the boot delay is set to 5 seconds.
+
+The bootloader supports the following communication interfaces:
+
+Interface       | Parameters            | Protocol                                              | Note
+----------------|-----------------------|-------------------------------------------------------|----------------------
+USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, DCD Port is inactive
+DCD port (UART) | 115200-8N1 (fixed)    | Same as USB CDC ACM                                   | Available only while USB is disconnected
+CAN bus         | Autoconfigured        | UAVCAN firmware update protocol                       | Always available
+
+As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed below.
+
+Once started, the bootloader initializes the interfaces and exposes a CLI interface via either DCD port or USB.
+The USB is always preferred if it is connected to the host;
+otherwise the CLI falls back to the UART interface of the DCD port.
+
+### Via XMODEM/YMODEM
+
+#### CLI commands
 
 ### Via UAVCAN
 
-Zubax GNSS 2 uses PX4 UAVCAN bootloader that implements UAVCAN-compliant firmware update protocol.
+#### Supported messages
 
-Update procedure works as follows:
-
-1. The service `uavcan.protocol.file.BeginFirmwareUpdate` (with any arguments) must be called on the device.
-The device will boot into bootloader.
-2. When the device is in the bootloader, the service `uavcan.protocol.file.BeginFirmwareUpdate` must be called again,
-this time with properly configured fields.
-3. After that, the bootloader will erase the firmware and download the new image using the service
-`uavcan.protocol.file.Read`.
-4. When the new firmware is downloaded and verified, the bootloader will start it.
-
-It is safe to abort the process at any point - in this case the bootloader
-will try again until a correct image is loaded.
-
-If you're using PX4 flight stack, please
-[follow these instructions](http://dev.px4.io/uavcan-node-firmware.html#placing-the-binaries-in-the-px4-romfs).
-
-### Via DroneCode debug port
-
-Please refer to the [DroneCode probe documentation page](/dronecode_probe) for instructions.
+#### Supported services
 
 ## Links
 
