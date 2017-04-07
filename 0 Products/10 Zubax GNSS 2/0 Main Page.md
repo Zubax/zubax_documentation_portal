@@ -80,15 +80,15 @@ Sensor model:
 
 Please refer to the specifications provided by the sensor manufacturer.
 
-Sensor model:
-[Measurement Specialties MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx)
+Sensor model: [TE Connectivity MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx)
 
 #### Three-axis digital compass with thermocompensation
 
 Please refer to the specifications provided by the sensor manufacturer.
 
-Sensor model:
+* Zubax GNSS v2.1 and v2.0:
 [Honeywell HMC5983](http://www51.honeywell.com/aero/common/documents/myaerospacecatalog-documents/Defense_Brochures-documents/HMC5983_3_Axis_Compass_IC.pdf)
+* Zubax GNSS v2.2: [LIS3MDL](http://www.st.com/en/mems-and-sensors/lis3mdl.html)
 
 ## Interfaces
 
@@ -203,6 +203,14 @@ Note that CAN frames filtered out by the hardware acceptance filters will not ca
 
 ### LED indication during firmware update and bootup
 
+#### Firmware v4.0 and newer
+
+During first few seconds after power-on or after restart, and also in the process of firmware update,
+Zubax GNSS 2 uses its LED indicators in a different way, as described in the section dedicated to the
+bootloader below.
+
+#### Firmware v3.x and older
+
 During first few seconds after power-on or after restart, and also in the process of firmware update,
 Zubax GNSS 2 uses its LED indicators in a different way, as described in the table below.
 
@@ -269,9 +277,9 @@ Data type                                       | Note
 `uavcan.protocol.GetDataTypeInfo`               |
 `uavcan.protocol.GetTransportStats`             |
 `uavcan.protocol.RestartNode`                   |
-`uavcan.protocol.file.BeginFirmwareUpdate`      | Request arguments will be ignored; the device will reboot into the bootloader shortly after receiving request.
+`uavcan.protocol.file.BeginFirmwareUpdate`      | Reboots the device into the bootloader and commences the firmware download process.
 `uavcan.protocol.param.GetSet`                  | Configuration parameters are described later in this document.
-`uavcan.protocol.param.ExecuteOpcode`           | Note that this request may cause transient disruptions to output sensor feeds.
+`uavcan.protocol.param.ExecuteOpcode`           | Note that this request may cause transient disruptions to output sensor feeds. Starting from firmware v4.0, configuration parameters are saved automatically after modification, so no explicit invokation of this service is necessary.
 
 ### Messages
 
@@ -286,19 +294,26 @@ Output (publishing frequency is configurable per message type):
 
 Data type                                       | Note
 ------------------------------------------------|----------------------------------------------------------------------
-`uavcan.protocol.GlobalTimeSync`                | Disabled by default
+`uavcan.protocol.GlobalTimeSync`                | Disabled by default.
 `uavcan.protocol.NodeStatus`                    |
-`uavcan.equipment.gnss.Fix`                     |
+`uavcan.equipment.gnss.Fix`                     | This message definition is deprecated; refer to the UAVCAN specification for detail. Enabled by default for compatibility reasons, but **it is recommended to disable it**.
+`uavcan.equipment.gnss.Fix2`                    | This is a replacement to the deprecated message type `uavcan.equipment.gnss.Fix`.
 `uavcan.equipment.gnss.Auxiliary`               |
-`uavcan.equipment.ahrs.Magnetometer`            |
-`uavcan.equipment.air_data.StaticPressure`      | Disabled by default
-`uavcan.equipment.air_data.StaticTemperature`   | Publication rate and priority are the same as for `uavcan.equipment.air_data.StaticPressure`. Disabled by default.
+`uavcan.equipment.ahrs.MagneticFieldStrength`   |
+`uavcan.equipment.air_data.StaticPressure`      | Disabled by default.
+`uavcan.equipment.air_data.StaticTemperature`   | Priority is shared with `uavcan.equipment.air_data.StaticPressure`. See a note below on publication frequency. Disabled by default.
 `uavcan.protocol.dynamic_node_id.Allocation`    | Used to allocate node ID if dynamic node ID allocation is enabled (it is enabled by defualt).
+
+The publication frequency of `uavcan.equipment.air_data.StaticTemperature` is defined as follows:
+
+* For firmware versions prior to v4.0, the message `uavcan.equipment.air_data.StaticTemperature` is published at the same rate as `uavcan.equipment.air_data.StaticPressure`.
+* For firmware versions v4.0 and newer, the message `uavcan.equipment.air_data.StaticTemperature` is published at 1/5th of the rate of `uavcan.equipment.air_data.StaticPressure`.
+E.g. if the pressure data is broadcasted at 20 Hz, the temperature data will be broadcasted at 4 Hz.
 
 ## USB interface
 
-USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver (also known as "GPS mouse")
-with standard NMEA 0183 protocol, and also provides access to configuration parameters.
+The USB interface allows to use Zubax GNSS 2 as a standalone USB GNSS receiver (also known as "GPS mouse")
+interfaced via the standard NMEA 0183 protocol; also it provides access to configuration parameters.
 
 Please refer to the [USB command line interface documentation page](/usb)
 for more information specific to this interface.
@@ -319,6 +334,13 @@ without any preparatory configuration.
 Zubax GNSS 2 reports sensor data using the following standard NMEA sentences.
 Please also refer to the list of configuration parameters below to see what can be asjusted if necessary.
 
+More information on NMEA can be found here: <http://www.catb.org/gpsd/NMEA.html>.
+
+Refer to the tutorials to see examples of using Zubax GNSS 2 with
+<abbr title="Geographic information system">GIS</abbr> software.
+
+#### Standard sentences
+
 NMEA sentence   | Component     | Purpose
 ----------------|---------------|--------------------------------------------------------------
 `GPRMC`         | GNSS receiver | Recommended minimum navigation information
@@ -329,13 +351,31 @@ NMEA sentence   | Component     | Purpose
 `YXXDR` (type `P`)|Altimeter    | Static barometric pressure *(only if sensor is enabled)*
 `YXXDR` (type `C`)|Altimeter    | Static air temperature *(only if sensor is enabled)*
 
-More information on NMEA can be found here: <http://www.catb.org/gpsd/NMEA.html>,
-and here: <http://edu-observatory.org/gps/NMEA_0183.txt>.
+#### Vendor-specific sentences
 
-Refer to the tutorials to see examples of using Zubax GNSS 2 with
-<abbr title="Geographic information system">GIS</abbr> software.
+The NMEA specification dedicates the prefix `$P` followed by the vendor ID for vendor-specific sentences.
+All Zubax products use the vendor-specific prefix `ZUBAX`.
+The first field of the sentence contains the sentence type identifier, which is a string containing upper case
+latin letters, arabic digits, and the minus symbol `-`.
 
-Sample NMEA output is shown below:
+##### Raw magnetic field strength
+
+Vendor-specific sentence type ID: `MAG-FLD-XYZ`.
+
+Availability: firmware v4.0 and newer.
+
+Fields:
+
+1. Magnetic field strength of the X axis.
+2. Magnetic field strength of the Y axis.
+3. Magnetic field strength of the Z axis.
+4. A single character `G` that indicates that the units of measurement are Gauss.
+5. Reserved.
+6. Reserved.
+
+Example: `$PZUBAX,MAG-FLD-XYZ,1.345,-1.345,0.345,G,,*12`
+
+#### Sample output
 
 ```
 $GPRMC,072626.30,A,0036.27144,N,00042.93538,E,1.097,235.8,141215,,*35
@@ -370,10 +410,15 @@ Allows to view or modify configuration parameters.
 
 Execute without arguments to get usage info. Supported arguments:
 
-* `list` - list all parameters, their values and ranges
-* `set <name> <value>` - change parameter value
-* `save` - save all parameters to the non-volatile memory
-* `erase` - reset all parameters to defaults
+* `list` - list all parameters, their values and ranges.
+* `set <name> <value>` - change parameter value.
+* `save` - save all parameters to the non-volatile memory.
+* `erase` - reset all parameters to defaults.
+
+<info>
+Starting from firmware v4.0, configuration parameters are saved automatically after modification.
+Thus, it is no longer necessary to execute `cfg save`.
+</info>
 
 #### `reset`
 
@@ -395,7 +440,13 @@ other sensors are working (if enabled), etc.
 
 #### `help`
 
-Print the list of available commands
+Prints the list of available commands
+
+#### `bootloader`
+
+Available in firmware v4.0+.
+
+Reboots the board into the bootloader.
 
 ## DroneCode port
 
@@ -437,19 +488,25 @@ UART parameters are fixed and provided below:
 
 ## Configuration parameters
 
-This section documents available configuration parameters.
+This section documents the available configuration parameters.
 Read the documentation on the interfaces to learn how to access the configuration parameters.
 
 <info>Reboot is required in order for all configuration changes to take effect.</info>
 
+<info>
+Starting from firmware v4.0, configuration parameters are saved automatically after modification.
+</info>
+
 ### `uavcan.bit_rate`
+
+**Removed in firmware v4.0.**
 
 CAN bus bit rate, all interfaces.
 Value 0 (which is default) causes the device to detect bit rate automatically at every boot up.
 
 Default value: 0
 
-Units: Bits/sec
+Units: bits/sec
 
 ### `uavcan.node_id`
 
@@ -540,6 +597,17 @@ Units: Microsecond
 
 ### `uavcan.prio-fix`
 
+#### Firmware v4.0 and newer
+
+This setting directly assigns the priority of the message `uavcan.equipment.gnss.Fix2`.
+The depreacted message `uavcan.equipment.gnss.Fix`, if enabled, will be using the next lower priority level.
+For example, if this setting is set to 16, the deprecated message will be broadcasted at the priority level 17,
+which is one lower than 16.
+
+Default value: 16
+
+#### Firmware v3.x and older
+
 Priority of `uavcan.equipment.gnss.Fix`.
 
 Default value: 16
@@ -607,6 +675,27 @@ Enable NMEA output via DroneCode port (UART).
 This configuration parameter does not affect NMEA output over USB.
 
 Default value: 0 (disabled)
+
+### `mag.pwron_slftst`
+
+**New in firmware v4.0.**
+
+Perform power on self test of the magnetometer when booting.
+Note that the manufacturer of the magnetometer recommends to hold the sensor stationary during the self test procedure.
+Therefore it is recommended to disable this feature unless it is expected that the board will be always held stationary
+during powering on. Otherwise the self test may be occasionally failing, delaying the proper start up of the device.
+
+Default value: 1 (enabled)
+
+### `gnss.old_fix_msg`
+
+**New in firmware v4.0.**
+
+Broadcast the deprecated message `uavcan.equipment.gnss.Fix` alongside the new message `uavcan.equipment.gnss.Fix2`.
+This feature is enabled by default for compatibility purposes; however, it is recommended to disable it in order to
+reduce the CAN bus traffic if it is not needed.
+
+Default value: 1 (compatibility mode)
 
 ## Identification information
 
