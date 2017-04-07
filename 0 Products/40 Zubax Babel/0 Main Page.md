@@ -578,8 +578,6 @@ Interface       | Parameters            | Protocol                              
 USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, DCD Port is inactive
 DCD port (UART) | 115200-8N1 (fixed)    | Same as USB CDC ACM                                   | Available only while USB is disconnected
 
-As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed later.
-
 Once started, the bootloader initializes the interfaces and exposes a CLI interface via either DCD port or USB.
 The USB is always preferred if it is connected to the host;
 otherwise the CLI falls back to the UART interface of the DCD port.
