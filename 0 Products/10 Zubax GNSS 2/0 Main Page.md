@@ -743,7 +743,7 @@ State ID| State name            | Comment
 1       | `BootDelay`           | The bootloader will start the application in a few seconds, unless the boot is cancelled or a firmware update is requested.
 2       | `BootCancelled`       | There is a valid application to boot, however, boot was cancelled by an external command.
 3       | `AppUpgradeInProgress`| Application is currently being upgraded. If interrupted, the bootloader will go into either `NoAppToBoot` or `BootCancelled`.
-4       | `ReadyToBoot`         | The application is already booting. This state is very transient and is left automatically as soon as possible.
+4       | `ReadyToBoot`         | The application is about to boot. This state is very transient and is left automatically as soon as possible.
 
 On Zubax GNSS 2, the boot delay is set to 5 seconds.
 
@@ -751,21 +751,77 @@ The bootloader supports the following communication interfaces:
 
 Interface       | Parameters            | Protocol                                              | Note
 ----------------|-----------------------|-------------------------------------------------------|----------------------
-USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, DCD Port is inactive
+USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, the DCD port is inactive
 DCD port (UART) | 115200-8N1 (fixed)    | Same as USB CDC ACM                                   | Available only while USB is disconnected
 CAN bus         | Autoconfigured        | UAVCAN firmware update protocol                       | Always available
 
 As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed below.
 
-Once started, the bootloader initializes the interfaces and exposes a CLI interface via either DCD port or USB.
+### Via USB/UART
+
+Once started, the bootloader exposes a CLI via either DCD port or USB.
 The USB is always preferred if it is connected to the host;
 otherwise the CLI falls back to the UART interface of the DCD port.
 
-### Via XMODEM/YMODEM
+The CLI can be used to query the state of the bootloader, modify it,
+obtain the information about the running firmware, and upgrade it if necessary.
+
+The CLI prompt is of the following format: `StateName> `,
+which features the human readable name of the current state of the bootloader,
+followed by the ASCII greater character (ASCII code 62),
+followed by a space.
+For example: `BootDelay> `.
+Such prompt allows the user (or software) to easily identify the state of the bootloader.
 
 #### CLI commands
 
-### Via UAVCAN
+##### `reboot`
+
+Restarts the bootloader.
+
+##### `zubax_id`
+
+This is the standard command supported by all products by Zubax Robotics that have a CLI.
+It takes no arguments, and outputs a YAML key-value dictionary containing the vital information
+about the device, the firmware it is running, unique ID, installed certificates of authenticity,
+version of the hardware, and possibly some other information.
+Aside from the standard fields, this command also provides at least the following fields in its output:
+
+* `bl_version` - bootloader version, major and minor.
+* `bl_vcs_commit` - build identifier of the bootloader.
+* `mode` - set to the string `bootloader` to indicate that the bootloader is running.
+
+If there is a valid firmware, its version information will also be provided via the standard fields
+`fw_version` and `fw_vcs_commit`.
+If the bootloader could not find a valid firmware, these fields will be omitted.
+
+##### `wait`
+
+Do not boot the application.
+If the current state is `BootDelay`, the state will be switched to `BootCancelled`.
+In all other states the command will have no effect.
+
+##### `download`
+
+Start the serial receiver and prepare to receive the new firmware image as a flat binary via the serial link
+using either YMODEM, XMODEM, or XMODEM-1K.
+The bootloader will automatically detect which protocol to use.
+According to the YMODEM specification, if no transfer was initiated by the host within one minute,
+the command will exit with an error.
+
+Note that while this command is running, the CLI will be unavailable,
+since the same serial link will be temporarily occupied by the file transfer protocol.
+
+If the YMODEM protocol is used, the file name field in the transfer header packet will be ignored.
+
+There are heaps of software products and scripts that support these file transfer protocols.
+For instance, the popular program `sz` (available on most Linux distributions) can be used as follows:
+
+```bash
+sz -vv --ymodem --1k $file > $port < $port
+```
+
+### Via CAN bus
 
 #### Supported messages
 
