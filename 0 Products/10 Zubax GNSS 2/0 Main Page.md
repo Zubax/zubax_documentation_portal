@@ -721,6 +721,28 @@ CAN1 bus        | Autoconfigured        | UAVCAN firmware update protocol       
 
 As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed below.
 
+### Error codes
+
+The table below provides definitions for the well defined error codes that can be reported by the bootloader.
+
+Error code  | Meaning
+------------|----------------------------------------------------------------------------------------------------------
+0           | Success.
+1           | Unknown error.
+9001        | Application ROM driver error: erase failed.
+9002        | Application ROM driver error: write failed.
+10001       | The current state of the bootloader does not permit the requested operation.
+10002       | Application image is too large for the device. Download has been aborted.
+10003       | Failed to write the next downloaded chunk of the application image into the ROM.
+20001       | X/YMODEM interface write has timed out.
+20002       | X/YMODEM retries exhausted.
+20003       | X/YMODEM protocol error.
+20004       | X/YMODEM transfer has been cancelled by the remote.
+20005       | X/YMODEM remote has refused to provide the file.
+30001       | UAVCAN service request has timed out.
+30002       | UAVCAN file downloading has been interrupted.
+32767       | Unknown error.
+
 ### LED indication
 
 While the bootloader is running, the LED indicators behave as follows:
@@ -791,6 +813,7 @@ using either YMODEM, XMODEM, or XMODEM-1K.
 The bootloader will automatically detect which protocol to use.
 According to the YMODEM specification, if no transfer was initiated by the host within one minute,
 the command will exit with an error.
+Possible error codes are defined in the table above.
 
 Note that while this command is running, the CLI will be unavailable,
 since the same serial link will be temporarily occupied by the file transfer protocol.
@@ -824,23 +847,7 @@ Bootloader state            | UAVCAN node mode  | UAVCAN node health
 
 The vendor specific status code of the node status message contains the status code of the last attempt
 to upgrade the firmware.
-The list below captures the well defined error codes.
-
-Error code  | Meaning
-------------|----------------------------------------------------------------------------------------------------------
-0           | Success.
-1           | Unknown error.
-9001        | Application ROM driver error: erase failed.
-9002        | Application ROM driver error: write failed.
-10001       | The current state of the bootloader does not permit the requested operation.
-10002       | Application image is too large for the device. Download has been aborted.
-10003       | Failed to write the next downloaded chunk of the application image into the ROM.
-20001       | X/YMODEM interface write has timed out.
-20002       | X/YMODEM retries exhausted.
-20003       | X/YMODEM protocol error.
-20004       | X/YMODEM transfer has been cancelled by the remote.
-20005       | X/YMODEM remote has refused to provide the file.
-32767       | Unknown error.
+Please refer to the error code table provided above.
 
 #### Supported messages
 
