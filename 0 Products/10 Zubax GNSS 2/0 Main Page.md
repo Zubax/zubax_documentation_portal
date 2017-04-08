@@ -59,8 +59,7 @@ Supply current  | 70            | 95            | 180           | mA    | Any po
 
 Parameter                               | Minimum       | Typical       | Maximum       | Units
 ----------------------------------------|---------------|---------------|---------------|-------
-Bit rate (manually configurable)        | 20            | 1000          | 1000          | Kbps
-Bit rate (autodetect)                   |        | 1000<br/>500<br/>250<br/>125 |       | Kbps
+Bit rate                                |        | 1000<br/>500<br/>250<br/>125 |       | Kbps
 Positive-going input threshold voltage  |               | 750           | 900           | mV
 Negative-going input threshold voltage  | 500           | 650           |               | mV
 Differential output voltage, dominant   | 1.5           | 2.0           | 3.0           | V
@@ -301,7 +300,7 @@ without any preparatory configuration.
 ### NMEA output
 
 Zubax GNSS 2 reports sensor data using the following standard NMEA sentences.
-Please also refer to the list of configuration parameters below to see what can be asjusted if necessary.
+Please also refer to the list of configuration parameters below to see what can be adjusted if necessary.
 
 More information on NMEA can be found here: <http://www.catb.org/gpsd/NMEA.html>.
 
@@ -312,20 +311,20 @@ Refer to the tutorials to see examples of using Zubax GNSS 2 with
 
 NMEA sentence   | Component     | Purpose
 ----------------|---------------|--------------------------------------------------------------
-`GPRMC`         | GNSS receiver | Recommended minimum navigation information
-`GPGGA`         | GNSS receiver | Global positioning system fix data
-`GPGSA`         | GNSS receiver | GPS DOP and active satellites
-`GPGSV`         | GNSS receiver | Information about satellites in view
-`HCHDG`         | Compass       | Raw magnetic heading; not calibrated, only valid if the board is mounted horizontal
-`YXXDR` (type `P`)|Altimeter    | Static barometric pressure *(only if sensor is enabled)*
-`YXXDR` (type `C`)|Altimeter    | Static air temperature *(only if sensor is enabled)*
+`GPRMC`         | GNSS receiver | Recommended minimum navigation information.
+`GPGGA`         | GNSS receiver | Global positioning system fix data.
+`GPGSA`         | GNSS receiver | GPS DOP and active satellites.
+`GPGSV`         | GNSS receiver | Information about satellites in view.
+`HCHDG`         | Compass       | Raw magnetic heading; not calibrated, only valid if the board is mounted horizontally.
+`YXXDR` (type `P`)|Altimeter    | Static barometric pressure *(only if the sensor is enabled)*.
+`YXXDR` (type `C`)|Altimeter    | Static air temperature *(only if the sensor is enabled)*.
 
 #### Vendor-specific sentences
 
 The NMEA specification dedicates the prefix `$P` followed by the vendor ID for vendor-specific sentences.
 All Zubax products use the vendor-specific prefix `ZUBAX`.
 The first field of the sentence contains the sentence type identifier, which is a string containing upper case
-latin letters, arabic digits, and the minus symbol `-`.
+Latin letters, Arabic digits, and the minus symbol `-`.
 
 ##### Raw magnetic field strength
 
@@ -381,7 +380,7 @@ Execute without arguments to get usage info. Supported arguments:
 
 * `list` - list all parameters, their values and ranges.
 * `set <name> <value>` - change parameter value.
-* `save` - save all parameters to the non-volatile memory.
+* `save` - save all parameters to the non-volatile memory (see the note).
 * `erase` - reset all parameters to defaults.
 
 <info>
@@ -857,7 +856,7 @@ allows the bootloader to avoid congestion of the CAN bus while downloading the f
 
 ## Links
 
-* [Purchase](http://shop.titaneliteinc.com/index.php?route=product/product&product_id=987)
+* **[Purchase](http://shop.titaneliteinc.com/index.php?route=product/product&product_id=987)**
 * [Product description](http://zubax.com/product/zubax-gnss-2)
 * [Source repository (firmware sources, 3D printable models, etc)](https://github.com/Zubax/zubax_gnss)
 * [Tutorials](tutorials)
