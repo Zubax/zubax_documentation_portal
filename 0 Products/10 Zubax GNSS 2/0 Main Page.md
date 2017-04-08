@@ -732,6 +732,8 @@ Zubax GNSS 2 can be used with the following accesories:
 
 <info>Instructions below are only applicable to Zubax GNSS v2.2 and newer.</info>
 
+<info>It is recommended to use Zubax Toolbox or the UAVCAN GUI Tool for updating the firmware.</info>
+
 Zubax GNSS 2 employs the Zubax Embedded Bootloader for purposes of firmware update and integrity checking.
 The following state machine lies at the core of the bootloader.
 
@@ -823,9 +825,48 @@ sz -vv --ymodem --1k $file > $port < $port
 
 ### Via CAN bus
 
+The bootloader supports the UAVCAN firmware update protocol.
+Please refer to the UAVCAN specification for theory.
+
+The following table describes the mapping from the bootloader states to the UAVCAN node status codes:
+
+Bootloader state            | UAVCAN node mode code   | UAVCAN node health code
+----------------------------|-------------------------|--------------------------------------------------------------
+`NoAppToBoot`               | `SOFTWARE_UPDATE`       | `ERROR`
+`BootDelay`, `ReadyToBoot`  | `MAINTENANCE`           | `OK`
+`BootCancelled`             | `MAINTENANCE`           | `WARNING`
+`AppUpgradeInProgress`      | `SOFTWARE_UPDATE`       | `OK`
+
 #### Supported messages
 
+Data type                                       | Direction     | Note
+------------------------------------------------|---------------|----------------------------------------------------------------------
+`uavcan.protocol.NodeStatus`                    | Output        | Published at 1 Hz. Refer to the state mapping table.
+`uavcan.protocol.debug.LogMessage`              | Output        | Used to report the application upgrade progress and status in a human readable form.
+`uavcan.protocol.dynamic_node_id.Allocation`    | Input/Output  | Used only during initialization, if the application did not provide a specific node ID to use.
+
 #### Supported services
+
+Servers:
+
+Data type                                       | Note
+------------------------------------------------|---------------------------------------------------------------------------------------------------------------------
+`uavcan.protocol.GetNodeInfo`                   | The nested structure `uavcan.protocol.SoftwareVersion` is populated only if there is a valid application.
+`uavcan.protocol.RestartNode`                   | Restarts the bootloader.
+`uavcan.protocol.file.BeginFirmwareUpdate`      | Initiates the firmware update process, unless it was initiated earlier before the application has rebooted into the bootloader.
+
+Clients:
+
+Data type                                       | Response timeout  | Transfer priority | Note
+------------------------------------------------|-------------------|-------------------|--------------------------------------------------
+`uavcan.protocol.file.Read`                     | 1 second          | 24                | Used to download the application image file from the specified file server.
+
+The interval at which the file read requests are issued is defined by the following formula (all units SI):
+
+    last_response_latency + 1 / (1 + can_bus_bit_rate / 65536)
+
+This formula, combined with the low transfer priority,
+allows the bootloader to avoid congestion of the CAN bus while downloading the firmware image.
 
 ## Links
 
