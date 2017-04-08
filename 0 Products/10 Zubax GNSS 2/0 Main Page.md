@@ -153,50 +153,13 @@ This LED indicator blinks with the rate of 1 Hz if the GNSS receiver has a navig
 
 ### Status LED
 
-<style>
-div.led {
-    padding: 0 2px;
-    animation-iteration-count: 1;
-}
-div.led:hover {
-    animation-iteration-count: infinite;
-}
-div.led-ok {
-    animation-name: led-ok;
-    animation-duration: 1s;
-}
-div.led-warning {
-    animation-name: led-warning;
-    animation-duration: 0.3s;
-}
-div.led-error {
-    animation-name: led-error;
-    animation-duration: 0.1s;
-}
-@keyframes led-ok {
-    0%   {background-color:red;}
-    5%   {background-color:white;}
-    100% {background-color:white;}
-}
-@keyframes led-warning {
-    0%   {background-color:red;}
-    16%  {background-color:white;}
-    100% {background-color:white;}
-}
-@keyframes led-error {
-    0%   {background-color:red;}
-    50%  {background-color:white;}
-    100% {background-color:white;}
-}
-</style>
-
 This LED indicator shows the health of the device derived from the continuous self-diagnostics as described above:
 
-Health  | Blinking ON/OFF duration
---------|------------------------------------------------
-OK      | <div class="led led-ok">0.05/0.95 seconds</div>
-WARNING | <div class="led led-warning">0.05/0.25 seconds</div>
-ERROR   | <div class="led led-error">0.05/0.05 seconds</div>
+Health  | Pattern (step 50 ms)      | Blinking ON/OFF duration
+--------|---------------------------|---------------------
+OK      | `█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁`    | 0.05/0.95 seconds
+WARNING | `█▁▁▁▁▁█▁▁▁▁▁█▁▁▁▁▁`      | 0.05/0.25 seconds
+ERROR   | `█▁█▁█▁█▁█▁█▁█▁█▁█▁█▁`    | 0.05/0.05 seconds
 
 ### CAN1 and CAN2 LEDs
 
@@ -755,9 +718,28 @@ Interface       | Parameters            | Protocol                              
 ----------------|-----------------------|-------------------------------------------------------|----------------------
 USB             | CDC ACM               | YMODEM, XMODEM, XMODEM-1K (autodetect)                | When connected, the DCD port is inactive
 DCD port (UART) | 115200-8N1 (fixed)    | Same as USB CDC ACM                                   | Available only while USB is disconnected
-CAN bus         | Autoconfigured        | UAVCAN firmware update protocol                       | Always available
+CAN1 bus        | Autoconfigured        | UAVCAN firmware update protocol                       | Always available on CAN1. CAN2 is not used in the bootloader.
 
 As can be seen from the table, there are two families of protocols: serial and CAN based; both are reviewed below.
+
+### LED indication
+
+While the bootloader is running, the LED indicators behave as follows:
+
+* The status LED is always on, which is the main indicator that the bootloader, rather than the firmware,
+is currently running.
+* The CAN1 LED behaves normally as a CAN bus activity and load indicator,
+blinking once for 25 milliseconds every time the CAN1 controller successfully transmits or receives a CAN frame.
+* The CAN2 LED displays one of the blinking patterns shown below, depending on which state the bootloader is in.
+While the bootloader is running, the state of this LED has no relation to the state of the redundant CAN interface
+(which is CAN2), since the bootloader makes no use of it.
+
+Bootloader state            | LED blinking pattern (step 50 ms)
+----------------------------|----------------------------------------------------------------------------------------
+`NoAppToBoot`               | `█▁█▁█▁█▁█▁█▁█▁█▁█▁█▁` 10 Hz (very quickly)
+`BootDelay`, `ReadyToBoot`  | `▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁` Turned off
+`BootCancelled`             | `█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁` 1 Hz, short pulses (50 ms)
+`AppUpgradeInProgress`      | `██████████▁▁▁▁▁▁▁▁▁▁` 1 Hz, long pulses (500 ms)
 
 ### Via USB/UART
 
@@ -828,22 +810,26 @@ sz -vv --ymodem --1k $file > $port < $port
 The bootloader supports the UAVCAN firmware update protocol.
 Please refer to the UAVCAN specification for theory.
 
+The bootloader only utilizes the primary CAN interface, which is CAN1.
+The redundant interface CAN2 remains in the passive mode while the bootloader is running.
+It is therefore required that if there is only one interface in use, it must be CAN1.
+
 The following table describes the mapping from the bootloader states to the UAVCAN node status codes:
 
-Bootloader state            | UAVCAN node mode code   | UAVCAN node health code
-----------------------------|-------------------------|--------------------------------------------------------------
-`NoAppToBoot`               | `SOFTWARE_UPDATE`       | `ERROR`
-`BootDelay`, `ReadyToBoot`  | `MAINTENANCE`           | `OK`
-`BootCancelled`             | `MAINTENANCE`           | `WARNING`
-`AppUpgradeInProgress`      | `SOFTWARE_UPDATE`       | `OK`
+Bootloader state            | UAVCAN node mode  | UAVCAN node health
+----------------------------|-------------------|--------------------------------------------------------------
+`NoAppToBoot`               | `SOFTWARE_UPDATE` | `ERROR`
+`BootDelay`, `ReadyToBoot`  | `MAINTENANCE`     | `OK`
+`BootCancelled`             | `MAINTENANCE`     | `WARNING`
+`AppUpgradeInProgress`      | `SOFTWARE_UPDATE` | `OK`
 
 #### Supported messages
 
-Data type                                       | Direction     | Note
-------------------------------------------------|---------------|----------------------------------------------------------------------
-`uavcan.protocol.NodeStatus`                    | Output        | Published at 1 Hz. Refer to the state mapping table.
-`uavcan.protocol.debug.LogMessage`              | Output        | Used to report the application upgrade progress and status in a human readable form.
-`uavcan.protocol.dynamic_node_id.Allocation`    | Input/Output  | Used only during initialization, if the application did not provide a specific node ID to use.
+Data type                                       | Direction     | Period    | Transfer priority | Note
+------------------------------------------------|---------------|-----------|-------------------|---------------------------------------------------------------------
+`uavcan.protocol.NodeStatus`                    | Output        | 1 Hz      | 24 (low)          | Refer to the bootloader state mapping table.
+`uavcan.protocol.debug.LogMessage`              | Output        | Aperiodic | 31 (lowest)       | Used to report the application upgrade progress and status in a human readable form.
+`uavcan.protocol.dynamic_node_id.Allocation`    | Input/Output  | Aperiodic | 24 (low)          | Used only during initialization, if the application did not provide a specific node ID to use.
 
 #### Supported services
 
@@ -858,10 +844,11 @@ Data type                                       | Note
 Clients:
 
 Data type                                       | Response timeout  | Transfer priority | Note
-------------------------------------------------|-------------------|-------------------|--------------------------------------------------
-`uavcan.protocol.file.Read`                     | 1 second          | 24                | Used to download the application image file from the specified file server.
+------------------------------------------------|-------------------|-------------------|-----------------------------------------------------------------------------
+`uavcan.protocol.file.Read`                     | 1 second          | 24 (low)          | Used to download the application image file from the specified file server.
 
-The interval at which the file read requests are issued is defined by the following formula (all units SI):
+The interval at which the file read requests are issued while downloading the application image
+is defined by the following formula (all units SI):
 
     last_response_latency + 1 / (1 + can_bus_bit_rate / 65536)
 
