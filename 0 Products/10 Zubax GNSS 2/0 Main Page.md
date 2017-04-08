@@ -822,6 +822,26 @@ Bootloader state            | UAVCAN node mode  | UAVCAN node health
 `BootCancelled`             | `MAINTENANCE`     | `WARNING`
 `AppUpgradeInProgress`      | `SOFTWARE_UPDATE` | `OK`
 
+The vendor specific status code of the node status message contains the status code of the last attempt
+to upgrade the firmware.
+The list below captures the well defined error codes.
+
+Error code  | Meaning
+------------|----------------------------------------------------------------------------------------------------------
+0           | Success.
+1           | Unknown error.
+9001        | Application ROM driver error: erase failed.
+9002        | Application ROM driver error: write failed.
+10001       | The current state of the bootloader does not permit the requested operation.
+10002       | Application image is too large for the device. Download has been aborted.
+10003       | Failed to write the next downloaded chunk of the application image into the ROM.
+20001       | X/YMODEM interface write has timed out.
+20002       | X/YMODEM retries exhausted.
+20003       | X/YMODEM protocol error.
+20004       | X/YMODEM transfer has been cancelled by the remote.
+20005       | X/YMODEM remote has refused to provide the file.
+32767       | Unknown error.
+
 #### Supported messages
 
 Data type                                       | Direction     | Period    | Transfer priority | Note
