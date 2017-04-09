@@ -24,6 +24,7 @@ such as the placement of connectors, LED indicators and mounting holes (click to
 
 <img src="drawing.png" width=500 title="Drawing, bottom view">
 
+The dimensions are valid for all revisions of the hardware.
 Two extra holes around the barometer can be used to install a protective cover.
 
 <info>
