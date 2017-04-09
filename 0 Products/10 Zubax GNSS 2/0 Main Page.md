@@ -20,9 +20,9 @@ Links to the firmware sources and 3D printable models are available at the botto
 ### Mechanical
 
 The drawing below documents the basic mechanical characteristics of Zubax GNSS 2,
-such as the placement of connectors, LED indicators and mounting holes (click to enlarge):
+such as the placement of connectors, LED indicators and mounting holes (bottom view) (click to enlarge):
 
-<img src="drawing.png" width=500 title="Drawing, bottom view">
+<img src="drawing.png" width=500 title="Zubax GNSS 2 mechanical drawing, bottom view">
 
 The dimensions are valid for all revisions of the hardware.
 Two extra holes around the barometer can be used to install a protective cover.
