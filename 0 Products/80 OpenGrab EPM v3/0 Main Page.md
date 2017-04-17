@@ -11,6 +11,12 @@ The device creates a very strong magnetic contact with a ferrous target.
 It supports [UAVCAN](/uavcan), RC PWM and push button operation.
 OpenGrab EPM v3 has been developed by NicaDrone in cooperation with Zubax Robotics.
 
+## Links
+
+* [Source repository (firmware sources, drawings, etc)](https://github.com/Zubax/opengrab_epm_v3)
+* [PCB layout and schematic] (https://upverter.com/ctech4285/b115a1af887107bc/OpenGrab-EPM-V3R5C/)
+* [Purchase from NicaDrone] (http://nicadrone.com/index.php?id_product=72&controller=product)
+
 ### Theory of operation
 
 <warning>
@@ -324,8 +330,3 @@ V<sub>UART(in-high)</sub> | High-level UART input voltage           | 0.7 V<sub>
 V<sub>UART(out-low)</sub> | Low-level UART output voltage           |         |         | 0.4     | V
 V<sub>UART(out-high)</sub>| High-level UART output voltage          | V<sub>supply</sub> - 0.4 | | | V
 
-## Links
-
-* [Source repository (firmware sources, drawings, etc)](https://github.com/Zubax/opengrab_epm_v3)
-* [PCB layout and schematic] (https://upverter.com/ctech4285/b115a1af887107bc/OpenGrab-EPM-V3R5C/)
-* [Purchase from NicaDrone] (http://nicadrone.com/index.php?id_product=72&controller=product)
