@@ -405,8 +405,8 @@ may produce the following response (non-printable characters are shown with esca
 ```
 cfg   list  \r\n
 can.bitrate           = 1000000     [10000, 1000000] (1000000)\r\n
-can.power_on          = 0           [0, 1] (0)\r\n
-can.terminator_on     = 0           [0, 1] (0)\r\n
+can.power_on          = 0           [0, 1] (1)\r\n
+can.terminator_on     = 0           [0, 1] (1)\r\n
 slcan.timestamping_on = 1           [0, 1] (1)\r\n
 slcan.flags_on        = 0           [0, 1] (0)\r\n
 uart.baudrate         = 115200      [2400, 3000000] (115200)\r\n
@@ -444,6 +444,8 @@ The response may contain `Error:` followed by the description of the error in ca
 It is recommended to execute `cfg list` afterwards to check if the value was updated.
 
 * `cfg save` - save the current configuration into the non-volatile memory.
+With firmware v1.1 this command became redundant and it should no longer be invoked manually,
+because configuration parameters are saved into the non-volatile memory automatically upon modification.
 
 * `cfg erase` - remove the stored configuration from the non-volatile memory.
 Next restart will reset all parameters to defaults.
@@ -512,20 +514,23 @@ Reboots the device.
 
 <img src="uavcan_gui_tool_adapter_configuration.png" class="thumbnail" title="Managing adapter configuration using the UAVCAN GUI Tool">
 
-Configuration parameters can be stored in the non-volatile memory on the adapter.
+Configuration parameters are stored in the non-volatile memory on the adapter.
 Stored parameters will be re-initialized to the saved values autimatically every time the adapter is turned on.
 Changes in adapter configuration take effect shortly after the corresponding command changing them is executed,
 typically within 100 milliseconds, unless stated otherwise elsewhere.
 Some configuration parameters are aliased via dedicated standard SLCAN commands.
 
-Name                    | SLCAN alias   | Default value | Purpose
-------------------------|---------------|---------------|--------------------------------------------------------------
-`can.bitrate`           | `S`           |               | CAN bitrate.
-`can.power_on`          |               | 0             | Open the CAN power switch (see the power supply diagram).
-`can.terminator_on`     |               | 0             | Enable the 120&#8486; termination resistor.
-`slcan.timestamping_on` | `Z`           | 1             | Provide timestamp information for CAN frame indications.
-`slcan.flags_on`        |               | 0             | Append flags to CAN frame indications (this is a non-standard SLCAN extension).
-`uart.baudrate`         | `U`           | 115200        | UART baud rate.
+Starting from firmware version v1.1, configuration parameters are stored into the non-volatile memory automatically
+after modification.
+
+Name                    | SLCAN alias   | Default value                         | Purpose
+------------------------|---------------|---------------------------------------|--------------------------------------------------------------
+`can.bitrate`           | `S`           | 1000000                               | CAN bitrate, in bits per second.
+`can.power_on`          |               | true (before firmware v1.1: false)    | Open the CAN power switch (see the power supply diagram).
+`can.terminator_on`     |               | true (before firmware v1.1: false)    | Enable the 120&#8486; termination resistor.
+`slcan.timestamping_on` | `Z`           | true                                  | Provide timestamp information for CAN frame indications.
+`slcan.flags_on`        |               | false                                 | Append flags to CAN frame indications (this is a non-standard SLCAN extension).
+`uart.baudrate`         | `U`           | 115200                                | UART baud rate.
 
 ## <abbr title="Original Equipment Manufacturer">OEM</abbr> applications
 
