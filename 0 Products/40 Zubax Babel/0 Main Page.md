@@ -351,7 +351,7 @@ where the sequence of `?` represents a 128-bit hexadecimal number that is the gl
 Zubax Babel may generate SLCAN notifications only in the following cases:
 
 1. A CAN frame is received.
-2. If loopback is enabled: a CAN frame is successfully transmitted.
+2. If loopback is enabled: a CAN frame has been successfully transmitted.
 
 The format of notifications is the same as for [CAN transmission commands](#CAN_frame_transmission):
 
@@ -394,7 +394,8 @@ Yes             | Yes                   | `T123456784012345680BEDL\r` (both of t
 Zubax Babel implements an extension of the SLCAN protocol that allows it to run a conventional CLI shell
 over the same serial port that is used for SLCAN communications, while maintaining full compatibility with SLCAN.
 
-A CLI command is a sequence of printable ASCII characters terminated with `\r\n` (ASCII codes 13, 10).
+A CLI command is a sequence of printable ASCII characters terminated with `\r\n` (ASCII codes 13, 10);
+the sequence must not be also a valid SLCAN command.
 Every CLI command returns a response, which may be empty. Response begins with the exact copy of the received command,
 terminated with `\r\n`, then followed by an arbitrary number of lines, each terminated with `\r\n`,
 and finalized with the ASCII END-OF-TEXT character (code 3) immediately followed by the final `\r\n`.
