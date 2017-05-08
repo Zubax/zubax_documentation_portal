@@ -396,7 +396,7 @@ over the same serial port that is used for SLCAN communications, while maintaini
 
 A CLI command is a sequence of printable ASCII characters terminated with `\r\n` (ASCII codes 13, 10);
 the sequence must not be also a valid SLCAN command.
-Every CLI command returns a response, which may be empty. Response begins with the exact copy of the received command,
+Every CLI command returns a response that begins with the exact copy of the received command,
 terminated with `\r\n`, then followed by an arbitrary number of lines, each terminated with `\r\n`,
 and finalized with the ASCII END-OF-TEXT character (code 3) immediately followed by the final `\r\n`.
 
@@ -416,7 +416,8 @@ uart.baudrate         = 115200      [2400, 3000000] (115200)\r\n
 
 Where `\x03` is the ASCII END-OF-TEXT character.
 
-The fact that CLI commands and their responses are terminated with `\r\n` rather than plain `\r`
+The facts that CLI commands and their responses are terminated with `\r\n` rather than plain `\r`,
+and that a valid SLCAN command cannot be also a valid CLI command,
 can be used to distinguish SLCAN data from CLI data in real time.
 A compliant SLCAN driver that is capable of dealing with CLI extensions with virtually zero performance penalty can
 be found in the [PyUAVCAN library](http://uavcan.org/Implementations/Pyuavcan).
