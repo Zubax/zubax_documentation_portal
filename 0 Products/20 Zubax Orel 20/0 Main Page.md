@@ -11,6 +11,10 @@ unmanned aerial vehicles.
 Zubax Orel 20 runs [PX4 Sapog - an advanced open source multiplatform BLDC motor controller firmware](/sapog).
 Power capability: 9~18 V, 350 W.
 
+<info>
+**[DOWNLOAD UPDATED VERSION OF THIS DOCUMENT](https://files.zubax.com/products/io.px4.sapog/Zubax_Orel_20_Datasheet.pdf)**
+</info>
+
 Use the following resource to evaluate compatibility of Zubax Orel 20 with your application:
 <http://www.ecalc.ch/xcoptercalc.php>.
 
