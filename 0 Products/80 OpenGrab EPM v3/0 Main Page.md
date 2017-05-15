@@ -90,6 +90,16 @@ RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       | 
 
 Pressing this button for at least 200 milliseconds will toggle the EPM.
 
+### External Button
+
+<img src="External_Button.jpg" height=350 title="External Button">
+
+An External Button can be connected to Pin 6 (GND) and 3 (TXD) of header J9
+Pulling pin 3 (TXD) low momentarly togels the EPM
+
+* J9 header is JST SH 6 pin
+* Needs firmware build after March 2017
+
 ### LED indication
 
 #### Status LED
@@ -327,5 +337,5 @@ V<sub>UART(out-high)</sub>| High-level UART output voltage          | V<sub>supp
 ## Links
 
 * [Source repository (firmware sources, drawings, etc)](https://github.com/Zubax/opengrab_epm_v3)
-* [PCB layout and schematic] (https://upverter.com/ctech4285/b115a1af887107bc/OpenGrab-EPM-V3R5C/)
+* [PCB layout and schematic] (https://upverter.com/eda/#tool=schematic,designId=26435306801c5de9/)
 * [Purchase from NicaDrone] (http://nicadrone.com/index.php?id_product=72&controller=product)
