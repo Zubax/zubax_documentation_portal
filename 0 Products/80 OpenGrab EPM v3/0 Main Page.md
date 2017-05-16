@@ -94,11 +94,11 @@ Pressing this button for at least 200 milliseconds will toggle the EPM.
 
 <img src="External_Button.jpg" height=350 title="External Button">
 
-An External Button can be connected to Pin 6 (GND) and 3 (TXD) of header J9
-Pulling pin 3 (TXD) low momentarly togels the EPM
+An External Button can be connected to Pin 6 (GND) and 3 (TXD) of header J9.
+Pulling pin 3 (TXD) low momentarly togels the EPM.
 
-* J9 header is JST SH 6 pin
-* Needs firmware build after March 2017
+* J9 header is JST SH 6 pin.
+* needs firmware build after March 2017.
 
 ### LED indication
 
