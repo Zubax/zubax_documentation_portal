@@ -90,9 +90,9 @@ RH<sub>operating</sub>  | Operating humidity (non-condensing)       | 0       | 
 
 Pressing this button for at least 200 milliseconds will toggle the EPM.
 
-### External Button
+### External button
 
-<img src="External_Button.jpg" height=350 title="External Button">
+<img src="External_Button.jpg" class="thumbnail" title="External Button">
 
 An external button can be connected to Pin 6 (GND) and 3 (TXD) of the UART header (J9).
 Pulling pin 3 (TXD) low momentarily toggles the EPM.
