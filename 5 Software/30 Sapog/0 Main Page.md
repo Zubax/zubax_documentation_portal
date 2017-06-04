@@ -9,6 +9,10 @@ PX4 Sapog is an advanced open source multiplatform BLDC motor controller firmwar
 
 The source git repository and developer documentation are located at <https://github.com/PX4/sapog>.
 
+<info>
+**[DOWNLOAD UPDATED VERSION OF THIS DOCUMENT](https://files.zubax.com/products/io.px4.sapog/Sapog_v2_Reference_Manual.pdf)**
+</info>
+
 ## Overview
 
 ### Design goals
