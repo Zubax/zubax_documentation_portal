@@ -107,7 +107,7 @@ of this document. The interfaces are as follows:
 * Doubly redundant [UAVCAN interface](#UAVCAN_interface) with two connectors for each interface.
 This interface provides access to all features of Zubax GNSS 2, including measurements output,
 configuration, time synchronization, firmware update, etc.
-Connector type is UAVCAN Micro connector (Molex CLIK-Mate).
+Connector type is UAVCAN Micro connector (JST GH).
 * [USB port](/usb) (CDC ACM profile, also known as virtual serial port).
 This interface can be used for NMEA output and configuration.
 Connector type is USB micro B (which is the most common USB connector).
@@ -668,8 +668,8 @@ Default value: 1 (compatibility mode)
 
 ## Identification information
 
-This section documents device properties that are reported in response to identification requests:
-CLI command `zubax_id` and UAVCAN service `uavcan.protocol.GetNodeInfo`.
+This section documents the device properties that are reported in response to identification requests:
+the CLI command `zubax_id` and the UAVCAN service `uavcan.protocol.GetNodeInfo`.
 
 * Product ID and UAVCAN node name: `com.zubax.gnss`.
 * Hardware version: 2.x.
