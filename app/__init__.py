@@ -157,11 +157,26 @@ def after_request(response_class):
 def try_desperate_redirect(path):
     # Compatibility with the old website
     redirects = {
-        '/Main_Page': '/',
-        '/Zubax_GNSS': '/zubax_gnss',
-        '/DroneCode_Probe': '/dronecode_probe',
-        '/UAVCAN_Interface': '/uavcan',
-        '/usb_command_line_interface': '/usb'
+        '/Main_Page': 'https://kb.zubax.com',
+
+        '/opengrab_epm_v3': 'https://kb.zubax.com/x/eoAh',
+
+        '/zubax_gnss_2'   : 'https://zubax.com/products/gnss_2',
+        '/zubax_gnss'     : 'https://zubax.com/products/gnss_2',
+        '/Zubax_GNSS'     : 'https://zubax.com/products/gnss_2',
+        '/zubax_gnss_2/tutorials/using_with_pixhawk': 'https://kb.zubax.com/x/W4Ah',
+
+        '/uavcan'          : 'https://kb.zubax.com/x/F4Ah',
+        '/UAVCAN_Interface': 'https://kb.zubax.com/x/F4Ah',
+
+        '/usb'                       : 'https://kb.zubax.com/x/OYAh',
+        '/usb_command_line_interface': 'https://kb.zubax.com/x/OYAh',
+
+        '/sapog'          : 'https://kb.zubax.com/x/cYAh',
+        '/zubax_orel_20'  : 'https://zubax.com/products/orel_20',
+
+        '/dronecode_probe': 'https://kb.zubax.com/x/iIAh',
+        '/DroneCode_Probe': 'https://kb.zubax.com/x/iIAh',
     }
 
     if path in redirects:
