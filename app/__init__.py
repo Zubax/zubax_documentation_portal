@@ -175,6 +175,8 @@ def try_desperate_redirect(path):
         '/sapog'          : 'https://kb.zubax.com/x/cYAh',
         '/zubax_orel_20'  : 'https://zubax.com/products/orel_20',
 
+        '/zubax_babel'    : 'https://zubax.com/products/babel',
+
         '/dronecode_probe': 'https://kb.zubax.com/x/iIAh',
         '/DroneCode_Probe': 'https://kb.zubax.com/x/iIAh',
     }
